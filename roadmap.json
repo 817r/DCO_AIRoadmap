@@ -9,61 +9,13 @@
       "description": "Core engine-level fixes and overrides for BI AI behaviour, configs, and scheduling. Everything else depends on this."
     },
     {
-      "category": "Soldier",
-      "name": "Aim correction",
-      "version": "v0.1",
-      "priority": 980,
-      "progress": 100,
-      "description": "Make description"
-    },
-    {
-      "category":  "Soldier",
-      "name": "Vision Limiting",
-      "version": "v0.1",
-      "priority": 950,
-      "progress": 100,
-      "description": "AI will have a slower detection time at night and will aim less accurate in night time."
-    },
-    {
-      "category": "Soldier",
-      "name": "Individual morale",
-      "version": "v0.1",
-      "priority": 950,
-      "progress": 60,
-      "description": "The individual AI's emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier to take cover, go prone or hide from enemy fire and do so for a longer time. Soldiers with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover."
-    },
-    {
-      "category": "Soldier",
-      "name": "Danger reaction",
-      "version": "v0.1",
+      "category": "Global",
+      "name": "Unified AI State Machine Core",
+      "version": "v0.2",
       "priority": 950,
       "progress": 0,
-      "description": "The AI's instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open."
+      "description": "Unified AI state machine core that all infantry, vehicles and artillery logic can plug into."
     },
-    {
-      "category": "Soldier",
-      "name": "Improved Long range engagements",
-      "version": "v0.1",
-      "priority": 900,
-      "progress": 30,
-      "description": "Tweaks to make AI engage at longer distances. This includes info sharing and use of radios and vocal warnings between soldiers. "
-    },
-    {
-      "category": "Soldier",
-      "name": "Suppression",
-      "version": "v0.1",
-      "priority": 890,
-      "progress": 30,
-      "description": "AI's ability to suppress detected or identified enemies."
-    },
-    {
-      "category": "Soldier",
-      "name": "Adjust to cover",
-      "version": "v0.1",
-      "priority": 850,
-      "progress": 0,
-      "description": "AI's ability to use advanced stance adjustment to adapt to cover geometry."
-    }, 
     {
       "category": "Soldier",
       "name": "Combat Movement",
@@ -71,6 +23,14 @@
       "priority": 950,
       "progress": 80,
       "description": "Infantry Combat Movement"
+    },
+    {
+      "category": "Soldier",
+      "name": " Vision Limiting",
+      "version": "v0.1",
+      "priority": 950,
+      "progress": 100,
+      "description": "AI will have a slower detection time at night and will aim less accurate in night time."
     }
   ]
 }
