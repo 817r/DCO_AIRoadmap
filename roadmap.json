@@ -1,0 +1,28 @@
+{
+  "features": [
+    {
+      "category": "Global",
+      "name": "BI Unfuck Systemss",
+      "version": "v0.1",
+      "priority": 1000,
+      "progress": 10,
+      "description": "Core engine-level fixes and overrides for BI AI behaviour, configs, and scheduling. Everything else depends on this."
+    },
+    {
+      "category": "Global",
+      "name": "Unified AI State Machine Core",
+      "version": "v0.2",
+      "priority": 950,
+      "progress": 0,
+      "description": "Unified AI state machine core that all infantry, vehicles and artillery logic can plug into."
+    },
+    {
+      "category": "Soldier",
+      "name": "Combat Movement",
+      "version": "v0.1",
+      "priority": 950,
+      "progress": 80,
+      "description": "Infantry Combat Movement"
+    }
+  ]
+}
