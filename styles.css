@@ -477,7 +477,7 @@ body {
 .funding-milestone {
     position: absolute;
     top: 0;
-    height: 30px; /* Match bar height */
+    height: 14px; /* Match bar height */
     width: 15px;
     background: rgba(255, 255, 255, 0.4);
     transform: translateX(-50%);
