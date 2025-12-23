@@ -478,7 +478,7 @@ body {
     position: absolute;
     top: 0;
     height: 30px; /* Match bar height */
-    width: 5px;
+    width: 15px;
     background: rgba(255, 255, 255, 0.4);
     transform: translateX(-50%);
     cursor: help;
