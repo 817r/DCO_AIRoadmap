@@ -3,15 +3,15 @@
     "current": 0,
     "currency": "USD",
     "milestones": [
-      { "amount": 0, "label": "Global systems" },
-      { "amount": 0, "label": "Soldier" },
-      { "amount": 0, "label": "Squad" },
-      { "amount": 0, "label": "Vehicle AI" },
-      { "amount": 0, "label": "Artillery AI" },
-      { "amount": 0, "label": "Player Command" },
-      { "amount": 0, "label": "Battlegroup Command" },
-      { "amount": 0, "label": "High Command" },
-      { "amount": 0, "label": "Gamemode" }
+      { "amount": 300, "label": "Global systems" },
+      { "amount": 1000, "label": "Soldier" },
+      { "amount": 1600, "label": "Squad" },
+      { "amount": 2400, "label": "Vehicle AI" },
+      { "amount": 3000, "label": "Artillery AI" },
+      { "amount": 3500, "label": "Player Command" },
+      { "amount": 6000, "label": "Battlegroup Command" },
+      { "amount": 8500, "label": "High Command" },
+      { "amount": 10000, "label": "Gamemode" }
     ]
   },  
   "features": [

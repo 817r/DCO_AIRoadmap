@@ -26,20 +26,20 @@
     </section>
 
     <section class="funding-section">
-    <h2>Project Funding</h2>
+        <h2>Project Funding</h2>
 
-    <div class="funding-bar-wrapper">
-        <div id="fundingBar" class="funding-bar">
-        <div id="fundingFill" class="funding-fill"></div>
+        <div class="funding-bar-wrapper">
+            <div id="fundingBar" class="funding-bar">
+                <div id="fundingFill" class="funding-fill"></div>
+            </div>
+
+            <div id="fundingMilestones" class="funding-milestones"></div>
         </div>
 
-        <div id="fundingMilestones" class="funding-milestones"></div>
-    </div>
-
-    <div class="funding-labels">
-        <span id="fundingCurrentLabel"></span>
-        <span id="fundingPercentLabel"></span>
-    </div>
+        <div class="funding-labels">
+            <span id="fundingCurrentLabel"></span>
+            <span id="fundingPercentLabel"></span>
+        </div>
     </section>    
 
     <!-- Project Overview -->
@@ -294,17 +294,14 @@
         const max = Math.max(...funding.milestones.map(m => m.amount));
         const percent = Math.min(100, Math.round((funding.current / max) * 100));
 
-        // Fill bar
         const fill = document.getElementById("fundingFill");
         fill.style.width = `${percent}%`;
 
-        // Labels
         document.getElementById("fundingCurrentLabel").textContent =
             `${funding.current.toLocaleString()} ${funding.currency}`;
         document.getElementById("fundingPercentLabel").textContent =
             `${percent}% funded`;
 
-        // Milestones
         const container = document.getElementById("fundingMilestones");
         container.innerHTML = "";
 
