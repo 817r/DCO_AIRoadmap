@@ -444,7 +444,8 @@ body {
 }
 
 /* ANCHOR: DCAR::CSS::FUNDING_FIX */
-.project-card {
+/* Container styling to match Overall Progress */
+.funding-section {
     max-width: 1200px;
     margin: 0 auto 1.5rem auto;
     padding: 1.5rem;
@@ -454,103 +455,62 @@ body {
     border: 1px solid var(--border);
 }
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1rem;
-}
-
-.funding-summary {
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.accent-text {
-    color: var(--accent);
-    margin-left: 10px;
-}
-
 .funding-bar-wrapper {
     position: relative;
-    padding-bottom: 60px; /* Space for milestone labels */
+    width: 100%;
     margin-top: 1rem;
+    padding-bottom: 20px; /* Space for markings */
 }
 
+/* The Bar itself */
 .funding-bar {
     width: 100%;
-    height: 16px;
+    height: 14px;
     background: #020617;
     border-radius: 999px;
-    overflow: hidden;
     border: 1px solid var(--border);
+    position: relative;
+    overflow: visible; /* Important: allows tooltips to pop out */
 }
 
-.funding-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--danger), #eab308, #22c55e);
-    transition: width 0.8s ease;
-}
-
-.funding-milestones {
+/* Vertical Markings (Visible by default) */
+.funding-milestone {
     position: absolute;
     top: 0;
-    height: 16px; /* Match bar height */
+    height: 14px; /* Match bar height */
     width: 2px;
-    background: rgba(255, 255, 255, 0.3); /* Dim marking */
+    background: rgba(255, 255, 255, 0.4);
     transform: translateX(-50%);
-    cursor: pointer;
-    z-index: 5;
+    cursor: help;
+    z-index: 10;
 }
 
-.funding-milestone::before {
-    content: "";
-    display: block;
-    width: 2px;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 999px;
-    transition: background var(--transition-fast);
+/* Tooltip Styling (Hidden by default) */
+.milestone-info {
+    position: absolute;
+    bottom: 25px; 
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius);
+    opacity: 0;
+    transition: all var(--transition-fast);
+    pointer-events: none;
+    white-space: nowrap;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    z-index: 100;
 }
 
-.funding-milestone:hover::before {
-    background: var(--accent);
-}
-
+/* Hover Interaction */
 .funding-milestone:hover {
-    background: var(--accent); /* Highlight the tick */
+    background: var(--accent);
 }
 
 .funding-milestone:hover .milestone-info {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-}
-
-.milestone-info {
-position: absolute;
-    bottom: 25px; 
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    background: #11151c;
-    border: 1px solid #252b37;
-    padding: 6px 10px;
-    border-radius: 4px;
-    opacity: 0; /* Hidden */
-    transition: all 0.2s ease;
-    pointer-events: none;
-    white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-.milestone-info strong {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--text-main);
-}
-
-.milestone-info span {
-    font-size: 0.75rem;
-    color: var(--text-muted);
 }
 /* END ANCHOR: DCAR::CSS::OVERVIEW */

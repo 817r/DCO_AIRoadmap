@@ -308,22 +308,24 @@
 
                 const container = document.getElementById("fundingMilestones");
             container.innerHTML = "";
-                funding.milestones.forEach(m => {
-                    const milestonePercent = (m.amount / max) * 100;
-                    const el = document.createElement("div");
-                    el.className = "funding-milestone";
-                    el.style.left = `${milestonePercent}%`;
-                    
-                    // Only this HTML inside the marking
-                    el.innerHTML = `
-                        <div class="milestone-info">
-                            <strong>${m.amount.toLocaleString()}</strong><br>
-                            <span>${m.label}</span>
-                        </div>
-                    `;
-                    container.appendChild(el);
-                });
-        }        
+            funding.milestones.forEach(m => {
+                const milestonePercent = (m.amount / max) * 100;
+                const el = document.createElement("div");
+                el.className = "funding-milestone";
+                el.style.left = `${milestonePercent}%`;
+                
+                // This creates the hidden info box that shows on hover
+                el.innerHTML = `
+                    <div class="milestone-info">
+                        <strong style="display:block;">${m.amount.toLocaleString()} ${funding.currency}</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${m.label}</span>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }       
+        
+
     </script>
 </body>
 </html>
