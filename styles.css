@@ -465,10 +465,11 @@ body {
 
 .funding-milestone {
   position: absolute;
+  top: 0;
   transform: translateX(-50%);
   font-size: 12px;
-  white-space: nowrap;
-  color: #ccc;
+  text-align: center;
+  max-width: 90px;
 }
 
 .funding-milestone::before {
@@ -478,6 +479,22 @@ body {
   height: 10px;
   background: #888;
   margin: 0 auto 4px;
+}
+
+.funding-section {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.funding-bar-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.funding-bar {
+  width: 100%;
+  height: 14px;
 }
 
 /* END ANCHOR: DCAR::CSS::OVERVIEW */
