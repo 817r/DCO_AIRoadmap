@@ -20,11 +20,24 @@
     box-sizing: border-box;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: -1;
+}
+
 body {
+    background-image: url("images/camo.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     margin: 0;
     padding: 1.5rem;
     font-family: var(--font-main);
-    background: radial-gradient(circle at top, #0f172a 0, #020617 40%, #000 100%);
+    /*background: radial-gradient(circle at top, #0f172a 0, #020617 40%, #000 100%);*/
     color: var(--text-main);
 }
 /* END ANCHOR: DCAR::CSS::BASE */

@@ -25,6 +25,23 @@
         <p class="help-text">Average progress of all features.</p>
     </section>
 
+    <section class="funding-section">
+    <h2>Project Funding</h2>
+
+    <div class="funding-bar-wrapper">
+        <div id="fundingBar" class="funding-bar">
+        <div id="fundingFill" class="funding-fill"></div>
+        </div>
+
+        <div id="fundingMilestones" class="funding-milestones"></div>
+    </div>
+
+    <div class="funding-labels">
+        <span id="fundingCurrentLabel"></span>
+        <span id="fundingPercentLabel"></span>
+    </div>
+    </section>    
+
     <!-- Project Overview -->
     <section class="project-overview-section">
         <h2>Project Overview & Release Roadmap</h2>
@@ -80,6 +97,61 @@
                             <div id="overview-artillery-bar" class="overview-progress-fill"></div>
                         </div>
                         <span id="overview-artillery-label" class="overview-progress-label">0%</span>
+                    </td>
+                    <td>TBD</td>
+                </tr>
+                <tr data-overview-category="Squad Behaviour">
+                    <td>Squad Behaviour</td>
+                    <td>Capture objectives.</td>
+                    <td>
+                        <div class="overview-progress-bar">
+                            <div id="overview-squad-bar" class="overview-progress-fill"></div>
+                        </div>
+                        <span id="overview-squad-label" class="overview-progress-label">0%</span>
+                    </td>
+                    <td>TBD</td>
+                </tr>
+                <tr data-overview-category="Player Command">
+                    <td>Player Command</td>
+                    <td>Ability to give orders to AI on all levels.</td>
+                    <td>
+                        <div class="overview-progress-bar">
+                            <div id="overview-Player Command-bar" class="overview-progress-fill"></div>
+                        </div>
+                        <span id="overview-Player Command-label" class="overview-progress-label">0%</span>
+                    </td>
+                    <td>TBD</td>
+                </tr>
+                <tr data-overview-category="Battlegroup Behaviour">
+                    <td>Battlegroup Behaviour</td>
+                    <td>Capturing AO's.</td>
+                    <td>
+                        <div class="overview-progress-bar">
+                            <div id="overview-Battlegroup Behaviour-bar" class="overview-progress-fill"></div>
+                        </div>
+                        <span id="overview-Battlegroup Behaviour-label" class="overview-progress-label">0%</span>
+                    </td>
+                    <td>TBD</td>
+                </tr>
+                <tr data-overview-category="High Command Behaviour">
+                    <td>High Command Behaviour</td>
+                    <td>Assign AO.</td>
+                    <td>
+                        <div class="overview-progress-bar">
+                            <div id="overview-High Command Behaviour-bar" class="overview-progress-fill"></div>
+                        </div>
+                        <span id="overview-High Command Behaviour-label" class="overview-progress-label">0%</span>
+                    </td>
+                    <td>TBD</td>
+                </tr>
+                <tr data-overview-category="DCO Game Mode">
+                    <td>DCO Game Mode</td>
+                    <td>CTI, Mission framework.</td>
+                    <td>
+                        <div class="overview-progress-bar">
+                            <div id="overview-DCO Game Mode-bar" class="overview-progress-fill"></div>
+                        </div>
+                        <span id="overview-DCO Game Mode-label" class="overview-progress-label">0%</span>
                     </td>
                     <td>TBD</td>
                 </tr>
@@ -210,6 +282,46 @@
                 row.style.display = (value === "all" || row.getAttribute("data-category") === value) ? "" : "none";
             });
         });
+
+        fetch("roadmap.json")
+        .then(r => r.json())
+        .then(data => {
+            renderFunding(data.funding);
+            renderRoadmap(data.features);
+        });        
+
+        function renderFunding(funding) {
+        const max = Math.max(...funding.milestones.map(m => m.amount));
+        const percent = Math.min(100, Math.round((funding.current / max) * 100));
+
+        // Fill bar
+        const fill = document.getElementById("fundingFill");
+        fill.style.width = `${percent}%`;
+
+        // Labels
+        document.getElementById("fundingCurrentLabel").textContent =
+            `${funding.current.toLocaleString()} ${funding.currency}`;
+        document.getElementById("fundingPercentLabel").textContent =
+            `${percent}% funded`;
+
+        // Milestones
+        const container = document.getElementById("fundingMilestones");
+        container.innerHTML = "";
+
+        funding.milestones.forEach(m => {
+            const milestonePercent = (m.amount / max) * 100;
+
+            const el = document.createElement("div");
+            el.className = "funding-milestone";
+            el.style.left = `${milestonePercent}%`;
+            el.innerHTML = `
+            <strong>${m.amount.toLocaleString()} ${funding.currency}</strong><br>
+            ${m.label}
+            `;
+
+            container.appendChild(el);
+        });
+        }        
     </script>
 </body>
 </html>

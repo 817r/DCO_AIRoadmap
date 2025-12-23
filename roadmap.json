@@ -1,6 +1,21 @@
 {
+  "funding": {
+    "current": 0,
+    "currency": "USD",
+    "milestones": [
+      { "amount": 0, "label": "Global systems" },
+      { "amount": 0, "label": "Soldier" },
+      { "amount": 0, "label": "Squad" },
+      { "amount": 0, "label": "Vehicle AI" },
+      { "amount": 0, "label": "Artillery AI" },
+      { "amount": 0, "label": "Player Command" },
+      { "amount": 0, "label": "Battlegroup Command" },
+      { "amount": 0, "label": "High Command" },
+      { "amount": 0, "label": "Gamemode" }
+    ]
+  },  
   "features": [
-{
+    {
       "category": "Global",
       "name": "BI Unfuck Systemss",
       "version": "v0.1",
@@ -18,7 +33,7 @@
     },
     {
       "category":  "Soldier",
-  "name": "Vision Limiting",
+      "name": "Vision Limiting",
       "version": "v0.1",
       "priority": 950,
       "progress": 100,
@@ -32,7 +47,7 @@
       "progress": 60,
       "description": "The individual AI's emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier to take cover, go prone or hide from enemy fire and do so for a longer time. Soldiers with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover."
     },
-  {
+    {
       "category": "Soldier",
       "name": "Danger reaction",
       "version": "v0.1",
@@ -40,7 +55,7 @@
       "progress": 0,
       "description": "The AI's instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open."
     },
-  {
+    {
       "category": "Soldier",
       "name": "Improved Long range engagements",
       "version": "v0.1",
@@ -48,7 +63,7 @@
       "progress": 30,
       "description": "Tweaks to make AI engage at longer distances. This includes info sharing and use of radios and vocal warnings between soldiers. "
     },
-{
+    {
       "category": "Soldier",
       "name": "Suppression",
       "version": "v0.1",
@@ -56,7 +71,7 @@
       "progress": 30,
       "description": "AI's ability to suppress detected or identified enemies."
     },
-  {
+    {
       "category": "Soldier",
       "name": "Adjust to cover",
       "version": "v0.1",
@@ -64,7 +79,7 @@
       "progress": 0,
       "description": "AI's ability to use advanced stance adjustment to adapt to cover geometry."
     }, 
- {
+    {
       "category": "Soldier",
       "name": "Combat Movement",
       "version": "v0.1",
