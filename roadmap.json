@@ -1,6 +1,6 @@
 {
   "funding": {
-    "current": 0,
+    "current": 1,
     "currency": "$",
     "milestones": [
       { "amount": 300, "label": "Global systems" },
@@ -86,6 +86,38 @@
       "priority": 950,
       "progress": 80,
       "description": "Infantry Combat Movement"
+    },
+    {
+      "category": "Soldier",
+      "name": "Emergency rearm",
+      "version": "v0.1",
+      "priority": 850,
+      "progress": 0,
+      "description": "Soldiers will pick up ammo for his rifle if available. If not, he will pick up nearby weapons that has available ammo for it. "
+    },
+    {
+      "category": "Soldier",
+      "name": "Close combat behaviour",
+      "version": "v0.1",
+      "priority": 750,
+      "progress": 0,
+      "description": "Soldiers will prioritize using buildings as cover (not possible yet as it can not ID a building yet), if in melee range, soldiers will engage in melee with the enemy. If within 50 meters from detected enemies, the soldier will avoid going prone and find cover instead."
+    },
+    {
+      "category": "Soldier",
+      "name": "IDLE behaviour",
+      "version": "v0.1",
+      "priority": 900,
+      "progress": 0,
+      "description": "A soldier that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier will patrol the nearby area.  Will patrol within a 150 m radius around the SL"
+    },
+    {
+      "category": "Squad",
+      "name": "Tactics",
+      "version": "v0.1",
+      "priority": 750,
+      "progress": 0,
+      "description": "If no custom settings are forced, the Group leader will initiate Five types of tactics "
     }
   ]
 }
