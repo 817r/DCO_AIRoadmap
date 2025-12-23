@@ -443,6 +443,16 @@ body {
     font-size: 0.8rem;
 }
 
+.fundingPercentLabel {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8rem;
+}
+
+.fundingCurrentLabel {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8rem;
+}
+
 /* ANCHOR: DCAR::CSS::FUNDING_FIX */
 /* Container styling to match Overall Progress */
 .funding-section {
