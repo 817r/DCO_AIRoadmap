@@ -1,6 +1,6 @@
 {
   "funding": {
-    "current": 10,
+    "current": 5,
     "currency": "$",
     "milestones": [
       { "amount": 300, "label": "Global systems" },
