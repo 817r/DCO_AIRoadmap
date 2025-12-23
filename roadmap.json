@@ -112,7 +112,7 @@
       "description": "A soldier that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier will patrol the nearby area.  Will patrol within a 150 m radius around the SL"
     },
     {
-      "category": "Squad",
+      "category": "Squad Behaviour",
       "name": "Tactics",
       "version": "v0.1",
       "priority": 750,
