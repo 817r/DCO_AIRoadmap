@@ -499,26 +499,20 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
-}
-
-.funding-milestone {
-    position: absolute;
-    top: 16px; /* Starts right below the bar */
-    transform: translateX(-50%);
-    font-size: 0.75rem;
-    text-align: center;
-    white-space: nowrap;
-    color: var(--text-muted);
 }
 
 .funding-milestone::before {
     content: "";
     display: block;
-    width: 1px;
-    height: 12px;
-    background: var(--border);
-    margin: 0 auto 5px;
+    width: 2px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    transition: background var(--transition-fast);
+}
+
+.funding-milestone:hover::before {
+    background: var(--accent);
 }
 
 .funding-milestone strong {
@@ -527,4 +521,36 @@ body {
     margin-bottom: 2px;
 }
 
+.milestone-info {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    pointer-events: none;
+    opacity: 0;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    text-align: center;
+}
+
+.funding-milestone:hover .milestone-info {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.milestone-info strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.milestone-info span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
 /* END ANCHOR: DCAR::CSS::OVERVIEW */

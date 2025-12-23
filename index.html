@@ -290,32 +290,36 @@
 
         function renderFunding(funding) {
             const max = Math.max(...funding.milestones.map(m => m.amount));
-            const percent = Math.min(100, Math.round((funding.current / max) * 100));
+                const percent = Math.min(100, Math.round((funding.current / max) * 100));
 
-            const fill = document.getElementById("fundingFill");
-            fill.style.width = `${percent}%`;
+                const fill = document.getElementById("fundingFill");
+                fill.style.width = `${percent}%`;
 
-            document.getElementById("fundingCurrentLabel").textContent =
-                `${funding.current.toLocaleString()} ${funding.currency}`;
-            document.getElementById("fundingPercentLabel").textContent =
-                `${percent}% funded`;
+                document.getElementById("fundingCurrentLabel").textContent =
+                    `${funding.current.toLocaleString()} ${funding.currency}`;
+                document.getElementById("fundingPercentLabel").textContent =
+                    `${percent}% funded`;
 
-            const container = document.getElementById("fundingMilestones");
-            container.innerHTML = "";
+                const container = document.getElementById("fundingMilestones");
+                container.innerHTML = "";
 
-            funding.milestones.forEach(m => {
-                const milestonePercent = (m.amount / max) * 100;
+                funding.milestones.forEach(m => {
+                    const milestonePercent = (m.amount / max) * 100;
 
-                const el = document.createElement("div");
-                el.className = "funding-milestone";
-                el.style.left = `${milestonePercent}%`;
-                el.innerHTML = `
-                <strong>${m.amount.toLocaleString()} ${funding.currency}</strong><br>
-                ${m.label}
-                `;
+                    const el = document.createElement("div");
+                    el.className = "funding-milestone";
+                    el.style.left = `${milestonePercent}%`;
+                    
+                    // Tooltip structure
+                    el.innerHTML = `
+                        <div class="milestone-info">
+                            <strong>${m.amount.toLocaleString()} ${funding.currency}</strong>
+                            <span>${m.label}</span>
+                        </div>
+                    `;
 
-                container.appendChild(el);
-            });
+                    container.appendChild(el);
+                });
         }        
     </script>
 </body>

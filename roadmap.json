@@ -1,7 +1,7 @@
 {
   "funding": {
-    "current": 100,
-    "currency": "USD",
+    "current": 0,
+    "currency": "$",
     "milestones": [
       { "amount": 300, "label": "Global systems" },
       { "amount": 1000, "label": "Soldier" },
