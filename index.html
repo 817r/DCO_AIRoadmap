@@ -307,23 +307,20 @@
                     `${percent}% funded`;
 
                 const container = document.getElementById("fundingMilestones");
-                container.innerHTML = "";
-
+            container.innerHTML = "";
                 funding.milestones.forEach(m => {
                     const milestonePercent = (m.amount / max) * 100;
-
                     const el = document.createElement("div");
                     el.className = "funding-milestone";
                     el.style.left = `${milestonePercent}%`;
                     
-                    // Tooltip structure
+                    // Only this HTML inside the marking
                     el.innerHTML = `
                         <div class="milestone-info">
-                            <strong>${m.amount.toLocaleString()} ${funding.currency}</strong>
+                            <strong>${m.amount.toLocaleString()}</strong><br>
                             <span>${m.label}</span>
                         </div>
                     `;
-
                     container.appendChild(el);
                 });
         }        
