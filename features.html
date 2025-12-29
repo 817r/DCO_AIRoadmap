@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 15px; }
+        .section-container { background: #1a1c1e; border-radius: 8px; padding: 20px; border: 1px solid #2d2f31; }
+        
+        /* Table Styles */
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; min-width: 700px; border-collapse: collapse; }
+        th { text-align: left; font-size: 11px; color: #9ca3af; padding: 12px; border-bottom: 2px solid #2d2f31; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid #2d2f31; font-size: 12px; }
+        
+        tr.feature-row { transition: background 0.2s; cursor: pointer; }
+        tr.feature-row:hover { background: rgba(250, 204, 21, 0.05); }
+        tr.active-row { background: rgba(250, 204, 21, 0.1) !important; border-left: 2px solid #facc15; }
+        
+        /* Status Dots */
+        .dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .dot-planned { background-color: #ef4444; }
+        .dot-progress { background-color: #facc15; }
+        .dot-done { background-color: #22c55e; }
+
+        .detail-box { background: #0d0e0a; border: 1px solid #3d4432; padding: 20px; min-height: 200px; }
+    </style>
+</head>
+<body>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 section-container">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <h2 class="text-lg font-bold uppercase italic text-yellow-500">// Feature Roadmap</h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] opacity-50 uppercase">Filter by category:</span>
+                    <select id="categoryFilter" class="bg-black border border-zinc-700 text-white text-[11px] px-2 py-1 outline-none focus:border-yellow-500">
+                        <option value="All">All Categories</option>
+                        <option value="Global Systems">Global Systems</option>
+                        <option value="Soldier Systems">Soldier Systems</option>
+                        <option value="Vehicle Behaviour">Vehicle Behaviour</option>
+                        <option value="Artillery">Artillery</option>
+                        <option value="Squad Behaviour">Squad Behaviour</option>
+                        <option value="Player Command">Player Command</option>
+                        <option value="Battlegroup Behaviour">Battlegroup Behaviour</option>
+                        <option value="High Command Behaviour">High Command Behaviour</option>
+                        <option value="DCO Game Mode">DCO Game Mode</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Feature</th>
+                            <th>Version</th>
+                            <th>Priority</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody id="featureTableBody">
+                        </tbody>
+                </table>
+            </div>
+            <p class="text-[9px] opacity-40 mt-4 italic">Hover or click a feature row to see tactical descriptions.</p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <div class="section-container detail-box">
+                <h3 class="text-xs font-bold text-yellow-500 mb-4 uppercase tracking-widest">Feature Details</h3>
+                <div id="detailContent" class="text-xs leading-relaxed opacity-80">
+                    <p class="italic opacity-40">Select a tactical entry from the roadmap to view detailed operational data...</p>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h3 class="text-[10px] font-bold mb-4 uppercase text-zinc-500">Progress Legend</h3>
+                <div class="space-y-3 text-[10px]">
+                    <div class="flex items-center gap-3"><span class="dot dot-planned"></span> 0-25%: Planned Operations</div>
+                    <div class="flex items-center gap-3"><span class="dot dot-progress"></span> 25-75%: In Active Progress</div>
+                    <div class="flex items-center gap-3"><span class="dot dot-done"></span> 75-100%: Nearly Done / Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data disinkronkan dengan kategori Area di home.html
+        let features = []; // Inisialisasi array kosong
+
+        async function fetchFeatures() {
+            try {
+                const response = await fetch('features.json');
+                const data = await response.json();
+                
+                // --- LOGIKA AUTO SORT PRIORITY (Tinggi ke Rendah) ---
+                features = data.sort((a, b) => b.prio - a.prio);
+                // ----------------------------------------------------
+
+                renderTable(); 
+            } catch (error) {
+                console.error("Gagal memuat data JSON:", error);
+                document.getElementById('featureTableBody').innerHTML = 
+                    `<tr><td colspan="5" class="text-center text-red-500 py-4 font-bold tracking-widest">! ERROR_LOADING_DATA_STREAM !</td></tr>`;
+            }
+        }
+
+        function getDotClass(prog) {
+            if (prog <= 25) return 'dot-planned';
+            if (prog < 75) return 'dot-progress';
+            return 'dot-done';
+        }
+
+        function renderTable(filter = "All") {
+            const body = document.getElementById('featureTableBody');
+            const filtered = filter === "All" ? features : features.filter(f => f.cat === filter);
+            
+            body.innerHTML = filtered.map((f) => {
+                // Membersihkan deskripsi dari tanda kutip agar tidak merusak HTML
+                const safeDesc = f.desc.replace(/'/g, "\\'"); 
+                const safeName = f.name.replace(/'/g, "\\'");
+
+                return `
+                    <tr class="feature-row" onclick="selectRow(this, '${f.name}', '${f.desc}', '${f.video || ""}')">
+                        <td class="opacity-60 text-[10px] uppercase">${f.cat}</td>
+                        <td class="font-bold text-gray-200">${f.name}</td>
+                        <td class="opacity-40">${f.ver}</td>
+                        <td class="text-yellow-500/80 font-mono">${f.prio}</td>
+                        <td class="font-bold">
+                            <span class="dot ${getDotClass(f.prog)}"></span>${f.prog}%
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function selectRow(element, name, desc, videoUrl) {
+            document.querySelectorAll('.feature-row').forEach(r => r.classList.remove('active-row'));
+            element.classList.add('active-row');
+            
+            let videoHtml = '';
+            
+            if (videoUrl && videoUrl !== "undefined" && videoUrl !== "") {
+                // Cek apakah ini link YouTube atau file lokal
+                const isYoutube = videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be');
+
+                if (isYoutube) {
+                    videoHtml = `
+                        <div class="mb-4 aspect-video bg-black border border-zinc-800">
+                            <iframe width="100%" height="100%" src="${videoUrl}" frameborder="0" allowfullscreen></iframe>
+                        </div>`;
+                } else {
+                    // PEMUTAR VIDEO LOKAL
+                    videoHtml = `
+                        <div class="mb-4 aspect-video bg-black border border-zinc-800 overflow-hidden relative">
+                            <video 
+                                controls 
+                                class="w-full h-full object-cover"
+                                key="${videoUrl}">
+                                <source src="${videoUrl}" type="video/mp4">
+                                Browser anda tidak mendukung tag video.
+                            </video>
+                        </div>
+                        <div class="text-[9px] text-yellow-500/50 mb-2 uppercase tracking-widest">>> LOCAL_FEED_ESTABLISHED</div>
+                    `;
+                }
+            }
+
+            document.getElementById('detailContent').innerHTML = `
+                <div class="text-yellow-500 font-bold mb-3 uppercase tracking-tighter text-sm border-b border-yellow-500/20 pb-2">
+                    ${name}
+                </div>
+                ${videoHtml}
+                <div class="text-gray-300 leading-relaxed italic">
+                    ${desc}
+                </div>
+            `;
+        }
+
+document.getElementById('categoryFilter').addEventListener('change', (e) => renderTable(e.target.value));
+
+// Jalankan pengambilan data saat halaman dimuat
+window.onload = fetchFeatures;
+    </script>
+</body>
+</html>

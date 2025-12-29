@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #0d0e0a; 
+            color: #d1d5db; 
+            font-family: 'JetBrains Mono', monospace; 
+            padding: 12px; /* Padding lebih kecil di mobile */
+        }
+        @media (min-width: 768px) {
+            body { padding: 24px; }
+        }
+        .section-container {
+            background-color: #1a1c1e;
+            border-radius: 8px;
+            padding: 16px; /* Padding dinamis */
+            margin-bottom: 20px;
+            border: 1px solid #2d2f31;
+        }
+        @media (min-width: 768px) {
+            .section-container { padding: 24px; }
+        }
+        
+        .progress-bg { background-color: #111315; border-radius: 4px; overflow: hidden; }
+        .progress-fill { background-color: #d97706; height: 8px; border-radius: 4px; }
+        
+        /* Table Responsive Wrapper */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; } /* Min-width mencegah tabel gepeng */
+        th { text-align: left; color: #9ca3af; padding: 12px; border-bottom: 2px solid #2d2f31; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 16px 12px; border-bottom: 1px solid #2d2f31; vertical-align: middle; }
+        
+        .status-bar-bg { background: #111315; width: 80px; height: 4px; border-radius: 2px; position: relative; }
+        @media (min-width: 400px) { .status-bar-bg { width: 120px; } }
+        .status-bar-fill { height: 100%; border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <div class="section-container">
+        <h2 class="text-lg md:text-xl font-bold mb-4">Overall Progress</h2>
+        <div class="flex items-center gap-4 md:gap-6">
+            <div class="flex-1 progress-bg">
+                <div class="progress-fill" style="width: 32%"></div>
+            </div>
+            <span class="font-bold">32%</span>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2 uppercase tracking-widest">Average progress of all features.</p>
+    </div>
+
+    <div class="section-container">
+        <h2 class="text-lg md:text-xl font-bold mb-4">Project Funding</h2>
+        <div id="funding-amount" class="text-lg font-bold mb-2">0 $</div>
+        
+        <div class="relative w-full h-5 bg-[#111315] rounded flex items-center mb-2 border border-zinc-800 overflow-hidden">
+            <div id="funding-progress-bar" class="absolute top-0 left-0 h-full bg-orange-600/40 transition-all duration-1000"></div>
+        </div>
+        
+        <div class="flex justify-between text-[10px] font-bold">
+            <span id="funding-percentage" class="uppercase tracking-tighter">0% FUNDED</span>
+            <span class="text-zinc-500 italic">GOAL: 10,000 $</span>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <h2 class="text-lg md:text-xl font-bold">Project Overview & Release Roadmap</h2>
+        <p class="text-[10px] text-gray-500 mb-6 uppercase">Progress per Category from feature below.</p>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Scope</th>
+                        <th>Progress</th>
+                        <th>ETA</th>
+                    </tr>
+                </thead>
+                <tbody id="roadmap-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const roadmapData = [
+            { area: "Global Systems", scope: "BI fixes, AI core, global combat context.", prog: 10, color: "bg-red-600" },
+            { area: "Soldier Systems", scope: "Individual Soldier", prog: 36, color: "bg-orange-500" },
+            { area: "Vehicle Behaviour", scope: "Perception, tactics, APC / IFV / MBT logic.", prog: 0, color: "bg-blue-600" },
+            { area: "Artillery", scope: "Player-requested fire missions and safety logic.", prog: 0, color: "bg-blue-600" },
+            { area: "Squad Behaviour", scope: "Capture objectives.", prog: 0, color: "bg-blue-600" },
+            { area: "Player Command", scope: "Ability to give orders to AI on all levels.", prog: 0, color: "bg-blue-600" },
+            { area: "Battlegroup Behaviour", scope: "Capturing AO's.", prog: 0, color: "bg-blue-600" },
+            { area: "High Command Behaviour", scope: "Assign AO.", prog: 0, color: "bg-blue-600" },
+            { area: "DCO Game Mode", scope: "CTI, Mission framework.", prog: 0, color: "bg-blue-600" }
+        ];
+
+        const container = document.getElementById('roadmap-body');
+        container.innerHTML = roadmapData.map(item => `
+            <tr>
+                <td class="font-bold text-gray-300">${item.area}</td>
+                <td class="text-gray-500">${item.scope}</td>
+                <td>
+                    <div class="status-bar-bg">
+                        <div class="status-bar-fill ${item.color}" style="width: ${item.prog}%"></div>
+                    </div>
+                    <div class="text-[9px] mt-1 font-bold">${item.prog}%</div>
+                </td>
+                <td class="font-bold text-gray-400">TBD</td>
+            </tr>
+        `).join('');
+
+        const fundingGoal = 10000;
+        const currentFunding = 0;
+
+        function updateFunding() {
+            const percentage = (currentFunding / fundingGoal) * 100;
+            const cappedPercentage = Math.min(percentage, 100);
+            document.getElementById('funding-amount').innerText = `${currentFunding.toLocaleString()} $`;
+            document.getElementById('funding-percentage').innerText = `${cappedPercentage.toFixed(0)}% FUNDED`;
+            const progressBar = document.getElementById('funding-progress-bar');
+            progressBar.style.width = `${cappedPercentage}%`;
+            if(cappedPercentage >= 100) {
+                progressBar.classList.remove('bg-orange-600/40');
+                progressBar.classList.add('bg-green-600/40');
+            }
+        }
+
+        window.onload = updateFunding;
+    </script>
+</body>
+</html>

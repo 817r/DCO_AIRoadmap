@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: transparent; 
+            color: #a4b494; 
+            font-family: 'JetBrains Mono', monospace; 
+            padding: 12px;
+        }
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+        }
+        .milestone-entry {
+            border: 1px solid #3d4432;
+            background: rgba(20, 20, 20, 0.6);
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        .milestone-entry.active { border-color: #facc15; }
+        
+        .milestone-header {
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column; /* Stack di mobile */
+            gap: 4px;
+        }
+        @media (min-width: 640px) {
+            .milestone-header { flex-direction: row; align-items: center; gap: 12px; padding: 12px 16px; }
+        }
+
+        .tag { font-weight: bold; color: #facc15; font-size: 0.75rem; }
+        .title { font-weight: bold; color: #d1d5db; text-transform: uppercase; font-size: 0.9rem; }
+
+        .milestone-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 12px;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        @media (min-width: 640px) {
+            .milestone-detail { padding: 0 16px; font-size: 0.85rem; }
+        }
+
+        .milestone-entry.active .milestone-detail {
+            max-height: 1000px;
+            padding-bottom: 16px;
+            padding-top: 4px;
+        }
+        .description-text {
+            border-top: 1px solid rgba(250, 252, 21, 0.2);
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="text-lg md:text-xl font-bold mb-6 italic text-zinc-500">// OPERATIONAL_LOG_ENTRIES</h2>
+
+    <div id="milestone-list">
+        <div class="milestone-entry" onclick="this.classList.toggle('active')">
+            <div class="milestone-header">
+                <span class="tag">[INFANTRY]</span>
+                <span class="title">New Combat Behavior</span>
+            </div>
+            <div class="milestone-detail">
+                <div class="description-text">
+                    Total Overhaul On How AI Behave In Combat:
+                    <ul class="mt-2 space-y-1 opacity-80">
+                        <li>> Aim Improvement</li>
+                        <li>> Danger Reaction</li>
+                        <li>> Individual & Group Morale</li>
+                        <li>> Individual & Group Fatigue</li>
+                        <li>> Individual & Group Tactics</li>
+                        <li>> Group Cohession</li>
+                        <li>> Group Threat Assessor</li>
+                        <li>> Artillery Support</li>
+                        <li>> Building Occupying</li>
+                        <li>> Building Clearance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone-entry opacity-50" onclick="this.classList.toggle('active')">
+            <div class="milestone-header">
+                <span class="tag text-zinc-500">[VEHICLE]</span>
+                <span class="title text-zinc-500">Vehicle Combat Overhaul</span>
+            </div>
+            <div class="milestone-detail">
+                <div class="description-text">
+                    Overhaul On How AI Vehicle Combat Including Mechanical, and Motorize Squad:
+                    <ul class="mt-2 space-y-1 opacity-80">
+                        <li>> Ressuply Point</li>
+                        <li>> Mechanical Squad Combat</li>
+                        <li>> Motorize Squad Combat</li>
+                        <li>> Vehicle Suppression</li>
+                        <li>> Vehicle Seek Cover</li>
+                        <li>> Vehicle Tactics</li>
+                        <li>> Vehicle Transport</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="milestone-entry opacity-50" onclick="this.classList.toggle('active')">
+            <div class="milestone-header">
+                <span class="tag text-zinc-500">[SYSTEM]</span>
+                <span class="title text-zinc-500">DCO Game Mode</span>
+            </div>
+            <div class="milestone-detail">
+                <div class="description-text italic">
+                    [DATA ENCRYPTED] - Wait For Update.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

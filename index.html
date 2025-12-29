@@ -1,330 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <title>Dragon Company AI Reforger – Roadmap</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REFORGER COMMAND CENTER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #1a1c14; color: #a4b494; font-family: 'JetBrains Mono', monospace; overflow: hidden; }
+        .sidebar { transition: transform 0.3s ease-in-out; z-index: 40; }
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; transform: translateX(-100%); height: 100%; }
+            .sidebar.open { transform: translateX(0); }
+        }
+        .nav-link.active { border-left: 4px solid #facc15; background: rgba(250, 204, 21, 0.1); color: white; }
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 2px;
+            background: #3d4432;
+            outline: none;
+            cursor: pointer;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            background: #facc15;
+            border-radius: 0; /* Kotak agar terkesan militer */
+            cursor: pointer;
+        }
+        
+        .audio-control {
+            font-size: 10px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: 1px solid #3d4432;
+            padding: 4px 8px;
+            background: rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+        .audio-control:hover { border-color: #facc15; color: #facc15; }
+    </style>
 </head>
-<body>
-    <header class="page-header">
-        <h1>Dragon Company AI Reforger – Development Roadmap</h1>
-        <p class="subtitle">
-            Roadmap for developers & community.
-        </p>
-    </header>
+<body class="flex flex-col h-screen">
+    <audio id="bgm">
+        <source id="audio-source" type="audio/mpeg">
+    </audio>
 
-    <!-- Overall Progress -->
-    <section class="overall-progress-section">
-        <h2>Overall Progress</h2>
-        <div class="overall-progress-wrapper">
-            <div id="overallProgressBar" class="overall-progress-bar">
-                <div id="overallProgressFill" class="overall-progress-fill"></div>
-            </div>
-            <span id="overallProgressLabel" class="overall-progress-label">0%</span>
-        </div>
-        <p class="help-text">Average progress of all features.</p>
-    </section>
-
-    <section class="funding-section project-card">
-        <div class="card-header">
-            <h2>Project Funding</h2>
-            <div class="funding-summary">
-                <span id="fundingCurrentLabel">0 USD</span>
+    <header class="h-16 border-b-2 border-yellow-500/50 bg-black flex items-center justify-between px-4 z-50">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleMenu()" class="md:hidden text-yellow-500 text-2xl">☰</button>
+            <div class="flex flex-col">
+                <span class="text-yellow-400 font-black text-lg leading-none">DCO</span>
+                <span class="text-[8px] text-yellow-600 tracking-[0.2em]">AI REFORGER</span>
             </div>
         </div>
+        
+        <div class="flex items-center gap-3">
+            <a href="https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger" target="_blank" 
+            class="hidden sm:flex items-center gap-2 px-3 py-1 border border-yellow-500/30 bg-yellow-500/5 text-yellow-500 text-[10px] font-bold hover:bg-yellow-500 hover:text-black transition-all group">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse group-hover:bg-black"></span>
+                [ACCESS_WORKSHOP_MOD]
+            </a>
 
-        <div class="funding-bar-wrapper">
-            <div id="fundingBar" class="funding-bar">
-                <div id="fundingFill" class="funding-fill"></div>
-            </div>
-            <span id="fundingPercentLabel" class="accent-text">0% funded</span>
-            <div id="fundingMilestones" class="funding-milestones"></div>
-        </div>
-    </section>
+            <div class="flex items-center gap-2 border-l border-zinc-800 pl-3">
+                    <div class="flex items-center gap-4 px-4 py-2 bg-black/50 border-b border-yellow-500/20">
+                        <div class="flex items-center gap-2">
+                            <div id="music-info" class="text-[9px] opacity-50 hidden md:block truncate max-w-[150px]">
+                                NOT_PLAYING
+                            </div>
+                            <div id="music-toggle" class="audio-control" onclick="toggleAudio()">
+                                [MUSIC_OFF]
+                            </div>
+                            <div class="audio-control" onclick="playNext()">
+                                [NEXT >>]
+                            </div>
+                        </div>
 
-
-    <!-- Project Overview -->
-    <section class="project-overview-section">
-        <h2>Project Overview & Release Roadmap</h2>
-        <p class="help-text">Progress per Category from feature below.</p>
-        <table class="overview-table">
-            <thead>
-                <tr>
-                    <th>Area</th>
-                    <th>Scope</th>
-                    <th>Progress</th>
-                    <th>ETA</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-overview-category="Global">
-                    <td>Global Systems</td>
-                    <td>BI fixes, AI core, global combat context.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-global-bar" class="overview-progress-fill"></div>
+                        <div class="flex items-center gap-2 border-l border-zinc-800 pl-4">
+                            <span class="text-[9px] text-zinc-500 uppercase">Vol</span>
+                            <input type="range" id="volume-control" class="volume-slider" min="0" max="1" step="0.01" value="0.3">
+                            <span id="vol-percent" class="text-[9px] text-yellow-500 font-bold w-6">30%</span>
                         </div>
-                        <span id="overview-global-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="Soldier">
-                    <td>Soldier Systems</td>
-                    <td>Individual Soldier</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-soldier-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-soldier-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="Vehicle">
-                    <td>Vehicle Behaviour</td>
-                    <td>Perception, tactics, APC / IFV / MBT logic.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-vehicle-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-vehicle-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="Artillery">
-                    <td>Artillery</td>
-                    <td>Player-requested fire missions and safety logic.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-artillery-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-artillery-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="Squad Behaviour">
-                    <td>Squad Behaviour</td>
-                    <td>Capture objectives.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-squad-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-squad-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="Player Command">
-                    <td>Player Command</td>
-                    <td>Ability to give orders to AI on all levels.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-Player Command-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-Player Command-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="Battlegroup Behaviour">
-                    <td>Battlegroup Behaviour</td>
-                    <td>Capturing AO's.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-Battlegroup Behaviour-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-Battlegroup Behaviour-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="High Command Behaviour">
-                    <td>High Command Behaviour</td>
-                    <td>Assign AO.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-High Command Behaviour-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-High Command Behaviour-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-                <tr data-overview-category="DCO Game Mode">
-                    <td>DCO Game Mode</td>
-                    <td>CTI, Mission framework.</td>
-                    <td>
-                        <div class="overview-progress-bar">
-                            <div id="overview-DCO Game Mode-bar" class="overview-progress-fill"></div>
-                        </div>
-                        <span id="overview-DCO Game Mode-label" class="overview-progress-label">0%</span>
-                    </td>
-                    <td>TBD</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <main class="layout">
-        <section class="table-section">
-            <div class="table-header-row">
-                <h2>Feature Roadmap</h2>
-                <div class="controls">
-                    <label for="categoryFilter">Filter by category:</label>
-                    <select id="categoryFilter">
-                        <option value="all">All</option>
-                        <option value="Global">Global</option>
-                        <option value="Soldier">Soldier</option>
-                        <option value="Vehicle">Vehicle</option>
-                        <option value="Artillery">Artillery</option>
-                        <option value="Squad Behaviour">Squad</option>
-                        <option value="Player Command">Player Command</option>
-                        <option value="Battlegroup Behaviour">Battlegroup</option>
-                        <option value="High Command Behaviour">High Command</option>
-                        <option value="DCO Game Mode">DCO Game Mode</option>
-                    </select>
+                    </div>
+                <div class="text-[10px] font-bold bg-yellow-400 text-black px-2 py-1 uppercase truncate">
+                    ARMA REFORGER
                 </div>
             </div>
+        </div>
+    </header>
 
-            <table id="roadmapTable">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Feature</th>
-                        <th>Version</th>
-                        <th>Priority</th>
-                        <th>Progress</th>
-                    </tr>
-                </thead>
-                <tbody id="roadmapBody"></tbody>
-            </table>
-            <p class="help-text">Hover untuk detail fitur.</p>
-        </section>
-
-        <aside class="hint-section">
-            <h2>Feature Details</h2>
-            <div id="hintBox" class="hint-box">
-                <p class="hint-placeholder">Hover over a feature row to see its full description here.</p>
-            </div>
-            <div class="legend">
-                <h3>Legend</h3>
-                <ul>
-                    <li><span class="legend-color legend-low"></span>0–25%: Planned</li>
-                    <li><span class="legend-color legend-mid"></span>25–75%: In Progress</li>
-                    <li><span class="legend-color legend-high"></span>75–100%: Nearly Done / Done</li>
-                </ul>
-            </div>
+    <div class="flex flex-1 overflow-hidden relative">
+        <aside id="sidebar" class="sidebar w-64 bg-[#0d0e0a] border-r-2 border-army-green p-4 flex flex-col gap-2">
+            <p class="text-[10px] opacity-30 mb-4">NAV_LOGS</p>
+            <a href="home.html" target="content-frame" class="nav-link p-3 text-sm font-bold active" onclick="closeMenu()">[00] OVERVIEW</a>
+            <a href="roadmap.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">[01] MILESTONES</a>
+            <a href="features.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
+                [02] DETAILED_FEATURES
+            </a>
+            <a href="donate.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
+                [03] DONATION_SUPPORT
+            </a>
+            <div class="mt-auto p-3 border border-yellow-900/30 text-[9px] opacity-40">SYSTEM: STABLE</div>
         </aside>
-    </main>
+
+        <main class="flex-1 relative bg-[#0d0e0a]">
+            <iframe name="content-frame" src="home.html" class="w-full h-full border-none"></iframe>
+        </main>
+    </div>
 
     <script>
-        fetch("roadmap.json")
-            .then(r => r.json())
-            .then(data =>
-            {
-                renderFunding(data.funding);
-                renderRoadmap(data.features)
-            });
-
-        function renderRoadmap(features) {
-            const body = document.getElementById("roadmapBody");
-            body.innerHTML = "";
-            features.forEach(f => {
-                const row = document.createElement("tr");
-                row.setAttribute("data-category", f.category);
-                row.setAttribute("data-description", f.description);
-                row.innerHTML = `
-                    <td>${f.category}</td>
-                    <td>${f.name}</td>
-                    <td>${f.version}</td>
-                    <td>${f.priority}</td>
-                    <td class="progress-cell">
-                        <div class="progress-bar-static" style="width: ${f.progress}%; background: ${progressToColor(f.progress)};"></div>
-                        <span class="progress-label">${f.progress}%</span>
-                    </td>
-                `;
-                body.appendChild(row);
-                attachHover(row);
-            });
-            updateOverallProgress(features);
-            updateCategoryOverview(features);
-        }
-
-        function progressToColor(value) {
-            const hue = (value * 1.2);
-            return `hsl(${hue}, 70%, 50%)`;
-        }
-
-        function attachHover(row) {
-            row.addEventListener("mouseenter", () => {
-                const hintBox = document.getElementById("hintBox");
-                const feature = row.cells[1].innerText;
-                const version = row.cells[2].innerText;
-                const priority = row.cells[3].innerText;
-                const desc = row.getAttribute("data-description");
-                hintBox.innerHTML = `
-                    <h3>${feature}</h3>
-                    <p><strong>Version:</strong> ${version}</p>
-                    <p><strong>Priority:</strong> ${priority}</p>
-                    <p>${desc}</p>
-                `;
-            });
-        }
-
-        function updateOverallProgress(features) {
-            const total = features.reduce((sum, f) => sum + f.progress, 0);
-            const avg = Math.round(total / features.length);
-            document.getElementById("overallProgressFill").style.width = `${avg}%`;
-            document.getElementById("overallProgressFill").style.backgroundColor = progressToColor(avg);
-            document.getElementById("overallProgressLabel").textContent = `${avg}%`;
-        }
-
-        function updateCategoryOverview(features) {
-            ["Global", "Soldier", "Vehicle", "Artillery"].forEach(cat => {
-                const catFeatures = features.filter(f => f.category === cat);
-                if (!catFeatures.length) return;
-                const total = catFeatures.reduce((sum, f) => sum + f.progress, 0);
-                const avg = Math.round(total / catFeatures.length);
-                document.getElementById(`overview-${cat.toLowerCase()}-bar`).style.width = `${avg}%`;
-                document.getElementById(`overview-${cat.toLowerCase()}-bar`).style.backgroundColor = progressToColor(avg);
-                document.getElementById(`overview-${cat.toLowerCase()}-label`).textContent = `${avg}%`;
-            });
-        }
-
-        document.getElementById("categoryFilter").addEventListener("change", e => {
-            const value = e.target.value;
-            document.querySelectorAll("#roadmapBody tr").forEach(row => {
-                row.style.display = (value === "all" || row.getAttribute("data-category") === value) ? "" : "none";
-            });
-        });    
-
-        function renderFunding(funding) {
-            const max = Math.max(...funding.milestones.map(m => m.amount));
-                const percent = Math.min(100, Math.round((funding.current / max) * 100));
-
-                const fill = document.getElementById("fundingFill");
-                fill.style.width = `${percent}%`;
-
-                document.getElementById("fundingCurrentLabel").textContent =
-                    `${funding.current.toLocaleString()} ${funding.currency}`;
-                document.getElementById("fundingPercentLabel").textContent =
-                    `${percent}% funded`;
-
-                const container = document.getElementById("fundingMilestones");
-            container.innerHTML = "";
-            funding.milestones.forEach(m => {
-                const milestonePercent = (m.amount / max) * 100;
-                const el = document.createElement("div");
-                el.className = "funding-milestone";
-                el.style.left = `${milestonePercent}%`;
-                
-                // This creates the hidden info box that shows on hover
-                el.innerHTML = `
-                    <div class="milestone-info">
-                        <strong style="display:block;">${m.amount.toLocaleString()} ${funding.currency}</strong>
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">${m.label}</span>
-                    </div>
-                `;
-                container.appendChild(el);
-            });
-        }       
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+        function closeMenu() { document.getElementById('sidebar').classList.remove('open'); }
         
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(l => l.addEventListener('click', () => {
+            links.forEach(link => link.classList.remove('active'));
+            l.classList.add('active');
+        }));
 
+        // 1. Tentukan daftar file musik yang ada di folder Anda
+        const musicFolder = "music/"; // Nama folder musik Anda
+        const playlist = [
+            "The Victory.mp3",
+            "Los Del Rio - Macarena.mp3",
+            "bad boys what you gonna do.mp3"
+        ];
+        
+        let currentTrackIndex = 0;
+        const audio = document.getElementById('bgm');
+        const source = document.getElementById('audio-source');
+        const musicBtn = document.getElementById('music-toggle');
+        const musicInfo = document.getElementById('music-info');
+
+        // 2. Fungsi untuk memuat lagu
+        function loadTrack(index) {
+            source.src = musicFolder + playlist[index];
+            audio.load();
+            musicInfo.innerText = "TRACK: " + playlist[index].toUpperCase();
+        }
+
+        const volSlider = document.getElementById('volume-control');
+        const volPercent = document.getElementById('vol-percent');
+
+        // Set volume awal ke 30%
+        audio.volume = 0.3;
+
+        // Event listener untuk perubahan volume
+        volSlider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            audio.volume = value;
+            volPercent.innerText = Math.round(value * 100) + "%";
+            
+            // Visual feedback jika mute
+            if (value == 0) {
+                volPercent.style.color = "#ef4444";
+            } else {
+                volPercent.style.color = "#facc15";
+            }
+        });
+
+        // 3. Fungsi Play/Pause
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play().catch(e => console.log("User interaction required"));
+                musicBtn.innerText = "[MUSIC_ON]";
+                musicBtn.style.color = "#facc15";
+                musicInfo.classList.remove('hidden');
+            } else {
+                audio.pause();
+                musicBtn.innerText = "[MUSIC_OFF]";
+                musicBtn.style.color = "";
+            }
+        }
+
+        // 4. Fungsi lagu berikutnya
+        function playNext() {
+            currentTrackIndex++;
+            if (currentTrackIndex >= playlist.length) {
+                currentTrackIndex = 0; // Kembali ke awal jika playlist habis
+            }
+            loadTrack(currentTrackIndex);
+            audio.play();
+            musicBtn.innerText = "[MUSIC_ON]";
+            musicBtn.style.color = "#facc15";
+        }
+
+        // 5. Event listener: jika lagu selesai, otomatis putar lagu berikutnya
+        audio.addEventListener('ended', function() {
+            playNext();
+        });
+
+        // Load lagu pertama saat startup
+        loadTrack(currentTrackIndex);
     </script>
 </body>
 </html>

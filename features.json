@@ -1,0 +1,110 @@
+[
+    {
+      "cat": "Global Systems",
+      "name": "BI Unfuck Systemss",
+      "ver": "v0.1",
+      "prio": 1000,
+      "prog": 100,
+      "desc": "Core engine-level fixes and overrides for BI AI behaviour, configs, and scheduling. Everything else depends on this.",
+      "video": "video/Arma Reforger DCO AI - Failing hard against our AI.mp4"
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Aim correction",
+      "ver": "v0.1",
+      "prio": 980,
+      "prog": 100,
+      "desc": "Make desc",
+      "video": ""
+    },
+    {
+      "cat":  "Soldier Systems",
+      "name": "Vision Limiting",
+      "ver": "v0.1",
+      "prio": 950,
+      "prog": 100,
+      "desc": "AI will have a slower detection time at night and will aim less accurate in night time.",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Individual morale",
+      "ver": "v0.1",
+      "prio": 950,
+      "prog": 60,
+      "desc": "The individual AI's emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier Systems to take cover, go prone or hide from enemy fire and do so for a longer time. Soldier Systemss with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover.",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Danger reaction",
+      "ver": "v0.1",
+      "prio": 950,
+      "prog": 0,
+      "desc": "The AI's instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Improved Long range engagements",
+      "ver": "v0.1",
+      "prio": 900,
+      "prog": 30,
+      "desc": "Tweaks to make AI engage at longer distances. This includes info sharing and use of radios and vocal warnings between soldier Systemss. ",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Suppression",
+      "ver": "v0.1",
+      "prio": 890,
+      "prog": 30,
+      "desc": "AI's ability to suppress detected or identified enemies.",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Adjust to cover",
+      "ver": "v0.1",
+      "prio": 500,
+      "prog": 0,
+      "desc": "AI's ability to use advanced stance adjustment to adapt to cover geometry.",
+      "video": ""
+    }, 
+    {
+      "cat": "Soldier Systems",
+      "name": "Emergency rearm",
+      "ver": "v0.1",
+      "prio": 850,
+      "prog": 0,
+      "desc": "Soldier Systemss will pick up ammo for his rifle if available. If not, he will pick up nearby weapons that has available ammo for it. ",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "Close combat behaviour",
+      "ver": "v0.1",
+      "prio": 750,
+      "prog": 0,
+      "desc": "Soldier Systemss will prioritize using buildings as cover (not possible yet as it can not ID a building yet), if in melee range, soldier Systemss will engage in melee with the enemy. If within 50 meters from detected enemies, the soldier Systems will avoid going prone and find cover instead.",
+      "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "IDLE behaviour",
+      "ver": "v0.1",
+      "prio": 950,
+      "prog": 0,
+      "desc": "A soldier Systems that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier Systems will patrol the nearby area.  Will patrol within a 150 m radius around the SL",
+      "video": ""
+    },
+    {
+      "cat": "Squad Behaviour",
+      "name": "Tactics",
+      "ver": "v0.1",
+      "prio": 750,
+      "prog": 0,
+      "desc": "If no custom settings are forced, the Group leader will initiate Five types of tactics ",
+      "video": ""
+    }
+]
