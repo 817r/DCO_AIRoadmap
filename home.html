@@ -58,16 +58,45 @@
     </div>
 
     <div class="section-container">
-        <h2 class="text-lg md:text-xl font-bold mb-4">Project Funding</h2>
-        <div id="funding-amount" class="text-lg font-bold mb-2">0 $</div>
+        <h2 class="text-xl font-bold mb-8 italic text-yellow-500">// PROJECT_FUNDING_STATUS</h2>
         
-        <div class="relative w-full h-5 bg-[#111315] rounded flex items-center mb-2 border border-zinc-800 overflow-hidden">
-            <div id="funding-progress-bar" class="absolute top-0 left-0 h-full bg-orange-600/40 transition-all duration-1000"></div>
+        <div class="relative pt-6 mb-12">
+            <div class="absolute top-0 w-full flex justify-between px-1 text-[10px] font-bold">
+                <span class="text-red-500">1500 USD</span>
+                <span class="text-orange-500">3000 USD</span>
+                <span class="text-yellow-500">6000 USD</span>
+                <span class="text-green-500">10000 USD</span>
+            </div>
+
+            <div class="relative w-full h-4 bg-[#0d0e0a] border border-zinc-800 rounded-full overflow-hidden shadow-[inner_0_2px_4px_rgba(0,0,0,0.5)]">
+                <div id="funding-progress-bar" 
+                    class="h-full bg-gradient-to-r from-red-600 via-orange-500 to-green-500 transition-all duration-1000 ease-out" 
+                    style="width: 0%">
+                </div>
+            </div>
+
+            <div class="mt-3 w-full flex justify-between px-1 text-[9px] font-black text-yellow-400 uppercase tracking-tighter">
+                <span>Global systems</span>
+                <span>Soldier</span>
+                <span>Squad</span>
+                <span>Vehicle AI</span>
+                <span>Artillery AI</span>
+                <span>Player Cmd</span>
+                <span>Battlegroup</span>
+                <span>High Cmd</span>
+                <span>Gamemode</span>
+            </div>
         </div>
         
-        <div class="flex justify-between text-[10px] font-bold">
-            <span id="funding-percentage" class="uppercase tracking-tighter">0% FUNDED</span>
-            <span class="text-zinc-500 italic">GOAL: 10,000 $</span>
+        <div class="flex justify-between items-end">
+            <div>
+                <div id="funding-amount" class="text-2xl font-black text-white leading-none">0 $</div>
+                <div class="text-[10px] opacity-40 uppercase tracking-widest mt-1">Current Operational Budget</div>
+            </div>
+            <div class="text-right">
+                <div id="funding-percentage" class="text-xl font-black text-yellow-500 leading-none">0%</div>
+                <div class="text-[10px] opacity-40 uppercase tracking-widest mt-1 italic">Total Funding Reach</div>
+            </div>
         </div>
     </div>
 
@@ -124,14 +153,16 @@
         function updateFunding() {
             const percentage = (currentFunding / fundingGoal) * 100;
             const cappedPercentage = Math.min(percentage, 100);
-            document.getElementById('funding-amount').innerText = `${currentFunding.toLocaleString()} $`;
-            document.getElementById('funding-percentage').innerText = `${cappedPercentage.toFixed(0)}% FUNDED`;
+
+            // Update teks budget
+            document.getElementById('funding-amount').innerText = `${currentFunding.toLocaleString()} USD`;
+            document.getElementById('funding-percentage').innerText = `${cappedPercentage.toFixed(0)}%`;
+
+            // Update lebar bar dengan animasi
             const progressBar = document.getElementById('funding-progress-bar');
-            progressBar.style.width = `${cappedPercentage}%`;
-            if(cappedPercentage >= 100) {
-                progressBar.classList.remove('bg-orange-600/40');
-                progressBar.classList.add('bg-green-600/40');
-            }
+            setTimeout(() => {
+                progressBar.style.width = `${cappedPercentage}%`;
+            }, 100);
         }
 
         window.onload = updateFunding;
