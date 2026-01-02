@@ -42,6 +42,24 @@
             transition: all 0.2s;
         }
         .audio-control:hover { border-color: #facc15; color: #facc15; }
+        .nav-link {
+        font-size: 16px !important; /* Diperbesar dari 14px */
+        letter-spacing: 1px;
+        }
+        .campaign-bar-bg {
+            background: rgba(61, 68, 50, 0.3);
+            border: 1px solid #3d4432;
+            height: 8px;
+            width: 150px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .campaign-bar-fill {
+            background: #facc15;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+            transition: width 1s ease-out;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen">
@@ -49,18 +67,30 @@
         <source id="audio-source" type="audio/mpeg">
     </audio>
 
-    <header class="h-16 border-b-2 border-yellow-500/50 bg-black flex items-center justify-between px-4 z-50">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleMenu()" class="md:hidden text-yellow-500 text-2xl">☰</button>
-            <div class="flex flex-col">
-                <span class="text-yellow-400 font-black text-lg leading-none">DCO</span>
-                <span class="text-[8px] text-yellow-600 tracking-[0.2em]">AI REFORGER</span>
+    <header class="h-20 border-b-2 border-yellow-500/50 bg-black flex items-center justify-between px-4 z-50">
+        <div class="flex items-center gap-3 border-l border-zinc-800 pl-3">
+            <div class="flex items-center bg-yellow-400 p-1">
+                <img src="images\dragon_company.png" alt="UNIT_LOGO" class="h-12 w-auto object-contain">
+                <span class="text-[12px] font-black text-black px-2 uppercase truncate hidden sm:block">
+                    Dragon Company AI
+                </span>
+            </div>
+        </div>
+
+        <div class="campaign-stats flex items-center gap-4 border-l border-[#3d4432] pl-4 h-8">
+            <div class="flex flex-col items-end">
+                <span class="text-[15px] font-bold text-zinc-500 uppercase tracking-widest">Overall_Campaign_Progress</span>
+                <div class="flex items-center gap-3">
+                    <div class="campaign-bar-bg">
+                        <div class="campaign-bar-fill" style="width: 45%;"></div> </div>
+                    <span class="text-[15px] font-black text-[#facc15]">45%</span>
+                </div>
             </div>
         </div>
         
         <div class="flex items-center gap-3">
             <a href="https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger" target="_blank" 
-            class="hidden sm:flex items-center gap-2 px-3 py-1 border border-yellow-500/30 bg-yellow-500/5 text-yellow-500 text-[10px] font-bold hover:bg-yellow-500 hover:text-black transition-all group">
+            class="hidden sm:flex items-center gap-2 px-3 py-1 border border-yellow-500/30 bg-yellow-500/5 text-yellow-500 text-[15px] font-bold hover:bg-yellow-500 hover:text-black transition-all group">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse group-hover:bg-black"></span>
                 [ACCESS_WORKSHOP_MOD]
             </a>
@@ -68,7 +98,7 @@
             <div class="flex items-center gap-2 border-l border-zinc-800 pl-3">
                     <div class="flex items-center gap-4 px-4 py-2 bg-black/50 border-b border-yellow-500/20">
                         <div class="flex items-center gap-2">
-                            <div id="music-info" class="text-[9px] opacity-50 hidden md:block truncate max-w-[150px]">
+                            <div id="music-info" class="text-[13px] opacity-50 hidden md:block truncate max-w-[150px]">
                                 NOT_PLAYING
                             </div>
                             <div id="music-toggle" class="audio-control" onclick="toggleAudio()">
@@ -85,7 +115,7 @@
                             <span id="vol-percent" class="text-[9px] text-yellow-500 font-bold w-6">30%</span>
                         </div>
                     </div>
-                <div class="text-[10px] font-bold bg-yellow-400 text-black px-2 py-1 uppercase truncate">
+                <div class="text-[15px] font-bold bg-yellow-400 text-black px-2 py-1 uppercase truncate">
                     ARMA REFORGER
                 </div>
             </div>
@@ -96,12 +126,22 @@
         <aside id="sidebar" class="sidebar w-64 bg-[#0d0e0a] border-r-2 border-army-green p-4 flex flex-col gap-2">
             <p class="text-[10px] opacity-30 mb-4">NAV_LOGS</p>
             <a href="home.html" target="content-frame" class="nav-link p-3 text-sm font-bold active" onclick="closeMenu()">[00] OVERVIEW</a>
-            <a href="roadmap.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">[01] MILESTONES</a>
+            <a href="about.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">[01] TEAM COMPOSITION</a>
+            <a href="roadmap.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">[02] MILESTONES</a>
             <a href="features.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [02] DETAILED_FEATURES
+                [03] DETAILED_FEATURES
+            </a>
+            <a href="devlog.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
+                [04] DEVLOG
+            </a>
+            <a href="media.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
+                [05] MEDIA
+            </a>
+            <a href="recruitment.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
+                [06] RECRUITMENT
             </a>
             <a href="donate.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [03] DONATION_SUPPORT
+                [07] DONATION_SUPPORT
             </a>
             <div class="mt-auto p-3 border border-yellow-900/30 text-[9px] opacity-40">SYSTEM: STABLE</div>
         </aside>

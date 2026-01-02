@@ -7,30 +7,184 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
-        .donate-card { background: #1a1c1e; border: 1px solid #3d4432; border-radius: 8px; padding: 30px; text-align: center; max-width: 500px; margin: 40px auto; }
-        .paypal-button { background: #facc15; color: #000; font-weight: bold; padding: 12px 24px; border-radius: 4px; display: inline-block; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .donate-card { background: #1a1c1e; border: 1px solid #3d4432; border-radius: 8px; padding: 25px; }
+        .paypal-button { background: #facc15; color: #000; font-weight: bold; padding: 12px 24px; border-radius: 4px; display: inline-block; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; width: 100%; text-align: center; }
         .paypal-button:hover { background: #eab308; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3); }
+        
+        /* Table Styles */
+        .database-container { background: #0d0e0a; border: 1px solid #3d4432; border-radius: 4px; overflow: hidden; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th:nth-child(1), td:nth-child(1) { width: 10%; text-align: center; }
+        th:nth-child(2), td:nth-child(2) { width: 35%; }
+        th:nth-child(3), td:nth-child(3) { width: 35%; }
+        th:nth-child(4), td:nth-child(4) { width: 20%; text-align: right; }
+        thead { background: #3d4432; color: #facc15; text-transform: uppercase; font-size: 14px; letter-spacing: 2px; }
+        th, td { padding: 18px 20px; border-bottom: 1px solid #2d2f31; }
+        tbody tr td { font-size: 16px; }
+
+        /* Rank Badge Style */
+        .rank-badge { font-weight: bold; font-size: 11px; padding: 6px 0; width: 150px; text-align: center; border-radius: 2px; text-transform: uppercase; display: inline-block; }
+        .platinum { color: #f87171; border: 1px solid #f87171; background: rgba(248, 113, 113, 0.1); }
+        .gold { color: #facc15; border: 1px solid #facc15; background: rgba(250, 204, 21, 0.1); }
+        .silver { color: #60a5fa; border: 1px solid #60a5fa; background: rgba(96, 165, 250, 0.1); }
+        .basic { color: #4ade80; border: 1px solid #4ade80; background: rgba(74, 222, 128, 0.1); }
+
+        /* Task Progress Bar Styles */
+        .task-bar-bg { background: #0d0e0a; height: 6px; border-radius: 3px; overflow: hidden; border: 1px solid #2d2f31; }
+        .task-bar-fill { height: 100%; background: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
+        .task-card { background: #111315; border: 1px solid #2d2f31; padding: 12px; transition: all 0.3s; }
+        .stat-box {
+        background: #111315;
+        border: 1px solid #2d2f31;
+        padding: 15px 20px;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        }
+        .stat-label { font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .stat-value { font-size: 24px; font-weight: 800; color: #facc15; font-family: 'JetBrains Mono', monospace; }
+        .stat-value span { font-size: 14px; color: #4ade80; margin-left: 5px; }
     </style>
 </head>
 <body>
-    <div class="donate-card">
-        <h2 class="text-xl font-bold mb-4 text-yellow-500">// SUPPORT_THE_PROJECT</h2>
-        <p class="text-xs mb-8 opacity-70 leading-relaxed">
-            Your Contribution Help Us Accelerate The Project On Arma.
-        </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="stat-box border-l-4 border-l-green-500">
+            <span class="stat-label">[TOTAL_FUNDED]</span>
+            <div class="stat-value" id="display-funded">$0<span>/ $10,000</span></div>
+        </div>
         
-        <div class="mb-8 p-4 bg-black/40 border border-zinc-800 text-[10px] text-left italic">
-            <span class="text-yellow-500 font-bold uppercase block mb-2">Notice:</span>
-            All funds will be donated to the developer instantly.
+        <div class="stat-box border-l-4 border-l-blue-500">
+            <span class="stat-label">[ACTIVE_OPERATIVES]</span>
+            <div class="stat-value" id="display-donators">0<span>DONORS</span></div>
         </div>
 
-        <a href="https://paypal.me/LINK_PAYPAL_ANDA" target="_blank" class="paypal-button">
-            Donate via PayPal
-        </a>
-
-        <div class="mt-8 text-[9px] opacity-30 uppercase tracking-widest">
-            Logistics Support Protocol v1.0
+        <div class="stat-box border-l-4 border-l-yellow-500">
+            <span class="stat-label">[CAMPAIGN_STATUS]</span>
+            <div class="stat-value text-sm" style="font-size: 18px;">INFANTRY COMBAT</div>
         </div>
     </div>
+    <div class="max-w-7xl mx-auto">
+        
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="lg:w-2/3">
+                <div class="donate-card">
+                    <h2 class="text-2xl font-black mb-4 text-yellow-500 italic">// LOGISTICS_FUNDING_PORTAL</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-left">
+                        <div>
+                            <p class="text-sm opacity-70 leading-relaxed mb-6">
+                                Every Contribution is recorded in the central database to support DCO operations. Ranks are assigned based on total support.
+                            </p>
+                            <a id="donateButton" href="https://paypal.me/YOUR_PAYPAL" target="_blank" class="paypal-button">
+                                Donate
+                            </a>
+                        </div>
+                        <div class="p-4 bg-black/40 border border-zinc-800 text-[14px] italic">
+                            <span class="text-yellow-500 font-bold uppercase block mb-2">Operational Ranks:</span>
+                            > 500 USD : Platinum Contributor<br>
+                            > 250 USD : Gold Contributor<br>
+                            > 50 USD  : Silver Contributor<br>
+                            > 10 USD  : Basic Contributor
+                        </div>
+                    </div>
+                </div>
+
+                <div class="database-container">
+                    <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
+                        <span class="text-xs font-bold uppercase tracking-widest text-zinc-500">[CONTRIBUTOR_DATABASE]</span>
+                        <span class="text-[10px] text-green-500">● ONLINE</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr><th>#</th><th>Callsign</th><th>Ranks</th><th style="text-align: right;">Amount</th></tr>
+                            </thead>
+                            <tbody id="donorBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/3 space-y-6">
+
+                <div>
+                    <div class="text-xs font-bold text-green-500 mb-3 tracking-widest uppercase">>> Funding_Task_Progress</div>
+                    <div class="space-y-3">
+                        <div class="task-card">
+                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
+                                <span>Global systems</span>
+                                <span class="text-green-500">100%</span>
+                            </div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 100%"></div></div>
+                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 1,500 USD Reached</div>
+                        </div>
+                        <div class="task-card">
+                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
+                                <span>Soldier & Squad AI</span>
+                                <span class="text-green-500">78%</span>
+                            </div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 78%"></div></div>
+                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 3,000 USD Target</div>
+                        </div>
+                        <div class="task-card">
+                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
+                                <span>Vehicle & Artillery</span>
+                                <span class="text-zinc-600">0%</span>
+                            </div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 0%"></div></div>
+                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 6,000 USD Target</div>
+                        </div>
+                        <div class="task-card">
+                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
+                                <span>High Cmd & Gamemode</span>
+                                <span class="text-zinc-600">0%</span>
+                            </div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 0%"></div></div>
+                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 10,000 USD Final</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* { name: "Ghost_Lead_01", amount: 600 }, */
+        const donors = [
+        ];
+
+        function getRank(amount) {
+            if (amount >= 500) return { label: "Platinum", class: "platinum" };
+            if (amount >= 250) return { label: "Gold", class: "gold" };
+            if (amount >= 50) return { label: "Silver", class: "silver" };
+            return { label: "Basic", class: "basic" };
+        }
+
+        function renderDonors() {
+            const body = document.getElementById('donorBody');
+            const sortedDonors = donors.sort((a, b) => b.amount - a.amount);
+            body.innerHTML = sortedDonors.map((donor, index) => {
+                const rank = getRank(donor.amount);
+                return `
+                    <tr>
+                        <td style="text-align: center;" class="font-bold text-zinc-500">${index + 1}</td>
+                        <td class="font-bold text-white uppercase tracking-wider">${donor.name}</td>
+                        <td><span class="rank-badge ${rank.class}">${rank.label}</span></td>
+                        <td style="text-align: right;" class="text-green-500 font-bold font-mono">$${donor.amount.toLocaleString()}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        window.onload = renderDonors;
+
+        // Hover effect for donate button
+        const button = document.getElementById('donateButton');
+        button.addEventListener('mouseenter', () => {
+            button.textContent = '[ Deploy Funds ]';
+        });
+        button.addEventListener('mouseleave', () => {
+            button.textContent = '[ Donate ]';
+        });
+    </script>
 </body>
 </html>

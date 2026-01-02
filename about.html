@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
+        .about-section { background: rgba(26, 28, 30, 0.9); border: 1px solid #2d2f31; border-radius: 8px; padding: 30px; margin-bottom: 20px; }
+        .font-header { font-size: 24px; font-weight: 800; color: #facc15; }
+        
+        /* Profile Styling */
+        .profile-card { background: #0d0e0a; border: 1px solid #3d4432; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        @media (min-width: 768px) { .profile-card { flex-direction: row; } }
+        .profile-img { width: 150px; height: 180px; background: #1a1c1e; border: 2px solid #3d4432; object-fit: cover; filter: sepia(0.5) contrast(1.2); }
+        .dossier-label { color: #facc15; font-weight: bold; font-size: 14px; text-transform: uppercase; width: 80px; display: inline-block; }
+        .role-tag { background: #facc15; color: black; padding: 2px 8px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <div class="max-w-4xl mx-auto">
+        <h2 class="font-header italic mb-8">// ABOUT_DRAGON_COMPANY</h2>
+
+        <div class="about-section">
+            <h3 class="text-lg font-bold mb-6 uppercase text-white tracking-widest">[PERSONNEL_DOSSIER]</h3>
+            
+            <div class="profile-card mb-6">
+                <img src="path_ke_foto_militer.jpg" alt="Erlend_Profile" class="profile-img">
+                
+                <div class="flex-1 space-y-2">
+                    <div class="border-b border-zinc-800 pb-2 mb-2">
+                        <h4 class="text-xl font-bold text-white">Erlend Kristensen</h4>
+                        <span class="role-tag">Lead Designer & Tester</span>
+                    </div>
+                    <div class="text-[13px]">
+                        <div><span class="dossier-label">Rank:</span> Founder</div>
+                        <div><span class="dossier-label">Age:</span> 49</div>
+                        <div><span class="dossier-label">Joined:</span> 2021</div>
+                        <div class="mt-4">
+                            <span class="dossier-label block mb-1">History:</span>
+                            <p class="opacity-70 italic text-[12px]">Seorang veteran simulasi taktis dengan visi mendalam pada mekanika AI. Mendirikan Dragon Company sebagai respon terhadap keterbatasan sistem tempur standar, membawa pengalaman bertahun-tahun dalam pengujian skenario taktis kompleks.</p>
+                        </div>
+                        <div class="mt-3">
+                            <span class="dossier-label block mb-1">Skillset:</span>
+                            <p class="text-yellow-500/80 text-[11px]">AI Design.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card mb-6">
+                <img src="path_ke_foto_militer.jpg" alt="Richard_Profile" class="profile-img">
+                
+                <div class="flex-1 space-y-2">
+                    <div class="border-b border-zinc-800 pb-2 mb-2">
+                        <h4 class="text-xl font-bold text-white">Richard</h4>
+                        <span class="role-tag">Lead Programmer</span>
+                    </div>
+                    <div class="text-[13px]">
+                        <div><span class="dossier-label">Rank:</span> Founder</div>
+                        <div><span class="dossier-label">Age:</span> 23</div>
+                        <div><span class="dossier-label">Joined:</span> 2024</div>
+                        <div class="mt-4">
+                            <span class="dossier-label block mb-1">History:</span>
+                            <p class="opacity-70 italic text-[12px]">A AI Programmer, experinence in Unity and Unreal Engine.</p>
+                        </div>
+                        <div class="mt-3">
+                            <span class="dossier-label block mb-1">Skillset:</span>
+                            <p class="text-yellow-500/80 text-[11px]">AI Programmer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</body>
+</html>

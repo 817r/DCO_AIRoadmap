@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
+        .log-container { border-left: 2px solid #3d4432; margin-left: 20px; padding-left: 30px; position: relative; }
+        .log-entry { background: #1a1c1e; border: 1px solid #2d2f31; padding: 20px; margin-bottom: 30px; position: relative; }
+        .log-entry::before { 
+            content: ""; width: 12px; height: 12px; background: #facc15; position: absolute; 
+            left: -37px; top: 24px; border-radius: 2px; box-shadow: 0 0 10px #facc15;
+        }
+        .version-badge { background: #facc15; color: black; padding: 2px 8px; font-weight: bold; font-size: 10px; }
+        .stability-tag { font-size: 10px; padding: 2px 8px; border: 1px solid #3d4432; }
+    </style>
+</head>
+<body>
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-black italic mb-8 text-yellow-500 uppercase tracking-tighter">// AI_DEVELOPMENT_LOG</h2>
+
+        <div class="log-container">
+            
+            <div class="log-entry">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="version-badge">v0.4.9</span>
+                        <span class="ml-2 text-xs opacity-50">2025-12-15</span>
+                    </div>
+                    <span class="stability-tag text-green-500">STABLE VERSION</span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">Individual Initial Behavior Port</h3>
+                <p class="text-sm opacity-70 mb-4 leading-relaxed italic">
+                    Porting individual behavior logic from the previous system.
+                </p>
+                <div class="grid grid-cols-1 gap-2 text-[12px]">
+                    <div class="p-2 bg-black/40 border border-zinc-800">
+                        <span class="text-yellow-500 block mb-1">[+] ADDED</span>
+                        <ul class="opacity-60">
+                            <li>- Improved Combat Movement</li>
+                            <li>- Morale System</li>
+                        </ul>
+                    </div>
+                    <div class="p-2 bg-black/40 border border-zinc-800">
+                        <span class="text-red-500 block mb-1">[-] FIXED</span>
+                        <ul class="opacity-60">
+                            <li>- Better Fireteam and Investigation</li>
+                            <li>- Better Cover Seeking Behavior</li>
+                            <li>- Improved Danger Reaction</li>
+                        </ul>
+                    </div>
+                    <div class="p-2 bg-black/40 border border-zinc-800">
+                        <span class="text-yellow-500 block mb-1">[!] PATCH_NOTES</span>
+                        <ul class="opacity-60">
+                            <li>- Fix Cover System</li>
+                            <li>- Better suppression area handling</li>
+                            <li>- More responsive AI on combat</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="log-entry">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="version-badge">v0.4.10</span>
+                        <span class="ml-2 text-xs opacity-50">2026-01-02</span>
+                    </div>
+                    <span class="stability-tag text-yellow-500">TESTING CANDIDATE</span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2 uppercase tracking-wide">IMPROVED INFANTRY COMBAT</h3>
+                <p class="text-sm opacity-70 mb-4 leading-relaxed italic">
+                    Better combat movement, morale system and threat assessment.
+                </p>
+                <div class="grid grid-cols-1 text-[11px]">
+                    <div class="p-2 bg-black/40 border border-zinc-800">
+                        <span class="text-yellow-500 block mb-1">[!] PATCH_NOTES</span>
+                        <ul class="opacity-60">
+                            <li>- Fix Cover System</li>
+                            <li>- Better suppression area handling</li>
+                            <li>- More responsive AI on combat</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

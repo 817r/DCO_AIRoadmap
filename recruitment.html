@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
+        .recruit-card { background: #1a1c1e; border: 1px solid #3d4432; border-radius: 4px; padding: 25px; margin-bottom: 25px; }
+        
+        /* Role Box Detail */
+        .role-entry { background: #111315; border: 1px solid #2d2f31; margin-bottom: 15px; overflow: hidden; border-left: 4px solid #3d4432; transition: all 0.3s; }
+        .role-entry:hover { border-left-color: #facc15; background: #16181b; }
+        
+        .role-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .role-content { padding: 0 15px 15px 15px; border-top: 1px dashed #2d2f31; margin-top: 5px; padding-top: 15px; }
+        
+        .req-tag { font-size: 9px; padding: 2px 6px; background: #22c55e/10; color: #4ade80; border: 1px solid #22c55e/30; border-radius: 2px; text-transform: uppercase; margin-right: 5px; }
+        .status-open { color: #facc15; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+        
+        .apply-btn { background: #facc15; color: #000; font-weight: bold; padding: 12px; border-radius: 2px; display: block; width: 100%; text-align: center; text-transform: uppercase; transition: all 0.2s; }
+        .apply-btn:hover { background: #eab308; box-shadow: 0 0 15px rgba(250, 204, 21, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-black italic mb-6 text-yellow-500 uppercase tracking-tighter">// PERSONNEL_RECRUITMENT_OFFICE</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+                <h3 class="text-xs font-bold text-zinc-500 mb-4 uppercase tracking-[0.3em] font-mono">>> AVAILABLE_MOS_POSITIONS</h3>
+
+                <div class="role-entry">
+                    <div class="role-header">
+                        <div>
+                            <span class="text-xs text-zinc-500 font-bold block mb-1">Programmers</span>
+                            <h4 class="text-white font-bold text-lg uppercase">Reforger Programmers</h4>
+                        </div>
+                        <span class="status-open">[OPEN]</span>
+                    </div>
+                    <div class="role-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
+                                <p class="text-[11px] opacity-70 leading-relaxed italic">Engage in direct combat operations, conduct reconnaissance and security patrols, and secure strategic objectives.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
+                                <ul class="text-[10px] space-y-1 opacity-80">
+                                    <li>- Basic knowledge of infantry weapons and tactics.</li>
+                                    <li>- Proficiency in radio communication (TFAR/ACRE).</li>
+                                    <li>- Discipline in fire control and movement.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="role-entry">
+                    <div class="role-header">
+                        <div>
+                            <span class="text-xs text-zinc-500 font-bold block mb-1">Media</span>
+                            <h4 class="text-white font-bold text-lg uppercase">Media</h4>
+                        </div>
+                        <span class="status-open">[OPEN]</span>
+                    </div>
+                    <div class="role-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
+                                <p class="text-[11px] opacity-70 leading-relaxed italic">Provide immediate medical treatment to wounded personnel on the battlefield, including wound stabilization and evacuation coordination.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
+                                <ul class="text-[10px] space-y-1 opacity-80">
+                                    <li>- Knowledge of basic trauma care and medical procedures.</li>
+                                    <li>- Familiarity with medical equipment (tourniquets, bandages, etc.).</li>
+                                    <li>- Ability to remain calm and effective under fire.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="role-entry">
+                    <div class="role-header">
+                        <div>
+                            <span class="text-xs text-zinc-500 font-bold block mb-1">Server admins</span>
+                            <h4 class="text-white font-bold text-lg uppercase">Server admins</h4>
+                        </div>
+                        <span class="status-open">[OPEN]</span>
+                    </div>
+                    <div class="role-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
+                                <p class="text-[11px] opacity-70 leading-relaxed italic">Manage and maintain game servers, ensure smooth operations, and handle technical issues during missions.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
+                                <ul class="text-[10px] space-y-1 opacity-80">
+                                    <li>- Knowledge of server administration and hosting.</li>
+                                    <li>- Experience with troubleshooting technical issues.</li>
+                                    <li>- Ability to monitor and optimize server performance.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="role-entry">
+                    <div class="role-header">
+                        <div>
+                            <span class="text-xs text-zinc-500 font-bold block mb-1">Dedicated testers</span>
+                            <h4 class="text-white font-bold text-lg uppercase">Dedicated testers</h4>
+                        </div>
+                        <span class="status-open">[OPEN]</span>
+                    </div>
+                    <div class="role-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
+                                <p class="text-[11px] opacity-70 leading-relaxed italic">Test game features extensively, report bugs, and provide detailed feedback on gameplay mechanics and balance.</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
+                                <ul class="text-[10px] space-y-1 opacity-80">
+                                    <li>- Attention to detail and systematic testing approach.</li>
+                                    <li>- Experience with bug reporting and documentation.</li>
+                                    <li>- Strong communication skills for feedback delivery.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="recruit-card">
+                    <h3 class="text-xs font-bold text-white mb-4 uppercase tracking-widest">[GENERAL_CRITERIA]</h3>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-black/40 border border-zinc-800">
+                            <span class="text-[10px] text-green-500 font-bold block mb-1">AGE_REQUIREMENT</span>
+                            <p class="text-[11px] opacity-60">Minimum 18 years (Mature mindset).</p>
+                        </div>
+                        <div class="p-3 bg-black/40 border border-zinc-800">
+                            <span class="text-[10px] text-green-500 font-bold block mb-1">COMMUNICATION</span>
+                            <p class="text-[11px] opacity-60">Quality microphone & Discord required.</p>
+                        </div>
+                        <div class="p-3 bg-black/40 border border-zinc-800">
+                            <span class="text-[10px] text-green-500 font-bold block mb-1">ATTENDANCE</span>
+                            <p class="text-[11px] opacity-60">Able to attend minimum 2 operations per month.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <a href="mailto:armadragoncompany@gmail.com" class="apply-btn">Send Application Email</a>
+                        <p class="text-[9px] text-center mt-3 opacity-40 uppercase tracking-tighter">Secure Terminal Access Only</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

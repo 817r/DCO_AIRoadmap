@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
+        .media-container { background: rgba(26, 28, 30, 0.9); border: 1px solid #2d2f31; border-radius: 8px; padding: 24px; margin-bottom: 30px; }
+        .video-card { background: #0d0e0a; border: 1px solid #3d4432; overflow: hidden; transition: all 0.3s ease; }
+        .video-card:hover { border-color: #facc15; transform: translateY(-2px); }
+        .gallery-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border: 1px solid #2d2f31; filter: grayscale(0.3); transition: all 0.3s ease; cursor: pointer; }
+        .gallery-img:hover { filter: grayscale(0); border-color: #facc15; }
+        .font-header { font-size: 24px; font-weight: 800; color: #facc15; }
+    </style>
+</head>
+<body>
+    <div class="max-w-6xl mx-auto">
+        <h2 class="font-header italic mb-8">// OPERATIONAL_MEDIA_ARCHIVE</h2>
+
+        <div class="media-container">
+            <h3 class="text-sm font-bold mb-6 uppercase text-white tracking-widest border-b border-zinc-800 pb-2">[VIDEO_FEED_SATELLITE]</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="video-card">
+                    <div class="aspect-video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/42-5Bvi5g6s?si=02xJmBXSwg5CFXgg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-[10px] text-yellow-500 font-bold uppercase italic">Showcase: AI Combat Early Stage Testing</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="aspect-video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/wZ2vh6sK-mk?si=e10NIftTWh_TzKYR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-[10px] text-yellow-500 font-bold uppercase italic">Showcase: DCO AI Testing Operation</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="aspect-video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/ghiGmggwQLM?si=qjizmhf_9UawoJ1O" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3">
+                        <p class="text-[10px] text-yellow-500 font-bold uppercase italic">Showcase: DCO AI Testing Forest Combat</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="media-container">
+            <h3 class="text-sm font-bold mb-6 uppercase text-white tracking-widest border-b border-zinc-800 pb-2">[FIELD_PHOTOGRAPHY_LOGS]</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                
+                <div class="video-card group">
+                    <img src="gallery1.jpg" alt="Combat_Log_1" class="gallery-img">
+                    <div class="p-3 bg-black/50">
+                        <p class="text-[12px] text-yellow-500 font-bold uppercase mb-1">Entry: 001_REC_SQUAD</p>
+                        <p class="text-[11px] text-zinc-400 italic leading-tight">Pengujian formasi squad saat melakukan patroli di sektor hutan Everon.</p>
+                    </div>
+                </div>
+
+                <div class="video-card group">
+                    <img src="gallery2.jpg" alt="Combat_Log_2" class="gallery-img">
+                    <div class="p-3 bg-black/50">
+                        <p class="text-[12px] text-yellow-500 font-bold uppercase mb-1">Entry: 002_MED_PROC</p>
+                        <p class="text-[11px] text-zinc-400 italic leading-tight">Visualisasi sistem medis baru: Stabilisasi unit di bawah tekanan api musuh.</p>
+                    </div>
+                </div>
+
+                <div class="video-card group">
+                    <img src="gallery3.jpg" alt="Combat_Log_3" class="gallery-img">
+                    <div class="p-3 bg-black/50">
+                        <p class="text-[12px] text-yellow-500 font-bold uppercase mb-1">Entry: 003_AI_COVER</p>
+                        <p class="text-[11px] text-zinc-400 italic leading-tight">Analisis pergerakan AI mencari perlindungan (Cover) secara dinamis.</p>
+                    </div>
+                </div>
+
+                <div class="video-card group">
+                    <img src="gallery4.jpg" alt="Combat_Log_4" class="gallery-img">
+                    <div class="p-3 bg-black/50">
+                        <p class="text-[12px] text-yellow-500 font-bold uppercase mb-1">Entry: 004_VEH_TEST</p>
+                        <p class="text-[11px] text-zinc-400 italic leading-tight">Uji coba sinkronisasi turret kendaraan dengan target infanteri jarak jauh.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

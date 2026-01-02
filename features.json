@@ -32,7 +32,7 @@
       "ver": "v0.1",
       "prio": 950,
       "prog": 60,
-      "desc": "The individual AI's emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier Systems to take cover, go prone or hide from enemy fire and do so for a longer time. Soldier Systemss with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover.",
+      "desc": "The individual AIs emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier Systems to take cover, go prone or hide from enemy fire and do so for a longer time. Soldier Systemss with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover.",
       "video": ""
     },
     {
@@ -41,7 +41,7 @@
       "ver": "v0.1",
       "prio": 950,
       "prog": 0,
-      "desc": "The AI's instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
+      "desc": "The AIs instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
       "video": ""
     },
     {
@@ -59,7 +59,7 @@
       "ver": "v0.1",
       "prio": 890,
       "prog": 30,
-      "desc": "AI's ability to suppress detected or identified enemies.",
+      "desc": "AIs ability to suppress detected or identified enemies.",
       "video": ""
     },
     {
@@ -68,7 +68,7 @@
       "ver": "v0.1",
       "prio": 500,
       "prog": 0,
-      "desc": "AI's ability to use advanced stance adjustment to adapt to cover geometry.",
+      "desc": "AIs ability to use advanced stance adjustment to adapt to cover geometry.",
       "video": ""
     }, 
     {

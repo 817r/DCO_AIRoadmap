@@ -25,7 +25,7 @@
         @media (min-width: 768px) {
             .section-container { padding: 24px; }
         }
-        
+
         .progress-bg { background-color: #111315; border-radius: 4px; overflow: hidden; }
         .progress-fill { background-color: #d97706; height: 8px; border-radius: 4px; }
         
@@ -37,31 +37,23 @@
         }
         
         table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; } /* Min-width mencegah tabel gepeng */
-        th { text-align: left; color: #9ca3af; padding: 12px; border-bottom: 2px solid #2d2f31; text-transform: uppercase; letter-spacing: 1px; }
-        td { padding: 16px 12px; border-bottom: 1px solid #2d2f31; vertical-align: middle; }
+        th { text-align: left; color: #9ca3af; padding: 12px; border-bottom: 2px solid #2d2f31; text-transform: uppercase; letter-spacing: 1px; font-size: 14px !important; }
+        td { padding: 16px 12px; border-bottom: 1px solid #2d2f31; vertical-align: middle; font-size: 15px !important;}
         
         .status-bar-bg { background: #111315; width: 80px; height: 4px; border-radius: 2px; position: relative; }
         @media (min-width: 400px) { .status-bar-bg { width: 120px; } }
         .status-bar-fill { height: 100%; border-radius: 2px; }
+        .absolute.top-0.w-full span {
+        font-size: 12px !important;
+        }
     </style>
 </head>
 <body>
     <div class="section-container">
-        <h2 class="text-lg md:text-xl font-bold mb-4">Overall Progress</h2>
-        <div class="flex items-center gap-4 md:gap-6">
-            <div class="flex-1 progress-bg">
-                <div class="progress-fill" style="width: 32%"></div>
-            </div>
-            <span class="font-bold">32%</span>
-        </div>
-        <p class="text-[10px] text-gray-500 mt-2 uppercase tracking-widest">Average progress of all features.</p>
-    </div>
-
-    <div class="section-container">
-        <h2 class="text-xl font-bold mb-8 italic text-yellow-500">// PROJECT_FUNDING_STATUS</h2>
+        <h2 class="text-xl font-bold mb-8 italic text-yellow-500">// PROJECT_LOGISTICS_STATUS</h2>
         
         <div class="relative pt-6 mb-12">
-            <div class="absolute top-0 w-full flex justify-between px-1 text-[10px] font-bold">
+            <div class="absolute top-0 w-full flex justify-between px-1 text-[15px] font-bold">
                 <span class="text-red-500">1500 USD</span>
                 <span class="text-orange-500">3000 USD</span>
                 <span class="text-yellow-500">6000 USD</span>
@@ -75,7 +67,7 @@
                 </div>
             </div>
 
-            <div class="mt-3 w-full flex justify-between px-1 text-[9px] font-black text-yellow-400 uppercase tracking-tighter">
+            <div class="mt-3 w-full flex justify-between px-1 text-[14px] font-black text-yellow-400 uppercase tracking-tighter">
                 <span>Global systems</span>
                 <span>Soldier</span>
                 <span>Squad</span>
@@ -141,7 +133,7 @@
                     <div class="status-bar-bg">
                         <div class="status-bar-fill ${item.color}" style="width: ${item.prog}%"></div>
                     </div>
-                    <div class="text-[9px] mt-1 font-bold">${item.prog}%</div>
+                    <div class="text-[12px] mt-1 font-bold">${item.prog}%</div>
                 </td>
                 <td class="font-bold text-gray-400">TBD</td>
             </tr>
