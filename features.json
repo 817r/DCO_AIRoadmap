@@ -106,5 +106,14 @@
       "prog": 10,
       "desc": "If no custom settings are forced, the Group leader will initiate Five types of tactics ",
       "video": ""
+    },
+    {
+      "cat": "Soldier Systems",
+      "name": "CQB",
+      "ver": "v0.1",
+      "prio": 800,
+      "prog": 70,
+      "desc": "AI Able to do CQB and Building Assault ",
+      "video": ""
     }
 ]
