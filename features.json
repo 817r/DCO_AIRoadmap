@@ -14,7 +14,7 @@
       "ver": "v0.1",
       "prio": 980,
       "prog": 100,
-      "desc": "Make desc",
+      "desc": "AI will zero in on their targets over time, improving accuracy the longer they fire at a target. The zeroing process will reset if the LOS is lost for a certain time or the AI switches targets.",
       "video": ""
     },
     {
@@ -30,90 +30,111 @@
       "cat": "Soldier Systems",
       "name": "Individual morale",
       "ver": "v0.1",
-      "prio": 950,
+      "prio": 925,
       "prog": 80,
-      "desc": "The individual AIs emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier Systems to take cover, go prone or hide from enemy fire and do so for a longer time. Soldier Systemss with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover.",
+      "desc": "The individual AIs emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier Systems to take cover, go prone or hide from enemy fire and do so for a longer time. Soldiers with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover.",
       "video": ""
     },
-    {
+        {
+      "cat": "Soldier Systems",
+      "name": "Suppression",
+      "ver": "v0.1",
+      "prio": 910,
+      "prog": 45,
+      "desc": "AIs ability to suppress detected or identified enemies. Suppression will lower enemy accuracy and increase their chance to seek cover.",
+      "video": ""
+    },
+        {
+      "cat": "Vehicle Behaviour",
+      "name": "Basic vehicle behaviour",
+      "ver": "v0.1",
+      "prio": 900,
+      "prog": 30,
+      "desc": "Vehicles will detect enemies and will to positions with LOS to engage with suppression or direct fires. Vehicles will also take cover behind terrain features when threatned.",
+      "video": ""
+    },
+ {
       "cat": "Soldier Systems",
       "name": "Danger reaction",
       "ver": "v0.1",
-      "prio": 950,
+      "prio": 890,
       "prog": 10,
       "desc": "The AIs instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
       "video": ""
     },
+
     {
       "cat": "Soldier Systems",
-      "name": "Improved Long range engagements",
+      "name": "Vocal Info sharing",
       "ver": "v0.1",
-      "prio": 900,
-      "prog": 40,
-      "desc": "Tweaks to make AI engage at longer distances. This includes info sharing and use of radios and vocal warnings between soldier Systemss. ",
-      "video": ""
-    },
-    {
-      "cat": "Soldier Systems",
-      "name": "Suppression",
-      "ver": "v0.1",
-      "prio": 890,
-      "prog": 45,
-      "desc": "AIs ability to suppress detected or identified enemies.",
-      "video": ""
-    },
-    {
-      "cat": "Soldier Systems",
-      "name": "Adjust to cover",
-      "ver": "v0.1",
-      "prio": 500,
-      "prog": 0,
-      "desc": "AIs ability to use advanced stance adjustment to adapt to cover geometry.",
+      "prio": 880,
+      "prog": 15,
+      "desc": "Soldiers ability to share info vocally about detected enemies, danger events, orders etc. within a certain radius. This will greatly battlefield awareness and responsiveness of nearby allies.",
       "video": ""
     }, 
     {
-      "cat": "Soldier Systems",
-      "name": "Emergency rearm",
+      "cat": "Squad Systems",
+      "name": "Radio Info sharing",
       "ver": "v0.1",
-      "prio": 850,
+      "prio": 880,
       "prog": 0,
-      "desc": "Soldier Systemss will pick up ammo for his rifle if available. If not, he will pick up nearby weapons that has available ammo for it. ",
+      "desc": "Squad leaders will use radio to share info about detected enemies, danger events, orders etc. with other squad leaders in the vicinity. This will greatly increase battlefield awareness and responsiveness of nearby allied squads.",
       "video": ""
     },
     {
       "cat": "Soldier Systems",
       "name": "Close combat behaviour",
       "ver": "v0.1",
-      "prio": 750,
-      "prog": 10,
-      "desc": "Soldier Systemss will prioritize using buildings as cover (not possible yet as it can not ID a building yet), if in melee range, soldier Systemss will engage in melee with the enemy. If within 50 meters from detected enemies, the soldier Systems will avoid going prone and find cover instead.",
+      "prio": 850,
+      "prog": 30,
+      "desc": "IDLE Soldiers will prioritize using buildings as cover (not possible yet as it can not ID a building yet), if in melee range, soldier Systemss will engage in melee with the enemy. If within 50 meters from detected enemies, the soldier Systems will avoid going prone and find cover instead.",
       "video": ""
     },
-    {
-      "cat": "Soldier Systems",
-      "name": "IDLE behaviour",
-      "ver": "v0.1",
-      "prio": 950,
-      "prog": 10,
-      "desc": "A soldier Systems that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier Systems will patrol the nearby area.  Will patrol within a 150 m radius around the SL",
-      "video": ""
-    },
-    {
+   {
       "cat": "Squad Behaviour",
       "name": "Tactics",
       "ver": "v0.1",
-      "prio": 750,
+      "prio": 830,
       "prog": 10,
       "desc": "If no custom settings are forced, the Group leader will initiate Five types of tactics ",
       "video": ""
     },
     {
       "cat": "Soldier Systems",
-      "name": "CQB",
+      "name": "IDLE behaviour",
       "ver": "v0.1",
       "prio": 800,
-      "prog": 70,
+      "prog": 10,
+      "desc": "A soldier that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier Systems will patrol the nearby area.  Will patrol within a 150 m radius around the SL",
+      "video": ""
+    },
+      {
+      "cat": "Soldier Systems",
+      "name": "Emergency rearm",
+      "ver": "v0.1",
+      "prio": 780,
+      "prog": 0,
+      "desc": "Soldiers will pick up ammo for his rifle if available. If not, he will pick up nearby weapons that has available ammo for it. ",
+      "video": ""
+    },
+  
+    {
+      "cat": "Soldier Systems",
+      "name": "CQB",
+      "ver": "v0.1",
+      "prio": 750,
+      "prog": 0,
       "desc": "AI Able to do CQB and Building Assault ",
+      "video": ""
+    },
+
+        {
+      "cat": "Soldier Systems",
+      "name": "Adjust to cover",
+      "ver": "v0.1",
+      "prio": 700,
+      "prog": 0,
+      "desc": "AIs ability to use advanced stance adjustment to adapt to cover geometry.",
       "video": ""
     }
 ]
