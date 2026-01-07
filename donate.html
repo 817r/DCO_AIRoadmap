@@ -51,12 +51,12 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div class="stat-box border-l-4 border-l-green-500">
             <span class="stat-label">[TOTAL_FUNDED]</span>
-            <div class="stat-value" id="display-funded">$0<span>/ $10,000</span></div>
+            <div class="stat-value" id="display-funded">$500<span>/ $10,000</span></div>
         </div>
         
         <div class="stat-box border-l-4 border-l-blue-500">
             <span class="stat-label">[ACTIVE_OPERATIVES]</span>
-            <div class="stat-value" id="display-donators">0<span>DONORS</span></div>
+            <div class="stat-value" id="display-donators">1<span>DONORS</span></div>
         </div>
 
         <div class="stat-box border-l-4 border-l-yellow-500">
@@ -113,25 +113,25 @@
                         <div class="task-card">
                             <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
                                 <span>Global systems</span>
-                                <span class="text-zinc-600">0%</span>
+                                <span class="text-zinc-600">1%</span>
                             </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 0%"></div></div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 1%"></div></div>
                             <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 1,500 USD Reached</div>
                         </div>
                         <div class="task-card">
                             <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
                                 <span>Soldier & Squad AI</span>
-                                <span class="text-zinc-600">0%</span>
+                                <span class="text-zinc-600">3%</span>
                             </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 0%"></div></div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 3%"></div></div>
                             <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 3,000 USD Target</div>
                         </div>
                         <div class="task-card">
                             <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
                                 <span>Vehicle & Artillery</span>
-                                <span class="text-zinc-600">0%</span>
+                                <span class="text-zinc-600">1%</span>
                             </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 0%"></div></div>
+                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 1%"></div></div>
                             <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 6,000 USD Target</div>
                         </div>
                         <div class="task-card">
@@ -151,6 +151,7 @@
     <script>
         /* { name: "Ghost_Lead_01", amount: 600 }, */
         const donors = [
+        { name: "Lateral Combustion", amount: 500 },
         ];
 
         function getRank(amount) {
@@ -168,8 +169,8 @@
                 return `
                     <tr>
                         <td style="text-align: center;" class="font-bold text-zinc-500">${index + 1}</td>
-                        <td class="font-bold text-white uppercase tracking-wider">${donor.name}</td>
-                        <td><span class="rank-badge ${rank.class}">${rank.label}</span></td>
+                        <td style="text-align: center;" class="font-bold text-white uppercase tracking-wider">${donor.name}</td>
+                        <td style="text-align: center;"><span class="rank-badge ${rank.class}">${rank.label}</span></td>
                         <td style="text-align: right;" class="text-green-500 font-bold font-mono">$${donor.amount.toLocaleString()}</td>
                     </tr>
                 `;
