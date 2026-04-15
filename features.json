@@ -1,3 +1,4 @@
+
 [
     {
       "cat": "Global Systems",
@@ -40,7 +41,7 @@
       "name": "Suppression",
       "ver": "v0.1",
       "prio": 910,
-      "prog": 45,
+      "prog": 65,
       "desc": "AIs ability to suppress detected or identified enemies. Suppression will lower enemy accuracy and increase their chance to seek cover.",
       "video": ""
     },
@@ -58,7 +59,7 @@
       "name": "Danger reaction",
       "ver": "v0.1",
       "prio": 890,
-      "prog": 10,
+      "prog": 40,
       "desc": "The AIs instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
       "video": ""
     },
@@ -77,7 +78,7 @@
       "name": "Radio Info sharing",
       "ver": "v0.1",
       "prio": 880,
-      "prog": 0,
+      "prog": 15,
       "desc": "Squad leaders will use radio to share info about detected enemies, danger events, orders etc. with other squad leaders in the vicinity. This will greatly increase battlefield awareness and responsiveness of nearby allied squads.",
       "video": ""
     },
@@ -99,12 +100,24 @@
       "desc": "If no custom settings are forced, the Group leader will initiate Five types of tactics ",
       "video": ""
     },
+	
+	 {
+      "cat": "Squad Behaviour",
+      "name": "Bounding overwatch",
+      "ver": "v0.1",
+      "prio": 830,
+      "prog": 0,
+      "desc": "Squads will separate into two fireteams advancing using bounding overwatch.",
+      "video": ""
+    },
+	
+	
     {
       "cat": "Soldier Systems",
       "name": "IDLE behaviour",
       "ver": "v0.1",
       "prio": 800,
-      "prog": 10,
+      "prog": 40,
       "desc": "A soldier that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier Systems will patrol the nearby area.  Will patrol within a 150 m radius around the SL",
       "video": ""
     },
@@ -113,7 +126,7 @@
       "name": "Emergency rearm",
       "ver": "v0.1",
       "prio": 780,
-      "prog": 0,
+      "prog": 45,
       "desc": "Soldiers will pick up ammo for his rifle if available. If not, he will pick up nearby weapons that has available ammo for it. ",
       "video": ""
     },
@@ -124,7 +137,26 @@
       "ver": "v0.1",
       "prio": 750,
       "prog": 0,
-      "desc": "AI Able to do CQB and Building Assault ",
+      "desc": "AI Able to do advanced CQB tactics and Building Assault ",
+      "video": ""
+    },
+	
+	   {
+      "cat": "DCO Game Mode",
+      "name": "DCO Conflict Game mode",
+      "ver": "v0.1",
+      "prio": 750,
+      "prog": 10,
+      "desc": "DCO version of the Reforger Conflict mode but with our own High command, spawn and capture systems. Commander will assess threats, coordinate defence and attacks on objectives as well as send reinforcements and support to requesting groups.",
+      "video": ""
+    },
+	   {
+      "cat": "Artillery",
+      "name": "Artillery Request",
+      "ver": "v0.1",
+      "prio": 750,
+      "prog": 5,
+      "desc": "Commander will give approval for squads requesting artillery which will enable firemissions on target coordinates",
       "video": ""
     },
 
@@ -133,8 +165,10 @@
       "name": "Adjust to cover",
       "ver": "v0.1",
       "prio": 700,
-      "prog": 0,
+      "prog": 60,
       "desc": "AIs ability to use advanced stance adjustment to adapt to cover geometry.",
       "video": ""
     }
 ]
+
+

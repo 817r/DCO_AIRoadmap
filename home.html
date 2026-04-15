@@ -1,109 +1,327 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background-color: #0d0e0a; 
-            color: #d1d5db; 
-            font-family: 'JetBrains Mono', monospace; 
-            padding: 12px; /* Padding lebih kecil di mobile */
-        }
-        @media (min-width: 768px) {
-            body { padding: 24px; }
-        }
-        .section-container {
-            background-color: #1a1c1e;
-            border-radius: 8px;
-            padding: 16px; /* Padding dinamis */
-            margin-bottom: 20px;
-            border: 1px solid #2d2f31;
-        }
-        @media (min-width: 768px) {
-            .section-container { padding: 24px; }
+        :root {
+            --yellow: #facc15;
+            --orange: #f97316;
+            --green: #22c55e;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --bg: #0a0b08;
+            --card: #111310;
+            --border: #1e2118;
+            --border-bright: #2a2e22;
+            --text-dim: #4a5240;
+            --text-mid: #7a8468;
+            --text: #b8c4a0;
         }
 
-        .progress-bg { background-color: #111315; border-radius: 4px; overflow: hidden; }
-        .progress-fill { background-color: #d97706; height: 8px; border-radius: 4px; }
-        
-        /* Table Responsive Wrapper */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: #0d0e0a;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 16px;
         }
-        
-        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; } /* Min-width mencegah tabel gepeng */
-        th { text-align: left; color: #9ca3af; padding: 12px; border-bottom: 2px solid #2d2f31; text-transform: uppercase; letter-spacing: 1px; font-size: 14px !important; }
-        td { padding: 16px 12px; border-bottom: 1px solid #2d2f31; vertical-align: middle; font-size: 15px !important;}
-        
-        .status-bar-bg { background: #111315; width: 80px; height: 4px; border-radius: 2px; position: relative; }
-        @media (min-width: 400px) { .status-bar-bg { width: 120px; } }
-        .status-bar-fill { height: 100%; border-radius: 2px; }
-        .absolute.top-0.w-full span {
-        font-size: 12px !important;
+
+        /* ===== SECTION WRAPPER ===== */
+        .section {
+            background: var(--card);
+            border: 1px solid var(--border-bright);
+            margin-bottom: 16px;
+        }
+        .section-header {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-bright);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .section-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        .section-sub {
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .section-body { padding: 20px 16px; }
+
+        /* ===== FUNDING SECTION ===== */
+        .funding-milestones {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin-bottom: 16px;
+            border: 1px solid var(--border-bright);
+        }
+        @media (max-width: 640px) { .funding-milestones { grid-template-columns: repeat(2, 1fr); } }
+
+        .milestone-col {
+            padding: 10px 12px;
+            border-right: 1px solid var(--border-bright);
+            position: relative;
+        }
+        .milestone-col:last-child { border-right: none; }
+        .milestone-col.reached { background: rgba(250,204,21,0.04); }
+        .milestone-col.reached::before {
+            content: '✓';
+            position: absolute;
+            top: 8px; right: 8px;
+            font-size: 9px;
+            color: var(--green);
+        }
+
+        .ms-amount { font-size: 14px; font-weight: 700; color: var(--yellow); }
+        .ms-amount.muted { color: var(--text-dim); }
+        .ms-label { font-size: 9px; color: var(--text-mid); text-transform: uppercase; margin-top: 2px; }
+        .ms-desc { font-size: 9px; color: var(--text-dim); margin-top: 4px; font-style: italic; }
+
+        /* Progress bar */
+        .funding-bar-wrap { position: relative; margin-bottom: 12px; }
+        .funding-bar-track {
+            width: 100%;
+            height: 10px;
+            background: #0a0b08;
+            border: 1px solid var(--border-bright);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .funding-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444 0%, #f97316 30%, #facc15 60%, #22c55e 100%);
+            border-radius: 2px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+            position: relative;
+        }
+        .funding-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* Tick markers */
+        .funding-ticks {
+            position: relative;
+            height: 12px;
+            margin-top: 4px;
+        }
+        .funding-tick {
+            position: absolute;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 5px;
+            background: var(--border-bright);
+            top: 0;
+        }
+
+        .funding-numbers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .funding-stat { text-align: left; }
+        .funding-stat-val { font-size: 20px; font-weight: 700; color: #fff; line-height: 1; }
+        .funding-stat-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+        /* ===== ROADMAP TABLE ===== */
+        .roadmap-table { width: 100%; border-collapse: collapse; }
+        .roadmap-table th {
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-bright);
+            font-weight: 700;
+        }
+        .roadmap-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            font-size: 12px;
+        }
+        .roadmap-table tr:last-child td { border-bottom: none; }
+        .roadmap-table tr:hover td { background: rgba(250,204,21,0.02); }
+
+        .area-name { font-weight: 700; color: #d0dab8; font-size: 12px; }
+        .scope-text { color: var(--text-mid); font-size: 11px; }
+
+        .rt-bar-bg {
+            height: 4px;
+            background: var(--border-bright);
+            border-radius: 2px;
+            overflow: hidden;
+            width: 100%;
+            margin-bottom: 3px;
+        }
+        .rt-bar-fill { height: 100%; border-radius: 2px; }
+        .rt-prog-text { font-size: 10px; font-weight: 700; }
+
+        .status-badge {
+            display: inline-block;
+            font-size: 9px;
+            padding: 2px 7px;
+            border-radius: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .sb-active { background: rgba(250,204,21,0.12); color: var(--yellow); border: 1px solid rgba(250,204,21,0.25); }
+        .sb-early  { background: rgba(249,115,22,0.1);  color: var(--orange); border: 1px solid rgba(249,115,22,0.2); }
+        .sb-plan   { background: rgba(90,98,80,0.15);   color: var(--text-mid); border: 1px solid var(--border-bright); }
+        .sb-done   { background: rgba(34,197,94,0.1);   color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+
+        .area-icon {
+            display: inline-block;
+            width: 20px; height: 20px;
+            background: var(--border-bright);
+            text-align: center; line-height: 20px;
+            font-size: 10px;
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+        .area-cell { display: flex; align-items: center; }
+
+        /* ===== OVERALL STATS ===== */
+        .overall-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 480px) { .overall-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .ov-card {
+            background: #0a0b08;
+            border: 1px solid var(--border-bright);
+            padding: 12px;
+        }
+        .ov-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+        .ov-val { font-size: 18px; font-weight: 700; color: #fff; line-height: 1; }
+        .ov-val.yellow { color: var(--yellow); }
+        .ov-val.green { color: var(--green); }
+        .ov-val.orange { color: var(--orange); }
+
+        @media (max-width: 768px) {
+            .roadmap-table { font-size: 11px; }
+            .roadmap-table th, .roadmap-table td { padding: 8px; }
         }
     </style>
 </head>
 <body>
-    <div class="section-container">
-        <h2 class="text-xl font-bold mb-8 italic text-yellow-500">// PROJECT_LOGISTICS_STATUS</h2>
-        
-        <div class="relative pt-6 mb-12">
-            <div class="absolute top-0 w-full flex justify-between px-1 text-[15px] font-bold">
-                <span class="text-red-500">1500 USD</span>
-                <span class="text-orange-500">3000 USD</span>
-                <span class="text-yellow-500">6000 USD</span>
-                <span class="text-green-500">10000 USD</span>
-            </div>
 
-            <div class="relative w-full h-4 bg-[#0d0e0a] border border-zinc-800 rounded-full overflow-hidden shadow-[inner_0_2px_4px_rgba(0,0,0,0.5)]">
-                <div id="funding-progress-bar" 
-                    class="h-full bg-gradient-to-r from-red-600 via-orange-500 to-green-500 transition-all duration-1000 ease-out" 
-                    style="width: 0%">
+    <!-- ===== FUNDING SECTION ===== -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">// Project_Logistics_Status</span>
+            <span class="section-sub">Operational Budget Tracker</span>
+        </div>
+        <div class="section-body">
+
+            <!-- Milestones grid -->
+            <div class="funding-milestones">
+                <div class="milestone-col reached" id="ms-1">
+                    <div class="ms-amount">$1,500</div>
+                    <div class="ms-label">Global Systems</div>
+                    <div class="ms-desc">Core BI fixes & AI engine overrides</div>
+                </div>
+                <div class="milestone-col" id="ms-2">
+                    <div class="ms-amount muted">$3,000</div>
+                    <div class="ms-label">Soldier AI</div>
+                    <div class="ms-desc">Individual soldier full overhaul</div>
+                </div>
+                <div class="milestone-col" id="ms-3">
+                    <div class="ms-amount muted">$6,000</div>
+                    <div class="ms-label">Squad + Vehicle</div>
+                    <div class="ms-desc">Squad tactics & vehicle AI</div>
+                </div>
+                <div class="milestone-col" id="ms-4">
+                    <div class="ms-amount muted">$10,000</div>
+                    <div class="ms-label">High Cmd + Gamemode</div>
+                    <div class="ms-desc">Full CTI game mode integration</div>
                 </div>
             </div>
 
-            <div class="mt-3 w-full flex justify-between px-1 text-[14px] font-black text-yellow-400 uppercase tracking-tighter">
-                <span>Global systems</span>
-                <span>Soldier</span>
-                <span>Squad</span>
-                <span>Vehicle AI</span>
-                <span>Artillery AI</span>
-                <span>Player Cmd</span>
-                <span>Battlegroup</span>
-                <span>High Cmd</span>
-                <span>Gamemode</span>
+            <!-- Bar -->
+            <div class="funding-bar-wrap">
+                <div class="funding-bar-track">
+                    <div class="funding-bar-fill" id="funding-bar"></div>
+                </div>
+                <!-- Tick markers at 15%, 30%, 60% (milestones) -->
+                <div class="funding-ticks">
+                    <div class="funding-tick" style="left:15%"></div>
+                    <div class="funding-tick" style="left:30%"></div>
+                    <div class="funding-tick" style="left:60%"></div>
+                    <div class="funding-tick" style="left:100%"></div>
+                </div>
             </div>
-        </div>
-        
-        <div class="flex justify-between items-end">
-            <div>
-                <div id="funding-amount" class="text-2xl font-black text-white leading-none">0$</div>
-                <div class="text-[10px] opacity-40 uppercase tracking-widest mt-1">Current Operational Budget</div>
+
+            <!-- Numbers -->
+            <div class="funding-numbers">
+                <div class="funding-stat">
+                    <div class="funding-stat-val" id="funding-amount">—</div>
+                    <div class="funding-stat-label">Current Budget</div>
+                </div>
+                <div class="funding-stat" style="text-align:right">
+                    <div class="funding-stat-val" style="color:var(--yellow)" id="funding-pct">—</div>
+                    <div class="funding-stat-label">of $10,000 Goal</div>
+                </div>
             </div>
-            <div class="text-right">
-                <div id="funding-percentage" class="text-xl font-black text-yellow-500 leading-none">0%</div>
-                <div class="text-[10px] opacity-40 uppercase tracking-widest mt-1 italic">Total Funding Reach</div>
-            </div>
+
         </div>
     </div>
 
-    <div class="section-container">
-        <h2 class="text-lg md:text-xl font-bold">Project Overview & Release Roadmap</h2>
-        <p class="text-[10px] text-gray-500 mb-6 uppercase">Progress per Category from feature below.</p>
-        
-        <div class="table-responsive">
-            <table>
+    <!-- ===== OVERALL STATS ===== -->
+    <div class="overall-grid">
+        <div class="ov-card">
+            <div class="ov-label">Active Dev Areas</div>
+            <div class="ov-val yellow">3</div>
+        </div>
+        <div class="ov-card">
+            <div class="ov-label">Current Version</div>
+            <div class="ov-val">v0.4.60</div>
+        </div>
+        <div class="ov-card">
+            <div class="ov-label">Total Downloads</div>
+            <div class="ov-val green">8,856</div>
+        </div>
+    </div>
+
+    <!-- ===== ROADMAP TABLE ===== -->
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">// Development Roadmap</span>
+            <span class="section-sub">Progress per category</span>
+        </div>
+        <div style="overflow-x:auto">
+            <table class="roadmap-table">
                 <thead>
                     <tr>
-                        <th>Area</th>
-                        <th>Scope</th>
-                        <th>Progress</th>
-                        <th>ETA</th>
+                        <th style="width:25%">Area</th>
+                        <th style="width:30%">Scope</th>
+                        <th style="width:20%">Progress</th>
+                        <th style="width:12%">Status</th>
+                        <th style="width:13%">ETA</th>
                     </tr>
                 </thead>
                 <tbody id="roadmap-body"></tbody>
@@ -111,53 +329,75 @@
         </div>
     </div>
 
-    <script>
-        const roadmapData = [
-            { area: "Global Systems", scope: "BI fixes, AI core, global combat context.", prog: 12, color: "bg-red-600" },
-            { area: "Soldier Systems", scope: "Individual Soldier", prog: 40, color: "bg-orange-500" },
-            { area: "Vehicle Behaviour", scope: "Perception, tactics, APC / IFV / MBT logic.", prog: 5, color: "bg-blue-600" },
-            { area: "Artillery", scope: "Player-requested fire missions and safety logic.", prog: 0, color: "bg-blue-600" },
-            { area: "Squad Behaviour", scope: "Capture objectives.", prog: 0, color: "bg-blue-600" },
-            { area: "Player Command", scope: "Ability to give orders to AI on all levels.", prog: 0, color: "bg-blue-600" },
-            { area: "Battlegroup Behaviour", scope: "Capturing AO's.", prog: 0, color: "bg-blue-600" },
-            { area: "High Command Behaviour", scope: "Assign AO.", prog: 0, color: "bg-blue-600" },
-            { area: "DCO Game Mode", scope: "CTI, Mission framework.", prog: 0, color: "bg-blue-600" }
-        ];
+<script>
+    const roadmapData = [
+        { area: "Global Systems",        icon: "⚙", scope: "BI fixes, AI core, global combat context.", prog: 12,  color: "#ef4444", status: "active" },
+        { area: "Soldier Systems",       icon: "🪖", scope: "Individual soldier combat & morale.",       prog: 55,  color: "#facc15", status: "active" },
+        { area: "Vehicle Behaviour",     icon: "🚗", scope: "Perception, tactics, APC/IFV/MBT logic.",  prog: 10,  color: "#3b82f6", status: "early"  },
+        { area: "Squad Behaviour",       icon: "👥", scope: "Coordinated squad tactics & objectives.",   prog: 5,   color: "#3b82f6", status: "early"  },
+        { area: "Artillery",             icon: "💥", scope: "Player fire missions & safety logic.",      prog: 0,   color: "#5a6350", status: "plan"   },
+        { area: "Player Command",        icon: "📡", scope: "Give orders to AI on all command levels.",  prog: 0,   color: "#5a6350", status: "plan"   },
+        { area: "Battlegroup Behaviour", icon: "🗺", scope: "Capturing and defending AOs.",              prog: 15,  color: "#3b82f6", status: "early"  },
+        { area: "High Command",          icon: "⭐", scope: "Strategic AO assignment & macro logic.",    prog: 0,   color: "#5a6350", status: "plan"   },
+        { area: "DCO Game Mode",         icon: "🎮", scope: "CTI, mission framework, full gamemode.",    prog: 0,   color: "#5a6350", status: "plan"   }
+    ];
 
-        const container = document.getElementById('roadmap-body');
-        container.innerHTML = roadmapData.map(item => `
+    const statusMap = {
+        active: { label: 'Active Dev', cls: 'sb-active' },
+        early:  { label: 'Early Stage', cls: 'sb-early' },
+        plan:   { label: 'Planned', cls: 'sb-plan' },
+        done:   { label: 'Complete', cls: 'sb-done' }
+    };
+
+    const tbody = document.getElementById('roadmap-body');
+    tbody.innerHTML = roadmapData.map(item => {
+        const st = statusMap[item.status];
+        const progColor = item.prog >= 75 ? 'var(--green)' :
+                          item.prog >= 25 ? 'var(--yellow)' :
+                          item.prog > 0   ? 'var(--orange)' : 'var(--text-dim)';
+        return `
             <tr>
-                <td class="font-bold text-gray-300">${item.area}</td>
-                <td class="text-gray-500">${item.scope}</td>
                 <td>
-                    <div class="status-bar-bg">
-                        <div class="status-bar-fill ${item.color}" style="width: ${item.prog}%"></div>
+                    <div class="area-cell">
+                        <span class="area-icon">${item.icon}</span>
+                        <span class="area-name">${item.area}</span>
                     </div>
-                    <div class="text-[12px] mt-1 font-bold">${item.prog}%</div>
                 </td>
-                <td class="font-bold text-gray-400">TBD</td>
-            </tr>
-        `).join('');
+                <td class="scope-text">${item.scope}</td>
+                <td>
+                    <div class="rt-bar-bg">
+                        <div class="rt-bar-fill" style="width:${item.prog}%; background:${item.color}"></div>
+                    </div>
+                    <span class="rt-prog-text" style="color:${progColor}">${item.prog}%</span>
+                </td>
+                <td><span class="status-badge ${st.cls}">${st.label}</span></td>
+                <td style="font-size:10px; color:var(--text-dim);">TBD</td>
+            </tr>`;
+    }).join('');
 
-        const fundingGoal = 10000;
-        const currentFunding = 500;
+    // Funding
+    const fundingGoal = 10000;
+    const currentFunding = 500;
+    const pct = (currentFunding / fundingGoal) * 100;
 
-        function updateFunding() {
-            const percentage = (currentFunding / fundingGoal) * 100;
-            const cappedPercentage = Math.min(percentage, 100);
+    document.getElementById('funding-amount').textContent = '$' + currentFunding.toLocaleString();
+    document.getElementById('funding-pct').textContent = pct.toFixed(1) + '%';
 
-            // Update teks budget
-            document.getElementById('funding-amount').innerText = `${currentFunding.toLocaleString()} USD`;
-            document.getElementById('funding-percentage').innerText = `${cappedPercentage.toFixed(0)}%`;
+    setTimeout(() => {
+        document.getElementById('funding-bar').style.width = Math.min(pct, 100) + '%';
+    }, 200);
 
-            // Update lebar bar dengan animasi
-            const progressBar = document.getElementById('funding-progress-bar');
-            setTimeout(() => {
-                progressBar.style.width = `${cappedPercentage}%`;
-            }, 100);
+    // Milestone reached styling
+    const milestoneAmounts = [1500, 3000, 6000, 10000];
+    milestoneAmounts.forEach((amt, i) => {
+        if (currentFunding >= amt) {
+            const el = document.getElementById(`ms-${i+1}`);
+            if (el) {
+                el.classList.add('reached');
+                el.querySelector('.ms-amount').classList.remove('muted');
+            }
         }
-
-        window.onload = updateFunding;
-    </script>
+    });
+</script>
 </body>
 </html>
