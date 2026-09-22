@@ -240,8 +240,8 @@
 
             <!-- Milestones grid -->
             <div class="funding-milestones">
-                <div class="milestone-col reached" id="ms-1">
-                    <div class="ms-amount">$1,500</div>
+                <div class="milestone-col" id="ms-1">
+                    <div class="ms-amount muted">$1,500</div>
                     <div class="ms-label">Global Systems</div>
                     <div class="ms-desc">Core BI fixes & AI engine overrides</div>
                 </div>
@@ -377,7 +377,7 @@
 
     // Funding
     const fundingGoal = 10000;
-    const currentFunding = 500;
+    const currentFunding = 560; // keep in sync with donate.html donors
     const pct = (currentFunding / fundingGoal) * 100;
 
     document.getElementById('funding-amount').textContent = '$' + currentFunding.toLocaleString();
