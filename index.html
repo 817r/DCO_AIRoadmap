@@ -69,21 +69,22 @@
 
     <header class="h-20 border-b-2 border-yellow-500/50 bg-black flex items-center justify-between px-4 z-50">
         <div class="flex items-center gap-3 border-l border-zinc-800 pl-3">
-            <div class="flex items-center bg-yellow-400 p-1">
-                <img src="images\dragon_company.png" alt="UNIT_LOGO" class="h-12 w-auto object-contain">
+            <button onclick="toggleMenu()" class="md:hidden text-yellow-500 text-2xl leading-none px-1" aria-label="Open menu">☰</button>
+            <div class="flex items-center bg-yellow-400 p-1 shrink-0">
+                <img src="images/dragon_company.png" alt="DCO_AI logo" class="h-10 sm:h-12 w-auto object-contain">
                 <span class="text-[12px] font-black text-black px-2 uppercase truncate hidden sm:block">
                     Dragon Company AI
                 </span>
             </div>
         </div>
 
-        <div class="campaign-stats flex items-center gap-4 border-l border-[#3d4432] pl-4 h-8">
+        <div class="campaign-stats flex items-center gap-4 border-l border-[#3d4432] pl-3 sm:pl-4 h-8 min-w-0">
             <div class="flex flex-col items-end">
-                <span class="text-[15px] font-bold text-zinc-500 uppercase tracking-widest">Funding_Progress</span>
+                <span class="text-[11px] sm:text-[15px] font-bold text-zinc-500 uppercase tracking-widest">Funding_Progress</span>
                 <div class="flex items-center gap-3" title="$560 raised of $10,000 goal — see DONATION_SUPPORT">
-                    <div class="campaign-bar-bg">
+                    <div class="campaign-bar-bg hidden sm:block">
                         <div class="campaign-bar-fill" style="width: 5.6%;"></div> </div>
-                    <span class="text-[15px] font-black text-[#facc15] whitespace-nowrap">$560 / $10K</span>
+                    <span class="text-[13px] sm:text-[15px] font-black text-[#facc15] whitespace-nowrap">$560 / $10K</span>
                 </div>
             </div>
         </div>
@@ -95,7 +96,8 @@
                 [ACCESS_WORKSHOP_MOD]
             </a>
 
-            <div class="flex items-center gap-2 border-l border-zinc-800 pl-3">
+            <!-- Music player + badge: desktop only, they push the header off-screen on phones -->
+            <div class="hidden lg:flex items-center gap-2 border-l border-zinc-800 pl-3">
                     <div class="flex items-center gap-4 px-4 py-2 bg-black/50 border-b border-yellow-500/20">
                         <div class="flex items-center gap-2">
                             <div id="music-info" class="text-[13px] opacity-50 hidden md:block truncate max-w-[150px]">

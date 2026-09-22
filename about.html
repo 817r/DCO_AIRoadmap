@@ -1,78 +1,310 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Team — DCO_AI Reforger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
-        .about-section { background: rgba(26, 28, 30, 0.9); border: 1px solid #2d2f31; border-radius: 8px; padding: 30px; margin-bottom: 20px; }
-        .font-header { font-size: 24px; font-weight: 800; color: #facc15; }
-        
-        /* Profile Styling */
-        .profile-card { background: #0d0e0a; border: 1px solid #3d4432; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        @media (min-width: 768px) { .profile-card { flex-direction: row; } }
-        .profile-img { width: 150px; height: 180px; background: #1a1c1e; border: 2px solid #3d4432; object-fit: cover; filter: sepia(0.5) contrast(1.2); }
-        .dossier-label { color: #facc15; font-weight: bold; font-size: 14px; text-transform: uppercase; width: 80px; display: inline-block; }
-        .role-tag { background: #facc15; color: black; padding: 2px 8px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        :root {
+            --yellow: #facc15;
+            --green: #22c55e;
+            --card: #111310;
+            --card-2: #0d0e0a;
+            --border: #1e2118;
+            --border-bright: #2a2e22;
+            --text-dim: #5a6350;
+            --text-mid: #8a9478;
+            --text: #c4cdb4;
+            --white: #eef2e6;
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0d0e0a;
+            color: var(--text);
+            font-family: var(--sans);
+            padding: 24px 16px 48px;
+            line-height: 1.6;
+        }
+
+        .wrap { max-width: 960px; margin: 0 auto; }
+
+        .kicker {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        /* ===== INTRO ===== */
+        .intro { padding: 8px 0 28px; border-bottom: 1px solid var(--border-bright); margin-bottom: 28px; }
+        .intro h1 { font-size: 30px; font-weight: 800; color: var(--white); line-height: 1.2; margin: 10px 0 12px; letter-spacing: -0.01em; }
+        .intro h1 span { color: var(--yellow); }
+        .intro p { font-size: 15px; color: var(--text-mid); max-width: 680px; }
+
+        /* ===== NUMBERS ===== */
+        .numbers {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--border-bright);
+            background: var(--card);
+            margin-bottom: 40px;
+        }
+        .num { padding: 18px 20px; border-right: 1px solid var(--border-bright); }
+        .num:last-child { border-right: none; }
+        .num-val { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--white); line-height: 1.1; }
+        .num-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+        @media (max-width: 640px) {
+            .numbers { grid-template-columns: repeat(2, 1fr); }
+            .num:nth-child(2) { border-right: none; }
+            .num:nth-child(-n+2) { border-bottom: 1px solid var(--border-bright); }
+        }
+
+        .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+        .section-title h2 { font-size: 18px; font-weight: 700; color: var(--white); }
+
+        /* ===== TEAM ===== */
+        .team { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 44px; }
+        @media (max-width: 760px) { .team { grid-template-columns: 1fr; } }
+
+        .member { background: var(--card); border: 1px solid var(--border-bright); display: flex; flex-direction: column; }
+        .member-top { display: flex; gap: 18px; padding: 20px; border-bottom: 1px solid var(--border); }
+        .member-photo {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--border-bright);
+            background: var(--card-2);
+        }
+        .member-name { font-size: 20px; font-weight: 700; color: var(--white); line-height: 1.2; }
+        .member-role { font-size: 13px; font-weight: 600; color: var(--yellow); margin-top: 2px; }
+        .member-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .chip {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-mid);
+            border: 1px solid var(--border-bright);
+            padding: 2px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .member-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+        .member-bio { font-size: 14px; color: var(--text); }
+        .label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
+        .focus { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+        .focus li { font-size: 13px; color: var(--text-mid); padding-left: 16px; position: relative; }
+        .focus li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; background: var(--yellow); }
+        .skills { display: flex; flex-wrap: wrap; gap: 6px; }
+        .skill { font-size: 12px; color: var(--text); background: rgba(250,204,21,0.06); border: 1px solid rgba(250,204,21,0.18); padding: 3px 10px; }
+
+        /* ===== HOW WE WORK ===== */
+        .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 44px; }
+        @media (max-width: 760px) { .principles { grid-template-columns: 1fr; } }
+        .principle { background: var(--card); border: 1px solid var(--border-bright); padding: 18px; }
+        .principle h3 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+        .principle p { font-size: 13px; color: var(--text-mid); }
+
+        /* ===== CREDITS ===== */
+        .credits { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border-bright); background: var(--card); margin-bottom: 44px; }
+        @media (max-width: 760px) { .credits { grid-template-columns: 1fr; } }
+        .credit-col { padding: 18px 20px; border-right: 1px solid var(--border-bright); }
+        .credit-col:last-child { border-right: none; }
+        @media (max-width: 760px) { .credit-col { border-right: none; border-bottom: 1px solid var(--border-bright); } .credit-col:last-child { border-bottom: none; } }
+        .credit-col ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .credit-col li { font-size: 14px; color: var(--text); }
+
+        /* ===== JOIN ===== */
+        .join {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 24px;
+            border: 1px solid rgba(250,204,21,0.35);
+            background: linear-gradient(135deg, rgba(250,204,21,0.08), rgba(17,19,16,0) 60%), var(--card);
+        }
+        .join h2 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+        .join p { font-size: 14px; color: var(--text-mid); max-width: 520px; }
+        .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 16px;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            border: 1px solid var(--border-bright);
+            color: var(--text);
+            transition: border-color 0.15s, color 0.15s, background 0.15s;
+        }
+        .btn:hover { border-color: var(--yellow); color: var(--yellow); }
+        .btn.primary { background: var(--yellow); border-color: var(--yellow); color: #000; }
+        .btn.primary:hover { background: #eab308; color: #000; }
     </style>
 </head>
 <body>
-    <div class="max-w-4xl mx-auto">
-        <h2 class="font-header italic mb-8">// ABOUT_DRAGON_COMPANY</h2>
+<div class="wrap">
 
-        <div class="about-section">
-            <h3 class="text-lg font-bold mb-6 uppercase text-white tracking-widest">[PERSONNEL_DOSSIER]</h3>
-            
-            <div class="profile-card mb-6">
-                <img src="images\erlend.png" alt="Erlend_Profile" class="profile-img">
-                
-                <div class="flex-1 space-y-2">
-                    <div class="border-b border-zinc-800 pb-2 mb-2">
-                        <h4 class="text-xl font-bold text-white">Erlend Kristensen</h4>
-                        <span class="role-tag">Lead Designer & Tester</span>
-                    </div>
-                    <div class="text-[13px]">
-                        <div><span class="dossier-label">Rank:</span> Founder</div>
-                        <div><span class="dossier-label">Age:</span> 49</div>
-                        <div><span class="dossier-label">Joined:</span> 2021</div>
-                        <div class="mt-4">
-                            <span class="dossier-label block mb-1">History:</span>
-                            <p class="opacity-70 italic text-[12px]">A AI Designer For Arma 3 and Arma Reforger.</p>
-                        </div>
-                        <div class="mt-3">
-                            <span class="dossier-label block mb-1">Skillset:</span>
-                            <p class="text-yellow-500/80 text-[11px]">AI Design.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- INTRO -->
+    <header class="intro">
+        <div class="kicker">// Team Composition</div>
+        <h1>Dragon Company — the team behind <span>DCO_AI</span></h1>
+        <p>A small, independent team building an autonomous AI system for Arma Reforger: from how a single soldier reacts to a near miss, up to an AI commander running a whole battlegroup. We design it, build it, and test it ourselves, and ship it free on the Workshop.</p>
+    </header>
 
-            <div class="profile-card mb-6">
-                <img src="images\rich.png" alt="Richard_Profile" class="profile-img">
-                
-                <div class="flex-1 space-y-2">
-                    <div class="border-b border-zinc-800 pb-2 mb-2">
-                        <h4 class="text-xl font-bold text-white">Richard</h4>
-                        <span class="role-tag">Lead Programmer</span>
-                    </div>
-                    <div class="text-[13px]">
-                        <div><span class="dossier-label">Rank:</span> Co-Founder</div>
-                        <div><span class="dossier-label">Age:</span> 23</div>
-                        <div><span class="dossier-label">Joined:</span> 2024</div>
-                        <div class="mt-4">
-                            <span class="dossier-label block mb-1">History:</span>
-                            <p class="opacity-70 italic text-[12px]">A AI Programmer, experinence in Unity and Unreal Engine.</p>
-                        </div>
-                        <div class="mt-3">
-                            <span class="dossier-label block mb-1">Skillset:</span>
-                            <p class="text-yellow-500/80 text-[11px]">AI Programmer.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
+    <!-- NUMBERS -->
+    <div class="numbers">
+        <div class="num"><div class="num-val">34,178</div><div class="num-label">Workshop downloads</div></div>
+        <div class="num"><div class="num-val">95%</div><div class="num-label">Workshop rating</div></div>
+        <div class="num"><div class="num-val">v0.4.136</div><div class="num-label">Latest release</div></div>
+        <div class="num"><div class="num-val">66</div><div class="num-label">Features tracked</div></div>
     </div>
+
+    <!-- TEAM -->
+    <div class="section-title">
+        <h2>Core team</h2>
+        <span class="kicker" style="color:var(--text-dim)">2 members</span>
+    </div>
+    <div class="team">
+
+        <article class="member">
+            <div class="member-top">
+                <img src="images/erlend.png" alt="Erlend Kristensen" class="member-photo">
+                <div>
+                    <div class="member-name">Erlend Kristensen</div>
+                    <div class="member-role">Founder · Lead AI Designer &amp; Tester</div>
+                    <div class="member-meta">
+                        <span class="chip">Since 2021</span>
+                        <span class="chip">Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="member-body">
+                <p class="member-bio">AI designer with a background in Arma 3 and Arma Reforger. Erlend defines how DCO_AI should behave on the battlefield and holds every build to that standard in testing.</p>
+                <div>
+                    <div class="label">Responsibilities</div>
+                    <ul class="focus">
+                        <li>AI behaviour design and feature specifications</li>
+                        <li>Roadmap priorities and milestone planning</li>
+                        <li>Playtesting, balancing and feedback</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="label">Expertise</div>
+                    <div class="skills">
+                        <span class="skill">AI Design</span>
+                        <span class="skill">Military Tactics</span>
+                        <span class="skill">QA &amp; Testing</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="member">
+            <div class="member-top">
+                <img src="images/rich.png" alt="Richard" class="member-photo">
+                <div>
+                    <div class="member-name">Richard</div>
+                    <div class="member-role">Co-Founder · Lead AI Programmer</div>
+                    <div class="member-meta">
+                        <span class="chip">Since 2024</span>
+                        <span class="chip">Engineering</span>
+                    </div>
+                </div>
+            </div>
+            <div class="member-body">
+                <p class="member-bio">AI programmer with experience in Unity and Unreal Engine. Richard builds DCO_AI's systems in Enfusion and publishes every release on the Workshop.</p>
+                <div>
+                    <div class="label">Responsibilities</div>
+                    <ul class="focus">
+                        <li>Soldier, squad and vehicle AI systems</li>
+                        <li>AI Commander, objectives and artillery</li>
+                        <li>Game Master tools and Workshop releases</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="label">Expertise</div>
+                    <div class="skills">
+                        <span class="skill">Enfusion Script</span>
+                        <span class="skill">Behaviour Trees</span>
+                        <span class="skill">Unity</span>
+                        <span class="skill">Unreal Engine</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- HOW WE WORK -->
+    <div class="section-title"><h2>How we work</h2></div>
+    <div class="principles">
+        <div class="principle">
+            <h3>Ship often</h3>
+            <p>Fifty Workshop releases so far. Features reach players early and improve release by release.</p>
+        </div>
+        <div class="principle">
+            <h3>Build in the open</h3>
+            <p>The roadmap, feature list and funding are public. You can see exactly what is done, what is next, and where support goes.</p>
+        </div>
+        <div class="principle">
+            <h3>Easy for mission makers</h3>
+            <p>Minimal setup, with Game Master and server settings for everything that matters.</p>
+        </div>
+    </div>
+
+    <!-- CREDITS -->
+    <div class="section-title"><h2>Credits</h2></div>
+    <div class="credits">
+        <div class="credit-col">
+            <div class="label">Contributor</div>
+            <ul><li>Yipman</li></ul>
+        </div>
+        <div class="credit-col">
+            <div class="label">Special thanks</div>
+            <ul><li>Atim</li><li>GME Team</li></ul>
+        </div>
+        <div class="credit-col">
+            <div class="label">Inspired by</div>
+            <ul><li>DCO AI (Arma 3)</li><li>CRX AI</li><li>GME</li></ul>
+        </div>
+    </div>
+
+    <!-- JOIN -->
+    <section class="join">
+        <div>
+            <h2>Want to build this with us?</h2>
+            <p>We're looking for programmers, media creators and server admins. Or back the project and get your name in the contributor database.</p>
+        </div>
+        <div class="actions">
+            <a href="recruitment.html" class="btn primary" onclick="goNav(event, 'recruitment.html')">Open positions</a>
+            <a href="donate.html" class="btn" onclick="goNav(event, 'donate.html')">Support</a>
+            <a href="https://discord.gg/YyAd3jBDHV" target="_blank" rel="noopener" class="btn">Discord</a>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // Inside index.html shell: go through the sidebar link so its active state updates.
+    function goNav(e, href) {
+        try {
+            const nav = parent !== window && parent.document.querySelector(`.nav-link[href="${href}"]`);
+            if (nav) { e.preventDefault(); nav.click(); }
+        } catch (_) { /* cross-origin / file:// — plain link fallback */ }
+    }
+</script>
 </body>
 </html>

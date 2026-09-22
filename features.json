@@ -1,174 +1,596 @@
-
 [
-    {
-      "cat": "Global Systems",
-      "name": "BI Unfuck Systemss",
-      "ver": "v0.1",
-      "prio": 1000,
-      "prog": 100,
-      "desc": "Core engine-level fixes and overrides for BI AI behaviour, configs, and scheduling. Everything else depends on this.",
-      "video": "video/Arma Reforger DCO AI - Failing hard against our AI.mp4"
-    },
-    {
-      "cat": "Soldier Systems",
-      "name": "Aim correction",
-      "ver": "v0.1",
-      "prio": 980,
-      "prog": 100,
-      "desc": "AI will zero in on their targets over time, improving accuracy the longer they fire at a target. The zeroing process will reset if the LOS is lost for a certain time or the AI switches targets.",
-      "video": ""
-    },
-    {
-      "cat":  "Soldier Systems",
-      "name": "Vision Limiting",
-      "ver": "v0.1",
-      "prio": 950,
-      "prog": 100,
-      "desc": "AI will have a slower detection time at night and will aim less accurate in night time.",
-      "video": ""
-    },
-    {
-      "cat": "Soldier Systems",
-      "name": "Individual morale",
-      "ver": "v0.1",
-      "prio": 925,
-      "prog": 80,
-      "desc": "The individual AIs emotional reaction to pressure such as passing bullets, near misses, near, explosions, wounds etc. Low morale will increase the chance for a soldier Systems to take cover, go prone or hide from enemy fire and do so for a longer time. Soldiers with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover.",
-      "video": ""
-    },
-        {
-      "cat": "Soldier Systems",
-      "name": "Suppression",
-      "ver": "v0.1",
-      "prio": 910,
-      "prog": 65,
-      "desc": "AIs ability to suppress detected or identified enemies. Suppression will lower enemy accuracy and increase their chance to seek cover.",
-      "video": ""
-    },
-        {
-      "cat": "Vehicle Behaviour",
-      "name": "Basic vehicle behaviour",
-      "ver": "v0.1",
-      "prio": 900,
-      "prog": 30,
-      "desc": "Vehicles will detect enemies and will to positions with LOS to engage with suppression or direct fires. Vehicles will also take cover behind terrain features when threatned.",
-      "video": ""
-    },
- {
-      "cat": "Soldier Systems",
-      "name": "Danger reaction",
-      "ver": "v0.1",
-      "prio": 890,
-      "prog": 40,
-      "desc": "The AIs instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
-      "video": ""
-    },
-
-    {
-      "cat": "Soldier Systems",
-      "name": "Vocal Info sharing",
-      "ver": "v0.1",
-      "prio": 880,
-      "prog": 15,
-      "desc": "Soldiers ability to share info vocally about detected enemies, danger events, orders etc. within a certain radius. This will greatly battlefield awareness and responsiveness of nearby allies.",
-      "video": ""
-    }, 
-    {
-      "cat": "Squad Systems",
-      "name": "Radio Info sharing",
-      "ver": "v0.1",
-      "prio": 880,
-      "prog": 15,
-      "desc": "Squad leaders will use radio to share info about detected enemies, danger events, orders etc. with other squad leaders in the vicinity. This will greatly increase battlefield awareness and responsiveness of nearby allied squads.",
-      "video": ""
-    },
-    {
-      "cat": "Soldier Systems",
-      "name": "Close combat behaviour",
-      "ver": "v0.1",
-      "prio": 850,
-      "prog": 30,
-      "desc": "IDLE Soldiers will prioritize using buildings as cover (not possible yet as it can not ID a building yet), if in melee range, soldier Systemss will engage in melee with the enemy. If within 50 meters from detected enemies, the soldier Systems will avoid going prone and find cover instead.",
-      "video": ""
-    },
-   {
-      "cat": "Squad Behaviour",
-      "name": "Tactics",
-      "ver": "v0.1",
-      "prio": 830,
-      "prog": 10,
-      "desc": "If no custom settings are forced, the Group leader will initiate Five types of tactics ",
-      "video": ""
-    },
-	
-	 {
-      "cat": "Squad Behaviour",
-      "name": "Bounding overwatch",
-      "ver": "v0.1",
-      "prio": 830,
-      "prog": 0,
-      "desc": "Squads will separate into two fireteams advancing using bounding overwatch.",
-      "video": ""
-    },
-	
-	
-    {
-      "cat": "Soldier Systems",
-      "name": "IDLE behaviour",
-      "ver": "v0.1",
-      "prio": 800,
-      "prog": 40,
-      "desc": "A soldier that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are avail, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover.. There is a chance the soldier Systems will patrol the nearby area.  Will patrol within a 150 m radius around the SL",
-      "video": ""
-    },
-      {
-      "cat": "Soldier Systems",
-      "name": "Emergency rearm",
-      "ver": "v0.1",
-      "prio": 780,
-      "prog": 45,
-      "desc": "Soldiers will pick up ammo for his rifle if available. If not, he will pick up nearby weapons that has available ammo for it. ",
-      "video": ""
-    },
-  
-    {
-      "cat": "Soldier Systems",
-      "name": "CQB",
-      "ver": "v0.1",
-      "prio": 750,
-      "prog": 0,
-      "desc": "AI Able to do advanced CQB tactics and Building Assault ",
-      "video": ""
-    },
-	
-	   {
-      "cat": "DCO Game Mode",
-      "name": "DCO Conflict Game mode",
-      "ver": "v0.1",
-      "prio": 750,
-      "prog": 10,
-      "desc": "DCO version of the Reforger Conflict mode but with our own High command, spawn and capture systems. Commander will assess threats, coordinate defence and attacks on objectives as well as send reinforcements and support to requesting groups.",
-      "video": ""
-    },
-	   {
-      "cat": "Artillery",
-      "name": "Artillery Request",
-      "ver": "v0.1",
-      "prio": 750,
-      "prog": 5,
-      "desc": "Commander will give approval for squads requesting artillery which will enable firemissions on target coordinates",
-      "video": ""
-    },
-
-        {
-      "cat": "Soldier Systems",
-      "name": "Adjust to cover",
-      "ver": "v0.1",
-      "prio": 700,
-      "prog": 60,
-      "desc": "AIs ability to use advanced stance adjustment to adapt to cover geometry.",
-      "video": ""
-    }
+  {
+    "cat": "Global Systems",
+    "name": "BI Unfuck Systems",
+    "ver": "v0.1",
+    "prio": 1000,
+    "prog": 100,
+    "desc": "Core engine-level fixes and overrides for BI AI behaviour, configs, and scheduling. Everything else depends on this.",
+    "video": "video/Arma Reforger DCO AI - Failing hard against our AI.mp4"
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Cover Booking System",
+    "ver": "v0.4",
+    "prio": 990,
+    "prog": 75,
+    "desc": "Global cover manager that reserves a cover position per soldier, so two AI never run to the same spot. Bookings auto-release after a timeout.",
+    "video": ""
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Threat & Suppression Model",
+    "ver": "v0.4.102",
+    "prio": 985,
+    "prog": 70,
+    "desc": "Each soldier accumulates threat from near misses, fly-bys and explosions, with natural falloff over time. Feeds morale, cover decisions and return fire. Latest scaling fix is in the dev build.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Aim correction",
+    "ver": "v0.1",
+    "prio": 980,
+    "prog": 100,
+    "desc": "AI will zero in on their targets over time, improving accuracy the longer they fire at a target. The zeroing process will reset if the LOS is lost for a certain time or the AI switches targets.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Vision Limiting",
+    "ver": "v0.1",
+    "prio": 950,
+    "prog": 100,
+    "desc": "AI will have a slower detection time at night and will aim less accurate in night time.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Individual morale",
+    "ver": "v0.1",
+    "prio": 925,
+    "prog": 80,
+    "desc": "The individual AI's emotional reaction to pressure such as passing bullets, near misses, explosions, wounds etc. Low morale will increase the chance for a soldier to take cover, go prone or hide from enemy fire and do so for a longer time. Soldiers with high morale will be more aggressive, will push forward and will return fire with less chance of heading for cover. At the extremes, a BREAK state forces a full prone reflex and a MANIAC state makes the soldier refuse to go prone.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "AI Personality",
+    "ver": "v0.4.108",
+    "prio": 920,
+    "prog": 75,
+    "desc": "Every soldier is Cautious, Standard, Aggressive or Reckless. Personality scales how long they stay pinned before returning fire (8s down to 2s), how stubbornly they hold a firing position, how far they search for cover and how freely they spend ammo.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Suppression",
+    "ver": "v0.4.102",
+    "prio": 910,
+    "prog": 65,
+    "desc": "AI's ability to suppress detected or identified enemies. Suppression will lower enemy accuracy and increase their chance to seek cover.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Dodge",
+    "ver": "v0.4.123",
+    "prio": 905,
+    "prog": 70,
+    "desc": "Soldiers sidestep or dive away from threatening incoming fire. Triggered after a number of close shots within a time window, with cooldown and distance limits, and biased toward the group's waypoint so they don't dodge away from the objective.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Cover-First Engagement",
+    "ver": "v0.4.126",
+    "prio": 895,
+    "prog": 70,
+    "desc": "When engaged, AI prioritizes fighting from cover. Being in the open raises the urgency to move instead of being a hard requirement, and all danger reactions share one movement budget so soldiers don't jitter between covers.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Danger reaction",
+    "ver": "v0.1",
+    "prio": 890,
+    "prog": 40,
+    "desc": "The AI's instinctual reaction to danger events such as incoming fire, explosions, wounds etc. AI reactions will range from flinching, dodging for cover, evading, going prone in the open.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Break Contact & Reposition",
+    "ver": "v0.4.131",
+    "prio": 885,
+    "prog": 60,
+    "desc": "When wounded, soldiers far from the enemy break contact (sprint, unpredictable direction), while soldiers close to the enemy reposition backwards and keep their weapon on target.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Vocal Info sharing",
+    "ver": "v0.1",
+    "prio": 880,
+    "prog": 15,
+    "desc": "Soldiers' ability to share info vocally about detected enemies, danger events, orders etc. within a certain radius. This will greatly improve battlefield awareness and responsiveness of nearby allies.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Unknown Fire Reaction",
+    "ver": "v0.4.119",
+    "prio": 875,
+    "prog": 60,
+    "desc": "When shot at by an unseen enemy, soldiers turn toward the source, hide from it and manage their stance based on threat and range instead of standing still.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Investigate & Push",
+    "ver": "v0.4.119",
+    "prio": 870,
+    "prog": 50,
+    "desc": "Soldiers move to investigate suspected enemy positions, choosing the flank relative to their waypoint so the push stays on the group's axis of advance.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Grenade Usage",
+    "ver": "v0.4.134",
+    "prio": 865,
+    "prog": 65,
+    "desc": "Soldiers throw frag grenades at enemies they can't see or hit. Safety checks enforce minimum distance and friendly clearance, and personality affects how often they throw.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Underbarrel Grenade Launcher",
+    "ver": "v0.4.134",
+    "prio": 860,
+    "prog": 60,
+    "desc": "Grenadiers use M203 / GP-25 launchers in short volleys with a cooldown. Works with modded weapons by detecting the launcher muzzle instead of relying on a fixed weapon slot.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Individual Roles",
+    "ver": "v0.4.60",
+    "prio": 855,
+    "prog": 50,
+    "desc": "Soldiers act by role: Leading, Suppressing, Anti-Armor, Covert, and Long / Medium / Close range, with reactions and engagement distances scaled to that role.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Individual Fire Mode Rules",
+    "ver": "v0.4.110",
+    "prio": 852,
+    "prog": 60,
+    "desc": "Per-soldier rules for fire mode selection, so riflemen, gunners and marksmen use their weapons differently.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Close combat behaviour",
+    "ver": "v0.1",
+    "prio": 850,
+    "prog": 30,
+    "desc": "IDLE Soldiers will prioritize using buildings as cover (not possible yet as it can not ID a building yet), if in melee range, soldiers will engage in melee with the enemy. If within 50 meters from detected enemies, the soldier will avoid going prone and find cover instead.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Ammo Conservation",
+    "ver": "dev",
+    "prio": 840,
+    "prog": 45,
+    "desc": "Suppressive fire rate now accounts for remaining ammo, so AI stops spraying at a target that is only 'maybe there'. Cautious soldiers start saving ammo earlier, reckless ones barely care.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Indoor Relocation",
+    "ver": "v0.4.136",
+    "prio": 835,
+    "prog": 45,
+    "desc": "Soldiers inside a building score rooms, windows and doorways against known threats and move to a better interior position instead of leaving the building.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Door Avoidance",
+    "ver": "v0.4.136",
+    "prio": 830,
+    "prog": 40,
+    "desc": "Indoor AI avoids standing in doorways and fatal funnels when choosing positions.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Breach Grenades",
+    "ver": "dev",
+    "prio": 825,
+    "prog": 30,
+    "desc": "Before entering a room suspected to hold enemies, AI throws a frag grenade in first. Respects the Grenade Usage slider.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Smoke Usage",
+    "ver": "dev",
+    "prio": 820,
+    "prog": 25,
+    "desc": "AI deploys smoke grenades for concealment while moving under fire.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "IDLE behaviour",
+    "ver": "v0.1",
+    "prio": 800,
+    "prog": 40,
+    "desc": "A soldier that has not received a movement order in 60 seconds, will seek to spread out and take cover. If static guns are available, AI will man them automatically. Buildings and hard structures will be prioritized as cover once BI enables ID type of cover. There is a chance the soldier will patrol the nearby area, within a 150 m radius around the SL.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Adjust to cover",
+    "ver": "v0.1",
+    "prio": 700,
+    "prog": 60,
+    "desc": "AI's ability to use advanced stance adjustment to adapt to cover geometry.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "CQB",
+    "ver": "v0.1",
+    "prio": 750,
+    "prog": 0,
+    "desc": "AI able to do advanced CQB tactics and Building Assault.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Squad Combat Modes",
+    "ver": "v0.4",
+    "prio": 845,
+    "prog": 55,
+    "desc": "Squads run Aggressive, Defensive, Evasive or Dynamic modes. Dynamic squads adjust to morale and perceived threat: push, hold, fall back or re-engage.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Fireteam Target Assignment",
+    "ver": "v0.4",
+    "prio": 842,
+    "prog": 40,
+    "desc": "The squad splits targets between main and auxiliary fireteams so the whole group doesn't fixate on one enemy.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Squad Suppression",
+    "ver": "v0.4.102",
+    "prio": 838,
+    "prog": 55,
+    "desc": "Squad-level suppressive fire on a threat area. Fire rate scales with distance, since suppression needs volume more than precision.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Squad Investigation",
+    "ver": "v0.4.119",
+    "prio": 836,
+    "prog": 45,
+    "desc": "The squad investigates contacts together instead of individual soldiers wandering off alone.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Waypoint Discipline",
+    "ver": "v0.4.124",
+    "prio": 834,
+    "prog": 65,
+    "desc": "AI respects mission-maker waypoints more reliably while still reacting to contact.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Radio Info sharing",
+    "ver": "v0.1",
+    "prio": 880,
+    "prog": 15,
+    "desc": "Squad leaders will use radio to share info about detected enemies, danger events, orders etc. with other squad leaders in the vicinity. This will greatly increase battlefield awareness and responsiveness of nearby allied squads.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Tactics",
+    "ver": "v0.1",
+    "prio": 830,
+    "prog": 10,
+    "desc": "If no custom settings are forced, the Group leader will initiate Five types of tactics.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Bounding overwatch",
+    "ver": "v0.1",
+    "prio": 830,
+    "prog": 0,
+    "desc": "Squads will separate into two fireteams advancing using bounding overwatch.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Basic vehicle behaviour",
+    "ver": "v0.1",
+    "prio": 900,
+    "prog": 30,
+    "desc": "Vehicles will detect enemies and will move to positions with LOS to engage with suppression or direct fires. Vehicles will also take cover behind terrain features when threatened.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Support-by-Fire Positioning",
+    "ver": "v0.4",
+    "prio": 895,
+    "prog": 40,
+    "desc": "Armed vehicles keep a minimum stand-off distance from the enemy and position to support infantry with fire, acting as active combat assets instead of taxis.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Automatic Vehicle Usage",
+    "ver": "v0.4",
+    "prio": 890,
+    "prog": 50,
+    "desc": "When enabled, groups board and use nearby vehicles and crew available turrets on their own. Vehicles already owned by another group are left alone.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Dedicated Transport",
+    "ver": "v0.4.60",
+    "prio": 885,
+    "prog": 60,
+    "desc": "Transport teams pick up infantry, drive them to the LZ and disembark them, then either return to base or wait at the LZ for the next job. Boarding, driving and disembark all have timeouts so nothing gets stuck.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "AI Commander",
+    "ver": "v0.4.60",
+    "prio": 960,
+    "prog": 55,
+    "desc": "An autonomous commander that thinks in cycles: reads the battlefield, assigns groups to objectives and adapts. Runs in Offensive, Defensive or Balanced mode.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Objective System",
+    "ver": "v0.4.60",
+    "prio": 955,
+    "prog": 55,
+    "desc": "Capture, Destroy and Recon objectives with priorities from Negligible to Critical. Objectives track presence and contested state, and the commander sets up defences on what it holds.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Group Roles",
+    "ver": "v0.4.60",
+    "prio": 950,
+    "prog": 50,
+    "desc": "The commander gives each group a role: Recon, Assault, Flank, Transport, Reserve, Retreat, Reinforce, Defend, Armored, Artillery or Suppress.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Threat Response & QRF",
+    "ver": "v0.4",
+    "prio": 945,
+    "prog": 50,
+    "desc": "Contact reports are clustered into threats and scored. The commander dispatches QRF elements to the ones that matter and keeps reserves back.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Contact Reports",
+    "ver": "v0.4",
+    "prio": 940,
+    "prog": 50,
+    "desc": "Groups report enemy contacts up to their commander, giving it a picture of the battlefield built from what its units actually saw.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Dynamic Frontline",
+    "ver": "dev",
+    "prio": 935,
+    "prog": 40,
+    "desc": "The frontline is built from the border between friendly and enemy territory. Groups spread along it and patrol with varied routes instead of piling onto one point.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Recon & Staging",
+    "ver": "dev",
+    "prio": 930,
+    "prog": 40,
+    "desc": "Recon goes where the enemy threat is highest and picks the best observation spot. Assault groups stage outside the target objective so they are ready before contact.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Artillery Request",
+    "ver": "v0.1",
+    "prio": 750,
+    "prog": 5,
+    "desc": "Commander will give approval for squads requesting artillery which will enable firemissions on target coordinates. Fire missions are corrected between salvos like a spotter would, shell count scales with visible enemies, and illumination rounds are used at night.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "FOB Builder",
+    "ver": "dev",
+    "prio": 720,
+    "prog": 25,
+    "desc": "The commander establishes Forward bases, Firebases, Main bases and Mortar bases, sending a group to build each one and keeping them spaced apart.",
+    "video": ""
+  },
+  {
+    "cat": "Logistics",
+    "name": "Magazine Well Resupply",
+    "ver": "v0.4.60",
+    "prio": 870,
+    "prog": 60,
+    "desc": "Soldiers find ammo sources that match their weapon's magazine well and resupply on their own.",
+    "video": ""
+  },
+  {
+    "cat": "Logistics",
+    "name": "Arsenal Resupply",
+    "ver": "v0.4.60",
+    "prio": 865,
+    "prog": 55,
+    "desc": "AI locates the nearest arsenal that stocks the right magazine, moves to it and takes what it needs.",
+    "video": ""
+  },
+  {
+    "cat": "Logistics",
+    "name": "Emergency rearm",
+    "ver": "v0.1",
+    "prio": 780,
+    "prog": 45,
+    "desc": "Soldiers will pick up ammo for their rifle if available. If not, they will pick up nearby weapons that have available ammo for it.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "GM Editor Attributes",
+    "ver": "v0.4.127",
+    "prio": 900,
+    "prog": 80,
+    "desc": "Set AI skill, accuracy, aim-improvement time and perception from the Game Master editor, globally or per unit.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Personality per Unit",
+    "ver": "v0.4.108",
+    "prio": 895,
+    "prog": 80,
+    "desc": "Assign Cautious, Standard, Aggressive or Reckless personality to individual units from the editor.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Suppression Coefficient",
+    "ver": "v0.4.108",
+    "prio": 890,
+    "prog": 80,
+    "desc": "Scale how hard suppression affects AI, globally or per unit.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Hold Position Action",
+    "ver": "v0.4.108",
+    "prio": 885,
+    "prog": 80,
+    "desc": "Context action to pin a group in place.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Dodge & Cover Settings",
+    "ver": "v0.4.127",
+    "prio": 880,
+    "prog": 70,
+    "desc": "Dodge chance, cooldown, distance, shot threshold and take-cover chance exposed as editor sliders, globally or per unit.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Grenade / GL Usage Sliders",
+    "ver": "v0.4.134",
+    "prio": 875,
+    "prog": 70,
+    "desc": "Control how often AI uses hand grenades and grenade launchers, from never to twice the default.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Magic Ammo",
+    "ver": "v0.4",
+    "prio": 870,
+    "prog": 75,
+    "desc": "Toggle unlimited ammo for AI globally or per unit, for long scenarios without logistics.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Vehicle Dismount Control",
+    "ver": "v0.4",
+    "prio": 865,
+    "prog": 60,
+    "desc": "Decide globally or per squad whether infantry dismounts from vehicles in combat.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Server JSON Config",
+    "ver": "v0.4.118",
+    "prio": 860,
+    "prog": 40,
+    "desc": "Server-side global settings file, so server owners can tune DCO_AI without editing prefabs. First pass.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Commander Assignment",
+    "ver": "dev",
+    "prio": 855,
+    "prog": 45,
+    "desc": "Assign groups and vehicles to a specific AI commander from the editor, or release them back.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Commander Debug Overlay",
+    "ver": "dev",
+    "prio": 850,
+    "prog": 50,
+    "desc": "GM-only 3D overlay that shows what the commander believes: contact reports, threat clusters, frontline and the thresholds behind each decision.",
+    "video": ""
+  },
+  {
+    "cat": "Game Modes",
+    "name": "DCO Conflict Game mode",
+    "ver": "v0.1",
+    "prio": 750,
+    "prog": 10,
+    "desc": "DCO version of the Reforger Conflict mode but with our own High command, spawn and capture systems. Commander will assess threats, coordinate defence and attacks on objectives as well as send reinforcements and support to requesting groups.",
+    "video": ""
+  },
+  {
+    "cat": "Game Modes",
+    "name": "Capture & Hold",
+    "ver": "dev",
+    "prio": 740,
+    "prog": 30,
+    "desc": "Capture-and-hold mode: win by reaching the score limit or holding the required number of bases.",
+    "video": ""
+  },
+  {
+    "cat": "Game Modes",
+    "name": "PvE Commander Spawner",
+    "ver": "dev",
+    "prio": 735,
+    "prog": 35,
+    "desc": "Infantry and vehicle respawners for PvE, with a balancer that scales AI count to the number of players (base + players x multiplier, clamped).",
+    "video": ""
+  }
 ]
-
-

@@ -30,6 +30,38 @@
             padding: 16px;
         }
 
+        /* ===== HERO ===== */
+        .hero {
+            border: 1px solid var(--border-bright);
+            background: linear-gradient(135deg, rgba(250,204,21,0.07), rgba(17,19,16,0) 55%), var(--card);
+            padding: 28px 24px;
+            margin-bottom: 16px;
+        }
+        .hero-kicker { font-size: 10px; font-weight: 700; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+        .hero h1 { font-size: 26px; font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 10px; }
+        .hero h1 span { color: var(--yellow); }
+        .hero p { font-size: 12px; color: var(--text-mid); line-height: 1.7; max-width: 640px; margin-bottom: 18px; }
+        .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            border: 1px solid var(--border-bright);
+            color: var(--text);
+            transition: border-color 0.15s, color 0.15s, background 0.15s;
+        }
+        .hero-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+        .hero-btn.primary { background: var(--yellow); border-color: var(--yellow); color: #000; }
+        .hero-btn.primary:hover { background: #eab308; color: #000; }
+        .hero-btn.discord:hover { border-color: #5865f2; color: #a5b4fc; }
+        @media (max-width: 480px) { .hero h1 { font-size: 20px; } .hero-btn { flex: 1 1 100%; justify-content: center; } }
+
         /* ===== SECTION WRAPPER ===== */
         .section {
             background: var(--card);
@@ -230,6 +262,18 @@
 </head>
 <body>
 
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+        <div class="hero-kicker">// DCO_AI Reforger — Alpha · v0.4.136</div>
+        <h1>Tactical AI for Arma Reforger that <span>fights like a real unit.</span></h1>
+        <p>Soldiers with personalities that suppress, dodge, use cover and grenades. Squads that coordinate. An AI commander that captures objectives and manages QRF and reserves. Free on the Workshop, built by a small team and funded by players.</p>
+        <div class="hero-actions">
+            <a href="donate.html" class="hero-btn primary" onclick="goNav(event, 'donate.html')">▶ Support Development</a>
+            <a href="https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger" target="_blank" rel="noopener" class="hero-btn">Get it on Workshop</a>
+            <a href="https://discord.gg/YyAd3jBDHV" target="_blank" rel="noopener" class="hero-btn discord">Join Discord</a>
+        </div>
+    </div>
+
     <!-- ===== FUNDING SECTION ===== -->
     <div class="section">
         <div class="section-header">
@@ -330,6 +374,14 @@
     </div>
 
 <script>
+    // Inside index.html shell: go through the sidebar link so its active state updates.
+    function goNav(e, href) {
+        try {
+            const nav = parent !== window && parent.document.querySelector(`.nav-link[href="${href}"]`);
+            if (nav) { e.preventDefault(); nav.click(); }
+        } catch (_) { /* cross-origin / file:// — plain link fallback */ }
+    }
+
     const roadmapData = [
         { area: "Global Systems",        icon: "⚙", scope: "BI fixes, AI core, global combat context.", prog: 12,  color: "#ef4444", status: "active" },
         { area: "Soldier Systems",       icon: "🪖", scope: "Individual soldier combat & morale.",       prog: 55,  color: "#facc15", status: "active" },
