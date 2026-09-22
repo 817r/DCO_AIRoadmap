@@ -274,6 +274,29 @@
             letter-spacing: 0.08em;
         }
 
+        /* ===== VERSION CHIP ===== */
+        .feat-ver {
+            display: inline-block;
+            margin-left: 4px;
+            padding: 0 5px;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--green);
+            border: 1px solid rgba(34,197,94,0.35);
+            background: rgba(34,197,94,0.08);
+            vertical-align: 1px;
+        }
+        .ms-live-tag {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .intel-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: 10px; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.06em; }
+        .intel-stats b { color: #fff; font-size: 13px; }
+
         /* ===== LEGEND ===== */
         .legend {
             display: flex;
@@ -311,6 +334,11 @@
         <div class="intel-pitch">
             <div class="page-sub" style="color:var(--yellow)">// Field_Footage — Live Build</div>
             <h2>Smarter, scarier AI for Arma Reforger — built by a small team, funded by players.</h2>
+            <div class="intel-stats">
+                <span><b>v0.4.136</b> live</span>
+                <span><b>34,178</b> downloads</span>
+                <span><b>95%</b> rating</span>
+            </div>
             <p>Every milestone below is already in development. Donations buy dev time to ship them faster — and every contributor is listed in the database.</p>
             <div class="intel-links">
                 <a href="donate.html" class="btn-support" onclick="goDonate(event)">▶ Support Development</a>
@@ -333,6 +361,7 @@
         <span><i style="background:var(--yellow)"></i>In Progress</span>
         <span><i style="background:var(--orange)"></i>Early Dev</span>
         <span><i style="background:var(--red)"></i>Planned</span>
+        <span><span class="feat-ver" style="margin:0">v0.4.x</span>Live on Workshop since</span>
     </div>
 
     <!-- MILESTONES LIST -->
@@ -379,7 +408,7 @@
                         <div class="feature-item">
                             <div class="feature-bullet" style="background:var(--yellow)"></div>
                             <div class="feature-text">
-                                <span class="feat-name">Suppression</span>
+                                <span class="feat-name">Suppression <span class="feat-ver">v0.4.102</span></span>
                                 <span class="feat-desc">AI suppresses enemies, lowering their accuracy.</span>
                             </div>
                         </div>
@@ -409,6 +438,34 @@
                             <div class="feature-text">
                                 <span class="feat-name">Group Threat Assessor</span>
                                 <span class="feat-desc">Squad prioritizes and assigns targets intelligently.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">AI Personality <span class="feat-ver">v0.4.108</span></span>
+                                <span class="feat-desc">Cautious / Standard / Aggressive / Reckless — each reacts differently under fire.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Dodge <span class="feat-ver">v0.4.123</span></span>
+                                <span class="feat-desc">Soldiers sidestep and dive away from incoming shots.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Cover-First Engagement <span class="feat-ver">v0.4.126</span></span>
+                                <span class="feat-desc">AI prioritizes cover while shooting and engaged.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Grenade & UGL Usage <span class="feat-ver">v0.4.134</span></span>
+                                <span class="feat-desc">Frag and underbarrel grenades with safety checks.</span>
                             </div>
                         </div>
                         <div class="feature-item">
@@ -489,7 +546,7 @@
                         <div class="feature-item">
                             <div class="feature-bullet" style="background:var(--red)"></div>
                             <div class="feature-text">
-                                <span class="feat-name">Vehicle Transport</span>
+                                <span class="feat-name">Vehicle Transport <span class="feat-ver">v0.4.60</span></span>
                                 <span class="feat-desc">Automated troop transport with tactical insertion.</span>
                             </div>
                         </div>
@@ -576,15 +633,29 @@
                         <div class="feature-item">
                             <div class="feature-bullet" style="background:var(--red)"></div>
                             <div class="feature-text">
-                                <span class="feat-name">Battlegroup Behaviour</span>
+                                <span class="feat-name">Battlegroup Behaviour <span class="feat-ver">v0.4.60</span></span>
                                 <span class="feat-desc">Coordinate multiple squads to capture and hold AOs.</span>
                             </div>
                         </div>
                         <div class="feature-item">
                             <div class="feature-bullet" style="background:var(--red)"></div>
                             <div class="feature-text">
-                                <span class="feat-name">High Command Logic</span>
+                                <span class="feat-name">High Command Logic <span class="feat-ver">v0.4.60</span></span>
                                 <span class="feat-desc">Macro-level AO assignment and strategic awareness.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Threat Response & QRF</span>
+                                <span class="feat-desc">Contact reports clustered into threats; QRF and reserves dispatched.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--orange)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">FOB Builder</span>
+                                <span class="feat-desc">Commander establishes forward bases, firebases and mortar positions.</span>
                             </div>
                         </div>
                         <div class="feature-item">
@@ -604,6 +675,71 @@
                     </div>
                     <div class="ms-fund">
                         <span>Funding task: <b style="color:var(--text-mid)">High Cmd &amp; Gamemode</b></span>
+                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GM / ZEUS TOOLKIT -->
+        <div class="milestone-entry phase-sys" data-phase="sys">
+            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
+                <span class="ms-tag tag-sys">[Game Master]</span>
+                <span class="ms-title">GM / Zeus Toolkit</span>
+                <span class="ms-live-tag">● Live</span>
+                <span class="ms-chevron">▶</span>
+            </div>
+            <div class="milestone-detail">
+                <div class="detail-inner">
+                    <div class="detail-intro">
+                        Tune DCO_AI live from the Game Master editor — globally or per unit. Built for mission makers and server owners.
+                    </div>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--green)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">GM Editor Attributes <span class="feat-ver">v0.4.127</span></span>
+                                <span class="feat-desc">Skill, accuracy, perception and dodge — global or per unit.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--green)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Hold Position Action <span class="feat-ver">v0.4.108</span></span>
+                                <span class="feat-desc">Context action to pin a group in place.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--green)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Suppression Coefficient <span class="feat-ver">v0.4.108</span></span>
+                                <span class="feat-desc">Scale how hard suppression hits, global or per unit.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Grenade / GL Usage Sliders <span class="feat-ver">v0.4.134</span></span>
+                                <span class="feat-desc">Control how often AI uses grenades and launchers.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Individual Fire Mode Rules <span class="feat-ver">v0.4.110</span></span>
+                                <span class="feat-desc">Per-unit fire mode behaviour.</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-text">
+                                <span class="feat-name">Server JSON Config <span class="feat-ver">v0.4.118</span></span>
+                                <span class="feat-desc">Server-side global settings without editing prefabs.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ms-fund">
+                        <span>Funding task: <b style="color:var(--text-mid)">Global systems</b></span>
                         <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
                     </div>
                 </div>
@@ -633,15 +769,15 @@
     <div class="summary-strip">
         <div class="sum-card">
             <div class="sum-label">Milestones Total</div>
-            <div class="sum-val">5</div>
+            <div class="sum-val">6</div>
         </div>
         <div class="sum-card">
             <div class="sum-label">Features Tracked</div>
-            <div class="sum-val" style="color:var(--yellow)">20+</div>
+            <div class="sum-val" style="color:var(--yellow)">36</div>
         </div>
         <div class="sum-card">
-            <div class="sum-label">Phase</div>
-            <div class="sum-val" style="color:var(--orange); font-size:14px;">ALPHA</div>
+            <div class="sum-label">Latest Build · Alpha</div>
+            <div class="sum-val" style="color:var(--green); font-size:14px;">v0.4.136</div>
         </div>
     </div>
 
