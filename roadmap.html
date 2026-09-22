@@ -211,6 +211,82 @@
         }
         .sum-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
         .sum-val { font-size: 18px; font-weight: 700; color: #fff; line-height: 1; }
+
+        /* ===== FIELD FOOTAGE + PITCH ===== */
+        .intel-brief {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 14px;
+            background: var(--card);
+            border: 1px solid var(--border-bright);
+        }
+        @media (max-width: 700px) { .intel-brief { grid-template-columns: 1fr; } }
+        .intel-video { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--border); }
+        .intel-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .intel-pitch { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+        .intel-pitch h2 { font-size: 13px; font-weight: 700; color: #d8e4c0; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4; }
+        .intel-pitch p { font-size: 11px; color: var(--text-mid); line-height: 1.6; }
+        .intel-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        /* ===== DONATE CTA ===== */
+        .btn-support {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--yellow);
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            transition: background 0.15s, box-shadow 0.15s;
+        }
+        .btn-support:hover { background: #eab308; box-shadow: 0 0 12px rgba(250,204,21,0.35); }
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border: 1px solid var(--border-bright);
+            color: var(--text-mid);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+        }
+        .btn-ghost:hover { border-color: var(--yellow); color: var(--yellow); }
+        .ms-fund {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-bright);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ===== LEGEND ===== */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: -8px 0 16px;
+            font-size: 9px;
+            color: var(--text-mid);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .legend i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
     </style>
 </head>
 <body>
@@ -226,12 +302,37 @@
         </div>
     </div>
 
+    <!-- FIELD FOOTAGE + PITCH -->
+    <div class="intel-brief">
+        <div class="intel-video">
+            <iframe src="https://www.youtube.com/embed/ghiGmggwQLM" title="DCO AI gameplay footage" loading="lazy"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="intel-pitch">
+            <div class="page-sub" style="color:var(--yellow)">// Field_Footage — Live Build</div>
+            <h2>Smarter, scarier AI for Arma Reforger — built by a small team, funded by players.</h2>
+            <p>Every milestone below is already in development. Donations buy dev time to ship them faster — and every contributor is listed in the database.</p>
+            <div class="intel-links">
+                <a href="donate.html" class="btn-support" onclick="goDonate(event)">▶ Support Development</a>
+                <a href="media.html" class="btn-ghost">More Footage</a>
+            </div>
+        </div>
+    </div>
+
     <!-- PHASE FILTER TABS -->
     <div class="phase-tabs">
         <button class="phase-tab active" onclick="filterMilestones('all', this)">All Phases</button>
         <button class="phase-tab" onclick="filterMilestones('inf', this)">[Infantry]</button>
         <button class="phase-tab" onclick="filterMilestones('veh', this)">[Vehicle]</button>
         <button class="phase-tab" onclick="filterMilestones('sys', this)">[System]</button>
+    </div>
+
+    <!-- BULLET LEGEND (same thresholds as features.html getStatusLabel) -->
+    <div class="legend">
+        <span><i style="background:var(--green)"></i>Complete</span>
+        <span><i style="background:var(--yellow)"></i>In Progress</span>
+        <span><i style="background:var(--orange)"></i>Early Dev</span>
+        <span><i style="background:var(--red)"></i>Planned</span>
     </div>
 
     <!-- MILESTONES LIST -->
@@ -269,7 +370,7 @@
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
+                            <div class="feature-bullet" style="background:var(--green)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Individual Morale</span>
                                 <span class="feat-desc">Emotional reactions to pressure, near-misses, wounds.</span>
@@ -283,7 +384,7 @@
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Danger Reaction</span>
                                 <span class="feat-desc">Instinctual flinch, dodge, prone on incoming fire.</span>
@@ -297,7 +398,7 @@
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Close Combat Behaviour</span>
                                 <span class="feat-desc">Prioritize buildings, melee at range &lt;50m.</span>
@@ -325,6 +426,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="ms-fund">
+                        <span>Funding task: <b style="color:var(--text-mid)">Soldier &amp; Squad AI</b></span>
+                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -347,7 +452,7 @@
                     </div>
                     <div class="feature-grid">
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
+                            <div class="feature-bullet" style="background:var(--yellow)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Basic Vehicle Behaviour</span>
                                 <span class="feat-desc">Detect enemies, move to LOS, seek cover when threatened.</span>
@@ -389,6 +494,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="ms-fund">
+                        <span>Funding task: <b style="color:var(--text-mid)">Vehicle &amp; Artillery</b></span>
+                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -411,14 +520,14 @@
                     </div>
                     <div class="feature-grid">
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
+                            <div class="feature-bullet" style="background:var(--orange)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Radio Info Sharing</span>
                                 <span class="feat-desc">Squad leaders relay contacts over radio to nearby squads.</span>
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
+                            <div class="feature-bullet" style="background:var(--orange)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Squad Tactics</span>
                                 <span class="feat-desc">5 dynamic tactical modes: assault, flank, defend, recon, withdraw.</span>
@@ -438,6 +547,10 @@
                                 <span class="feat-desc">Squad morale affects collective aggression and routing.</span>
                             </div>
                         </div>
+                    </div>
+                    <div class="ms-fund">
+                        <span>Funding task: <b style="color:var(--text-mid)">Soldier &amp; Squad AI</b></span>
+                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
                     </div>
                 </div>
             </div>
@@ -475,7 +588,7 @@
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
+                            <div class="feature-bullet" style="background:var(--orange)"></div>
                             <div class="feature-text">
                                 <span class="feat-name">Artillery Support</span>
                                 <span class="feat-desc">Player-requested fire missions with safety logic.</span>
@@ -488,6 +601,10 @@
                                 <span class="feat-desc">Give orders to AI at all command levels.</span>
                             </div>
                         </div>
+                    </div>
+                    <div class="ms-fund">
+                        <span>Funding task: <b style="color:var(--text-mid)">High Cmd &amp; Gamemode</b></span>
+                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
                     </div>
                 </div>
             </div>
@@ -529,6 +646,15 @@
     </div>
 
 <script>
+    // Inside index.html shell: go through the sidebar link so its active state updates.
+    function goDonate(e) {
+        e.stopPropagation();
+        try {
+            const nav = parent !== window && parent.document.querySelector('.nav-link[href="donate.html"]');
+            if (nav) { e.preventDefault(); nav.click(); }
+        } catch (_) { /* cross-origin / file:// — plain link fallback */ }
+    }
+
     function toggleMilestone(entry) {
         entry.classList.toggle('open');
     }
