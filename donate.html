@@ -1,202 +1,199 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Support — DCO_AI Reforger</title>
+    <meta name="description" content="Support DCO_AI Reforger. Donations fund development time and hardware for a free Arma Reforger AI mod.">
+    <meta property="og:title" content="Support DCO_AI Reforger">
+    <meta property="og:description" content="DCO_AI is free on the Workshop and funded by players. See where every donation goes.">
+    <meta property="og:image" content="https://817r.github.io/DCO_AIRoadmap/images/dragon_company.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
-        .donate-card { background: #1a1c1e; border: 1px solid #3d4432; border-radius: 8px; padding: 25px; }
-        .paypal-button { background: #facc15; color: #000; font-weight: bold; padding: 12px 24px; border-radius: 4px; display: inline-block; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; width: 100%; text-align: center; }
-        .paypal-button:hover { background: #eab308; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3); }
-        
-        /* Table Styles */
-        .database-container { background: #0d0e0a; border: 1px solid #3d4432; border-radius: 4px; overflow: hidden; margin-top: 30px; }
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th:nth-child(1), td:nth-child(1) { width: 10%; text-align: center; }
-        th:nth-child(2), td:nth-child(2) { width: 35%; }
-        th:nth-child(3), td:nth-child(3) { width: 35%; }
-        th:nth-child(4), td:nth-child(4) { width: 20%; text-align: right; }
-        thead { background: #3d4432; color: #facc15; text-transform: uppercase; font-size: 14px; letter-spacing: 2px; }
-        th, td { padding: 18px 20px; border-bottom: 1px solid #2d2f31; }
-        tbody tr td { font-size: 16px; }
+        .support { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
+        @media (max-width: 900px) { .support { grid-template-columns: 1fr; } }
+        .total { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+        .total b { font-family: var(--mono); font-size: 48px; color: var(--white); line-height: 1; }
+        .bar-meta { display: flex; justify-content: space-between; margin-top: 10px; font-family: var(--mono); font-size: 12px; color: var(--text-mid); }
+        .donate-box { border-color: var(--yellow-line); }
+        .donate-box h2 { font-size: 22px; margin-bottom: 8px; }
+        .donate-box p { margin-bottom: 20px; }
+        .fine { font-size: 12px; color: var(--text-dim); margin-top: 14px; }
 
-        /* Rank Badge Style */
-        .rank-badge { font-weight: bold; font-size: 11px; padding: 6px 0; width: 150px; text-align: center; border-radius: 2px; text-transform: uppercase; display: inline-block; }
-        .platinum { color: #f87171; border: 1px solid #f87171; background: rgba(248, 113, 113, 0.1); }
-        .gold { color: #facc15; border: 1px solid #facc15; background: rgba(250, 204, 21, 0.1); }
-        .silver { color: #60a5fa; border: 1px solid #60a5fa; background: rgba(96, 165, 250, 0.1); }
-        .basic { color: #4ade80; border: 1px solid #4ade80; background: rgba(74, 222, 128, 0.1); }
+        .tier { background: var(--surface); border: 1px solid var(--border); padding: 20px; }
+        .tier.reached { border-color: var(--yellow-line); background: linear-gradient(135deg, var(--yellow-soft), transparent 70%), var(--surface); }
+        .tier-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .tier-amt { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--white); }
+        .tier h3 { font-size: 15px; margin-bottom: 4px; }
+        .tier p { font-size: 13px; color: var(--text-mid); margin-bottom: 14px; }
 
-        /* Task Progress Bar Styles */
-        .task-bar-bg { background: #0d0e0a; height: 6px; border-radius: 3px; overflow: hidden; border: 1px solid #2d2f31; }
-        .task-bar-fill { height: 100%; background: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
-        .task-card { background: #111315; border: 1px solid #2d2f31; padding: 12px; transition: all 0.3s; }
-        .stat-box {
-        background: #111315;
-        border: 1px solid #2d2f31;
-        padding: 15px 20px;
-        border-radius: 4px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        }
-        .stat-label { font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .stat-value { font-size: 24px; font-weight: 800; color: #facc15; font-family: 'JetBrains Mono', monospace; }
-        .stat-value span { font-size: 14px; color: #4ade80; margin-left: 5px; }
+        .rank { font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border: 1px solid; display: inline-block; }
+        .rank.platinum { color: #e2e8f0; border-color: #94a3b8; background: rgba(148, 163, 184, 0.12); }
+        .rank.gold { color: var(--yellow); border-color: var(--yellow-line); background: var(--yellow-soft); }
+        .rank.silver { color: var(--blue); border-color: rgba(96, 165, 250, 0.35); background: rgba(96, 165, 250, 0.08); }
+        .rank.basic { color: var(--green); border-color: rgba(34, 197, 94, 0.35); background: rgba(34, 197, 94, 0.08); }
+        .rank-card { text-align: center; }
+        .rank-card .tier-amt { margin: 12px 0 4px; font-size: 18px; }
+
+        .db { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); }
+        .db th { text-align: left; font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 16px; border-bottom: 1px solid var(--border-strong); }
+        .db td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+        .db td:first-child { font-family: var(--mono); color: var(--text-dim); width: 48px; }
+        .db td.name { font-weight: 600; color: var(--white); }
+        .db td.amt, .db th.amt { text-align: right; font-family: var(--mono); color: var(--green); font-weight: 700; }
+
+        .faq details { border-bottom: 1px solid var(--border); }
+        .faq summary { cursor: pointer; padding: 16px 0; font-weight: 600; color: var(--white); list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+        .faq summary::-webkit-details-marker { display: none; }
+        .faq summary::after { content: '+'; font-family: var(--mono); color: var(--yellow); }
+        .faq details[open] summary::after { content: '–'; }
+        .faq p { color: var(--text-mid); padding-bottom: 16px; max-width: 720px; }
     </style>
 </head>
 <body>
-    <div class="max-w-7xl mx-auto">
-        
-        <div class="flex flex-col lg:flex-row gap-6">
-            <div class="lg:w-2/3">
-                <div class="donate-card">
-                    <h2 class="text-2xl font-black mb-4 text-yellow-500 italic">// LOGISTICS_FUNDING_PORTAL</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-left">
-                        <div>
-                            <p class="text-sm opacity-70 leading-relaxed mb-6">
-                                DCO_AI is free on the Workshop. Donations buy development time and hardware so features ship faster. Payments are handled by Ko-fi, and every contributor is listed in the database below within 24 hours, ranked by total support.
-                            </p>
-                            <a id="donateButton" href="https://ko-fi.com/richz117" target="_blank" rel="noopener" class="paypal-button">
-                                Donate
-                            </a>
-                            <a href="https://discord.gg/YyAd3jBDHV" target="_blank" rel="noopener" class="block text-center text-[12px] mt-3 opacity-60 hover:opacity-100 hover:text-indigo-300 transition">
-                                Questions first? Talk to the team on Discord →
-                            </a>
-                        </div>
-                        <div class="p-4 bg-black/40 border border-zinc-800 text-[14px] italic">
-                            <span class="text-yellow-500 font-bold uppercase block mb-2">Operational Ranks:</span>
-                            > 500 USD : Platinum Contributor<br>
-                            > 250 USD : Gold Contributor<br>
-                            > 50 USD  : Silver Contributor<br>
-                            > 10 USD  : Basic Contributor
-                        </div>
-                    </div>
-                </div>
+<main id="main">
 
-                <div class="database-container">
-                    <div class="p-4 border-b border-zinc-800 flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase tracking-widest text-zinc-500">[CONTRIBUTOR_DATABASE]</span>
-                        <span class="text-[10px] text-green-500">● ONLINE</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table>
-                            <thead>
-                                <tr><th>#</th><th>Callsign</th><th>Ranks</th><th style="text-align: right;">Amount</th></tr>
-                            </thead>
-                            <tbody id="donorBody"></tbody>
-                        </table>
-                    </div>
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Support the project</div>
+            <h1>Keep DCO_AI free — and <span class="accent">make it better, faster.</span></h1>
+            <p class="lead">DCO_AI is free on the Workshop for everyone. Donations buy development time and hardware so the roadmap ships sooner. Every contributor is listed below.</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container support">
+            <div class="card">
+                <div class="kicker dim mb-16">Funding progress</div>
+                <div class="total"><b data-bind="raised">$560</b><span class="muted">raised of <span data-bind="goal">$10,000</span> goal</span></div>
+                <div class="bar lg glow"><span data-bar="funding" style="width:0"></span></div>
+                <div class="bar-meta"><span><span data-bind="pct">5.6%</span> funded</span><span><span data-bind="contributors">3</span> contributors</span></div>
+                <div class="stats mt-24">
+                    <div class="stat"><div class="stat-val" data-bind="downloads">34,178</div><div class="stat-label">Downloads</div></div>
+                    <div class="stat"><div class="stat-val" data-bind="rating">95%</div><div class="stat-label">Rating</div></div>
+                    <div class="stat"><div class="stat-val" data-bind="releases">50</div><div class="stat-label">Releases</div></div>
+                    <div class="stat"><div class="stat-val" data-bind="version">v0.4.136</div><div class="stat-label">Latest</div></div>
                 </div>
             </div>
 
-            <div class="lg:w-1/3 space-y-6">
-
-                <div class="stat-box">
-                    <div class="stat-label">Total Raised</div>
-                    <div class="stat-value"><span id="raisedTotal" style="font-size:24px;color:#facc15;margin:0">$0</span><span id="raisedGoal">/ $10,000</span></div>
-                    <div class="task-bar-bg mt-3" style="height:10px"><div id="raisedBar" class="task-bar-fill" style="width:0%;background:#facc15;box-shadow:0 0 10px rgba(250,204,21,0.4)"></div></div>
-                    <div class="flex justify-between text-[11px] mt-2 opacity-60 uppercase">
-                        <span id="raisedPct">0% funded</span>
-                        <span id="raisedCount">0 contributors</span>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="text-xs font-bold text-green-500 mb-3 tracking-widest uppercase">>> Funding_Task_Progress</div>
-                    <div class="space-y-3">
-                        <div class="task-card">
-                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
-                                <span>Global systems</span>
-                                <span class="text-zinc-600">8%</span>
-                            </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 8%"></div></div>
-                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 1,500 USD Target</div>
-                        </div>
-                        <div class="task-card">
-                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
-                                <span>Soldier & Squad AI</span>
-                                <span class="text-zinc-600">5%</span>
-                            </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 5%"></div></div>
-                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 3,000 USD Target</div>
-                        </div>
-                        <div class="task-card">
-                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
-                                <span>Vehicle & Artillery</span>
-                                <span class="text-zinc-600">2%</span>
-                            </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 2%"></div></div>
-                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 6,000 USD Target</div>
-                        </div>
-                        <div class="task-card">
-                            <div class="flex justify-between text-[15px] mb-2 uppercase font-bold">
-                                <span>High Cmd & Gamemode</span>
-                                <span class="text-zinc-600">3%</span>
-                            </div>
-                            <div class="task-bar-bg"><div class="task-bar-fill" style="width: 3%"></div></div>
-                            <div class="text-[12px] mt-1 opacity-40 italic">Milestone: 10,000 USD Final</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="card donate-box">
+                <h2>Donate</h2>
+                <p class="muted">Donations are handled securely by Ko-fi. Any amount helps.</p>
+                <a class="btn btn-primary btn-block" data-link="kofi" href="#">Donate on Ko-fi</a>
+                <a class="btn btn-discord btn-block mt-8" data-link="discord" href="#">Questions? Ask on Discord</a>
+                <p class="fine">Your name appears in the contributor database within 24 hours. Prefer to stay anonymous? Leave a note on Ko-fi.</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        /* { name: "Ghost_Lead_01", amount: 600 }, */
-        const donors = [
-        { name: "Lateral Combustion", amount: 500 },
-        { name: "Hawkins", amount: 50 },
-        { name: "radar42", amount: 10 },
-        ];
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// Where it goes</div>
+                    <h2>Funding milestones</h2>
+                    <p>Each funding tier pays for a block of the <a href="roadmap.html" class="accent">roadmap</a>.</p>
+                </div>
+            </div>
+            <div class="grid grid-4" id="tiers"></div>
+        </div>
+    </section>
 
-        function getRank(amount) {
-            if (amount >= 500) return { label: "Platinum", class: "platinum" };
-            if (amount >= 250) return { label: "Gold", class: "gold" };
-            if (amount >= 50) return { label: "Silver", class: "silver" };
-            return { label: "Basic", class: "basic" };
-        }
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// Recognition</div>
+                    <h2>Contributor ranks</h2>
+                    <p>Ranks are based on your total support.</p>
+                </div>
+            </div>
+            <div class="grid grid-4" id="ranks"></div>
+        </div>
+    </section>
 
-        function renderDonors() {
-            const body = document.getElementById('donorBody');
-            const sortedDonors = donors.sort((a, b) => b.amount - a.amount);
-            body.innerHTML = sortedDonors.map((donor, index) => {
-                const rank = getRank(donor.amount);
-                return `
-                    <tr>
-                        <td style="text-align: center;" class="font-bold text-zinc-500">${index + 1}</td>
-                        <td style="text-align: center;" class="font-bold text-white uppercase tracking-wider">${donor.name}</td>
-                        <td style="text-align: center;"><span class="rank-badge ${rank.class}">${rank.label}</span></td>
-                        <td style="text-align: right;" class="text-green-500 font-bold font-mono">$${donor.amount.toLocaleString()}</td>
-                    </tr>
-                `;
+    <section class="section" id="contributors">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// Contributor database</div>
+                    <h2>Thank you</h2>
+                </div>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="db">
+                    <thead><tr><th>#</th><th>Callsign</th><th>Rank</th><th class="amt">Amount</th></tr></thead>
+                    <tbody id="donors"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-head"><div><div class="kicker">// FAQ</div><h2>Questions</h2></div></div>
+            <div class="faq">
+                <details>
+                    <summary>Is DCO_AI free?</summary>
+                    <p>Yes. DCO_AI is free on the Arma Reforger Workshop, and donations are optional.</p>
+                </details>
+                <details>
+                    <summary>What are donations used for?</summary>
+                    <p>Development time and the hardware to build and test on. Funding tiers map to blocks of the roadmap, so you can see what your support moves forward.</p>
+                </details>
+                <details>
+                    <summary>How do I pay?</summary>
+                    <p>Through Ko-fi, which handles the payment. We never see your card details.</p>
+                </details>
+                <details>
+                    <summary>When does my name show up?</summary>
+                    <p>Within 24 hours of your donation. If you'd rather not be listed, or want a different callsign, leave a note with your donation or message us on Discord.</p>
+                </details>
+                <details>
+                    <summary>Can I help without donating?</summary>
+                    <p>Absolutely. Play it, report bugs and share videos on Discord — or apply for an <a href="recruitment.html" class="accent">open position</a>.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="assets/site.js"></script>
+<script>
+    DCO.ready.then(site => {
+        const { raised } = DCO.funding(site);
+        let prev = 0;
+        document.getElementById('tiers').innerHTML = site.funding.tiers.map(t => {
+            const pct = Math.max(0, Math.min(100, (raised - prev) / (t.amount - prev) * 100));
+            const reached = raised >= t.amount;
+            prev = t.amount;
+            return `
+            <div class="tier${reached ? ' reached' : ''}">
+                <div class="tier-top"><span class="tier-amt">$${DCO.fmt(t.amount)}</span>${reached ? '<span class="chip chip-live">Reached</span>' : ''}</div>
+                <h3>${DCO.esc(t.label)}</h3>
+                <p>${DCO.esc(t.desc)}</p>
+                <div class="bar"><span style="width:${pct}%"></span></div>
+            </div>`;
+        }).join('');
+
+        const ranks = site.funding.ranks;
+        document.getElementById('ranks').innerHTML = ranks.map((r, i) => `
+            <div class="card rank-card">
+                <span class="rank ${r.class}">${DCO.esc(r.label)}</span>
+                <div class="tier-amt">${r.min ? '$' + DCO.fmt(r.min) + '+' : 'Any amount'}</div>
+                <p>${i === 0 ? 'Top-tier supporter' : r.min ? 'Up to $' + DCO.fmt(ranks[i - 1].min - 1) : 'Every contribution counts'}</p>
+            </div>`).join('');
+
+        document.getElementById('donors').innerHTML = [...site.donors]
+            .sort((a, b) => b.amount - a.amount)
+            .map((d, i) => {
+                const r = DCO.rank(site, d.amount);
+                return `<tr><td>${i + 1}</td><td class="name">${DCO.esc(d.name)}</td><td><span class="rank ${r.class}">${DCO.esc(r.label)}</span></td><td class="amt">$${DCO.fmt(d.amount)}</td></tr>`;
             }).join('');
-        }
-        const FUNDING_GOAL = 10000; // = "High Cmd & Gamemode" final milestone
-
-        function renderTotal() {
-            const raised = donors.reduce((sum, d) => sum + d.amount, 0);
-            const pct = Math.min(100, Math.round(raised / FUNDING_GOAL * 100));
-            document.getElementById('raisedTotal').textContent = '$' + raised.toLocaleString();
-            document.getElementById('raisedGoal').textContent = '/ $' + FUNDING_GOAL.toLocaleString();
-            document.getElementById('raisedBar').style.width = pct + '%';
-            document.getElementById('raisedPct').textContent = pct + '% funded';
-            document.getElementById('raisedCount').textContent = donors.length + (donors.length === 1 ? ' contributor' : ' contributors');
-        }
-
-        window.onload = () => { renderDonors(); renderTotal(); };
-
-        // Hover effect for donate button
-        const button = document.getElementById('donateButton');
-        button.addEventListener('mouseenter', () => {
-            button.textContent = '[ Deploy Funds ]';
-        });
-        button.addEventListener('mouseleave', () => {
-            button.textContent = '[ Donate ]';
-        });
-    </script>
+    });
+</script>
 </body>
 </html>

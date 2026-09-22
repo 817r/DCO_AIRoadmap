@@ -245,7 +245,7 @@
   {
     "cat": "Soldier Systems",
     "name": "CQB",
-    "ver": "v0.1",
+    "ver": "planned",
     "prio": 750,
     "prog": 0,
     "desc": "AI able to do advanced CQB tactics and Building Assault.",
@@ -317,7 +317,7 @@
   {
     "cat": "Squad Systems",
     "name": "Bounding overwatch",
-    "ver": "v0.1",
+    "ver": "planned",
     "prio": 830,
     "prog": 0,
     "desc": "Squads will separate into two fireteams advancing using bounding overwatch.",
@@ -591,6 +591,87 @@
     "prio": 735,
     "prog": 35,
     "desc": "Infantry and vehicle respawners for PvE, with a balancer that scales AI count to the number of players (base + players x multiplier, clamped).",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Building Occupying",
+    "ver": "planned",
+    "prio": 745,
+    "prog": 0,
+    "desc": "AI automatically occupies and defends structures.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Group Threat Assessor",
+    "ver": "planned",
+    "prio": 828,
+    "prog": 0,
+    "desc": "Squad prioritizes and assigns targets intelligently.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Group Cohesion",
+    "ver": "planned",
+    "prio": 826,
+    "prog": 0,
+    "desc": "Squad stays together and coordinates movement.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Group Morale",
+    "ver": "planned",
+    "prio": 824,
+    "prog": 0,
+    "desc": "Squad morale affects collective aggression and routing.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Mechanized Squad Combat",
+    "ver": "planned",
+    "prio": 880,
+    "prog": 0,
+    "desc": "IFV/APC squad coordinates dismount and assault.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Vehicle Suppression",
+    "ver": "planned",
+    "prio": 878,
+    "prog": 0,
+    "desc": "Vehicles pin down infantry using suppressive fire.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Vehicle Tactics",
+    "ver": "planned",
+    "prio": 876,
+    "prog": 0,
+    "desc": "Flanking, bounding overwatch, fire-and-maneuver.",
+    "video": ""
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Resupply Point",
+    "ver": "planned",
+    "prio": 874,
+    "prog": 0,
+    "desc": "Vehicles navigate to and use resupply depots autonomously.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Player Command Interface",
+    "ver": "planned",
+    "prio": 710,
+    "prog": 0,
+    "desc": "Give orders to AI at all command levels.",
     "video": ""
   }
 ]

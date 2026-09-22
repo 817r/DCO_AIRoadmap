@@ -3,322 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <title>Devlog — DCO_AI Reforger</title>
+    <meta name="description" content="DCO_AI Reforger development log: what changed in each major update.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        :root {
-            --primary: #facc15;
-            --primary-glow: rgba(250, 204, 21, 0.4);
-            --bg-deep: #050607;
-            --card-bg: #0f1115;
-            --border: #1e2616;
-            --major-accent: #f97316; 
-        }
-
-        body { 
-            background-color: var(--bg-deep);
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
-        .mono { font-family: 'JetBrains Mono', monospace; }
-
-        .bg-pattern {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(#1e2616 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            background: linear-gradient(to bottom, #fff 0%, #666 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 0.9;
-        }
-
-        .glow-border {
-            position: relative;
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .glow-border:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 30px rgba(250, 204, 21, 0.15);
-            transform: translateY(-4px);
-        }
-
-        .major-card {
-            border: 1px solid rgba(249, 115, 22, 0.3);
-            background: linear-gradient(145deg, #0f1115 0%, #1a120b 100%);
-        }
-
-        .timeline-line {
-            position: absolute;
-            left: -20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--primary), #1e2616, transparent);
-        }
-
-        .status-dot {
-            position: absolute;
-            left: -24px;
-            top: 32px;
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .badge {
-            font-size: 10px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .badge-major { background: var(--major-accent); color: #000; }
-        .badge-update { background: var(--primary); color: #000; }
-
-        .feature-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-        .scanline {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 5px;
-            background: rgba(250, 204, 21, 0.03);
-            animation: scanline 8s linear infinite;
-            pointer-events: none;
-        }
+        .timeline { position: relative; padding-left: 32px; }
+        .timeline::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--yellow), var(--border) 40%); }
+        .entry { position: relative; margin-bottom: 28px; }
+        .entry::before { content: ''; position: absolute; left: -32px; top: 22px; width: 16px; height: 16px; background: var(--bg); border: 2px solid var(--border-strong); }
+        .entry.major::before { border-color: var(--yellow); background: var(--yellow); box-shadow: 0 0 14px rgba(250, 204, 21, 0.5); }
+        .entry .card { padding: 28px; }
+        .entry.major .card { border-color: var(--yellow-line); background: linear-gradient(135deg, rgba(250, 204, 21, 0.06), transparent 50%), var(--surface); }
+        .entry-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .entry-ver { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--yellow); line-height: 1; }
+        .entry:not(.major) .entry-ver { font-size: 20px; color: var(--text); }
+        .entry-date { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+        .entry h2 { margin-bottom: 8px; }
+        .entry h3 { font-size: 18px; margin-bottom: 6px; }
+        .entry .card > p { color: var(--text-mid); max-width: 720px; }
+        .groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; }
+        @media (max-width: 760px) { .groups { grid-template-columns: 1fr; } }
+        .group { background: var(--bg); border: 1px solid var(--border); padding: 18px; }
+        .group h4 { font-family: var(--mono); font-size: 12px; color: var(--white); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+        .ver { font-family: var(--mono); font-size: 11px; color: var(--text-dim); white-space: nowrap; }
     </style>
 </head>
-<body class="p-6 md:p-12">
-    <div class="bg-pattern"></div>
-    <div class="scanline"></div>
+<body>
+<main id="main">
 
-    <main class="max-w-5xl mx-auto">
-        <header class="mb-20 text-center md:text-left relative">
-            <div class="inline-block px-3 py-1 border border-yellow-500/30 text-yellow-500 text-xs font-bold mb-4 tracking-widest mono uppercase">
-                SYSTEM STATUS: EVOLVING
-            </div>
-            <h1 class="hero-title mb-6 text-white uppercase">Intelligence <br><span class="text-yellow-400">Report</span></h1>
-            <p class="max-w-2xl text-gray-400 text-lg leading-relaxed">
-                Building the future ecosystem of tactical artificial intelligence. Version 0.4.136 brings AI personalities, dodging, grenade &amp; UGL usage and a full Game Master toolkit on top of the 0.4.60 commander overhaul.
-            </p>
-        </header>
-
-        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
-            <div class="p-6 bg-[#0f1115] border border-white/5 rounded-xl">
-                <div class="text-xs text-gray-500 mono mb-1 uppercase">Latest Build</div>
-                <div class="text-2xl font-bold text-white uppercase">v0.4.136</div>
-            </div>
-            <div class="p-6 bg-[#0f1115] border border-white/5 rounded-xl">
-                <div class="text-xs text-gray-500 mono mb-1 uppercase">AI Cognition</div>
-                <div class="text-2xl font-bold text-orange-500 uppercase">Major</div>
-            </div>
-            <div class="p-6 bg-[#0f1115] border border-white/5 rounded-xl">
-                <div class="text-xs text-gray-500 mono mb-1 uppercase">Operational Stability</div>
-                <div class="text-2xl font-bold text-white uppercase">94%</div>
-            </div>
-            <div class="p-6 bg-[#0f1115] border border-white/5 rounded-xl">
-                <div class="text-xs text-gray-500 mono mb-1 uppercase">Next Objective</div>
-                <div class="text-2xl font-bold text-yellow-400 italic uppercase">Beta 1.0</div>
-            </div>
-        </section>
-
-        <div class="space-y-16 relative ml-6">
-            <div class="timeline-line"></div>
-
-            <article class="relative group">
-                <div class="status-dot" style="background: var(--major-accent); box-shadow: 0 0 15px var(--major-accent);"></div>
-                <div class="glow-border major-card p-8 md:p-12 rounded-3xl relative overflow-hidden">
-                    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
-                        <div class="flex items-center gap-4">
-                            <span class="text-orange-500 font-black text-4xl mono tracking-tighter uppercase">v0.4.136</span>
-                            <span class="text-xs text-orange-500/50 font-bold mono">/ JUN – SEP 2026 · v0.4.102 → v0.4.136</span>
-                        </div>
-                        <span class="badge badge-major px-4 py-2 text-sm">🎯 Combat &amp; GM Update</span>
-                    </div>
-
-                    <h2 class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight uppercase">Every Soldier <br><span class="text-orange-500">Fights Differently.</span></h2>
-                    <p class="text-gray-300 text-lg mb-12 max-w-3xl leading-relaxed">
-                        Soldiers now have personalities, dodge incoming fire, and use grenades and launchers — and Game Masters can tune all of it live.
-                    </p>
-
-                    <div class="grid md:grid-cols-2 gap-8">
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">🧠</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Personality &amp; Reactions</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• AI Personality: Cautious, Standard, Aggressive, Reckless (v0.4.108).</li>
-                                <li>• Dodge incoming fire (v0.4.123).</li>
-                                <li>• Cover-first behaviour while engaged (v0.4.126).</li>
-                                <li>• Danger event &amp; reaction fixes (v0.4.131).</li>
-                            </ul>
-                        </div>
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">💥</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Suppression &amp; Firepower</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• Stronger suppression, better combat movement (v0.4.102).</li>
-                                <li>• Suppression over-reaction fixed (v0.4.105).</li>
-                                <li>• Grenade &amp; UGL usage (v0.4.134).</li>
-                                <li>• Per-unit fire mode rules (v0.4.110).</li>
-                            </ul>
-                        </div>
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">🎛️</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Game Master Toolkit</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• New GM interface attributes (v0.4.127).</li>
-                                <li>• Hold Position context action (v0.4.108).</li>
-                                <li>• Suppression effect coefficient (v0.4.108).</li>
-                                <li>• Grenade / GL usage chance sliders (v0.4.134).</li>
-                            </ul>
-                        </div>
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">🛰️</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Commander &amp; Server</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• Commander return-fire mode fixed (v0.4.106).</li>
-                                <li>• AI follows waypoints more reliably (v0.4.124).</li>
-                                <li>• Server-side JSON global settings, first pass (v0.4.118).</li>
-                                <li>• Updated for Arma Reforger 1.8 (v0.4.115+).</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <article class="relative group opacity-90 hover:opacity-100 transition-all">
-                <div class="status-dot" style="background: var(--major-accent); box-shadow: 0 0 15px var(--major-accent);"></div>
-                <div class="glow-border major-card p-8 md:p-12 rounded-3xl relative overflow-hidden">
-                    
-                    <div class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                        <span class="text-9xl font-black text-orange-500 italic">0.4.60</span>
-                    </div>
-
-                    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
-                        <div class="flex items-center gap-4">
-                            <span class="text-orange-500 font-black text-4xl mono tracking-tighter uppercase">v0.4.60</span>
-                            <span class="text-xs text-orange-500/50 font-bold mono">/ APRIL 2, 2026</span>
-                        </div>
-                        <span class="badge badge-major px-4 py-2 text-sm">🚀 Major AI Overhaul</span>
-                    </div>
-                    
-                    <h2 class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight uppercase">Smarter. Deadlier. <br><span class="text-orange-500">More Realistic.</span></h2>
-                    <p class="text-gray-300 text-lg mb-12 max-w-3xl leading-relaxed">
-                        Experience a whole new level of battlefield intelligence with a massive upgrade to commander, group, and resupply systems. AI no longer just reacts—it dominates.
-                    </p>
-
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">🧠</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Strategic Commanders</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• Real-time threat analysis and adaptation.</li>
-                                <li>• Dynamic Objective Handling: Recon, Assault, Flank, Defend.</li>
-                                <li>• Auto-generated smart flanking routes.</li>
-                                <li>• Improved continuous "Think" behavior logic.</li>
-                            </ul>
-                        </div>
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">🚗</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Transport Operations</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• Fully integrated AI transport system.</li>
-                                <li>• Seamless board/disembark coordination.</li>
-                                <li>• Advanced Group ↔ Vehicle teamwork.</li>
-                            </ul>
-                        </div>
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">⚔️</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Combat Intelligence</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• Role-based reactions and distance scaling.</li>
-                                <li>• Enhanced target awareness & danger detection.</li>
-                                <li>• Realistic backward combat maneuvering.</li>
-                            </ul>
-                        </div>
-
-                        <div class="p-6 bg-white/5 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all">
-                            <span class="feature-icon">📦</span>
-                            <h4 class="text-white font-bold mb-3 uppercase tracking-wider">Advanced Resupply</h4>
-                            <ul class="space-y-2 text-sm text-gray-400">
-                                <li>• Brand new <b>Magazine Well</b> system.</li>
-                                <li>• Autonomous ammo search and retrieval.</li>
-                                <li>• Seamless Arsenal & Environment integration.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="mt-12 pt-8 border-t border-white/5 grid grid-cols-2 gap-4">
-                        <div class="text-xs text-gray-500 mono">
-                            <span class="text-orange-500 font-bold uppercase">// Performance:</span> Efficient calculations, optimized logic.
-                        </div>
-                        <div class="text-xs text-gray-500 mono text-right">
-                            <span class="text-orange-500 font-bold uppercase">// Stability:</span> Refined Behavior Trees.
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <article class="relative group opacity-70 hover:opacity-100 transition-all">
-                <div class="status-dot"></div>
-                <div class="glow-border bg-[#0f1115] p-8 rounded-2xl">
-                    <div class="flex items-center gap-4 mb-4">
-                        <span class="text-yellow-400 font-bold text-2xl mono uppercase">v0.4.31</span>
-                        <span class="badge badge-update">Combat Refine</span>
-                    </div>
-                    <h3 class="text-xl font-black text-white mb-2 uppercase">Neural Pathfinding Stability</h3>
-                    <p class="text-gray-400 text-sm">Fine-tuned individual movement logic and AI aim calculation system v2.0.</p>
-                </div>
-            </article>
-
-            <article class="relative group opacity-50 hover:opacity-100 transition-all">
-                <div class="status-dot" style="background: #444;"></div>
-                <div class="glow-border bg-[#0f1115] p-8 rounded-2xl">
-                    <div class="flex items-center gap-4 mb-4">
-                        <span class="text-gray-400 font-bold text-2xl mono uppercase">v0.4.16</span>
-                        <span class="badge" style="border: 1px solid #444;">Legacy Update</span>
-                    </div>
-                    <h3 class="text-xl font-black text-white mb-2 uppercase">CQB & Motorized Warfare</h3>
-                    <p class="text-gray-400 text-sm">Implementation of Close Quarter Battle (CQB) protocols and initial heavy vehicle testing.</p>
-                </div>
-            </article>
-
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Devlog</div>
+            <h1>Intelligence report</h1>
+            <p class="lead">What changed in each major update. For every single build, see the <a data-link="changelog" href="#" class="accent">Workshop changelog</a>.</p>
         </div>
+    </header>
 
-        <footer class="mt-32 text-center border-t border-white/5 pt-12">
-            <div class="text-yellow-500/30 text-xs mono mb-6 tracking-[0.5em] uppercase">System Version 0.4.136 // Alpha_Phase</div>
-            <a href="https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger" target="_blank" class="inline-block bg-orange-500 hover:bg-orange-400 text-black font-black px-12 py-4 rounded-full transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(249,115,22,0.2)] uppercase tracking-tighter">
-                Deploy Latest Build
-            </a>
-        </footer>
-    </main>
+    <section class="section">
+        <div class="container">
+            <div class="stats" style="margin-bottom:48px">
+                <div class="stat"><div class="stat-val" data-bind="version">v0.4.136</div><div class="stat-label">Latest build</div></div>
+                <div class="stat"><div class="stat-val" data-bind="releases">50</div><div class="stat-label">Workshop releases</div></div>
+                <div class="stat"><div class="stat-val" data-bind="gameVersion">1.8.0.13</div><div class="stat-label">Game version</div></div>
+                <div class="stat"><div class="stat-val accent">Beta 1.0</div><div class="stat-label">Next objective</div></div>
+            </div>
+
+            <div class="timeline">
+
+                <article class="entry major">
+                    <div class="card">
+                        <div class="entry-head">
+                            <span class="entry-ver">v0.4.136</span>
+                            <span class="chip chip-live">Latest</span>
+                            <span class="entry-date">JUN – SEP 2026 · v0.4.102 → v0.4.136</span>
+                        </div>
+                        <h2>Every soldier fights differently.</h2>
+                        <p>Soldiers now have personalities, dodge incoming fire and use grenades and launchers — and Game Masters can tune all of it live.</p>
+                        <div class="groups">
+                            <div class="group">
+                                <h4>Personality &amp; reactions</h4>
+                                <ul class="list">
+                                    <li>AI Personality: Cautious, Standard, Aggressive, Reckless <span class="ver">v0.4.108</span></li>
+                                    <li>Dodge incoming fire <span class="ver">v0.4.123</span></li>
+                                    <li>Cover-first behaviour while engaged <span class="ver">v0.4.126</span></li>
+                                    <li>Danger event &amp; reaction fixes <span class="ver">v0.4.131</span></li>
+                                    <li>Indoor relocation &amp; door avoidance <span class="ver">v0.4.136</span></li>
+                                </ul>
+                            </div>
+                            <div class="group">
+                                <h4>Suppression &amp; firepower</h4>
+                                <ul class="list">
+                                    <li>Stronger suppression, better combat movement <span class="ver">v0.4.102</span></li>
+                                    <li>Suppression over-reaction fixed <span class="ver">v0.4.105</span></li>
+                                    <li>Per-unit fire mode rules <span class="ver">v0.4.110</span></li>
+                                    <li>Grenade &amp; UGL usage <span class="ver">v0.4.134</span></li>
+                                </ul>
+                            </div>
+                            <div class="group">
+                                <h4>Game Master toolkit</h4>
+                                <ul class="list">
+                                    <li>Hold Position context action <span class="ver">v0.4.108</span></li>
+                                    <li>Suppression effect coefficient <span class="ver">v0.4.108</span></li>
+                                    <li>New GM interface attributes <span class="ver">v0.4.127</span></li>
+                                    <li>Grenade / GL usage chance sliders <span class="ver">v0.4.134</span></li>
+                                </ul>
+                            </div>
+                            <div class="group">
+                                <h4>Commander &amp; server</h4>
+                                <ul class="list">
+                                    <li>Commander return-fire mode fixed <span class="ver">v0.4.106</span></li>
+                                    <li>Updated for Arma Reforger 1.8 <span class="ver">v0.4.115</span></li>
+                                    <li>Server-side JSON global settings, first pass <span class="ver">v0.4.118</span></li>
+                                    <li>AI follows waypoints more reliably <span class="ver">v0.4.124</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="entry major">
+                    <div class="card">
+                        <div class="entry-head">
+                            <span class="entry-ver">v0.4.60</span>
+                            <span class="chip">Major AI overhaul</span>
+                            <span class="entry-date">APRIL 2, 2026</span>
+                        </div>
+                        <h2>Smarter. Deadlier. More realistic.</h2>
+                        <p>A massive upgrade to commander, group and resupply systems. AI no longer just reacts — it plans.</p>
+                        <div class="groups">
+                            <div class="group">
+                                <h4>Strategic commanders</h4>
+                                <ul class="list">
+                                    <li>Real-time threat analysis and adaptation</li>
+                                    <li>Dynamic objectives: Recon, Assault, Flank, Defend</li>
+                                    <li>Auto-generated flanking routes</li>
+                                    <li>Continuous "think" cycle</li>
+                                </ul>
+                            </div>
+                            <div class="group">
+                                <h4>Transport operations</h4>
+                                <ul class="list">
+                                    <li>Fully integrated AI transport system</li>
+                                    <li>Board and disembark coordination</li>
+                                    <li>Group ↔ vehicle teamwork</li>
+                                </ul>
+                            </div>
+                            <div class="group">
+                                <h4>Combat intelligence</h4>
+                                <ul class="list">
+                                    <li>Role-based reactions and distance scaling</li>
+                                    <li>Better target awareness and danger detection</li>
+                                    <li>Realistic backward combat movement</li>
+                                </ul>
+                            </div>
+                            <div class="group">
+                                <h4>Advanced resupply</h4>
+                                <ul class="list">
+                                    <li>New magazine-well system</li>
+                                    <li>Autonomous ammo search and retrieval</li>
+                                    <li>Arsenal and environment integration</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="entry">
+                    <div class="card">
+                        <div class="entry-head">
+                            <span class="entry-ver">v0.4.31</span>
+                            <span class="chip">Combat refine</span>
+                        </div>
+                        <h3>Pathfinding stability</h3>
+                        <p>Fine-tuned individual movement logic and version 2.0 of the AI aim calculation.</p>
+                    </div>
+                </article>
+
+                <article class="entry">
+                    <div class="card">
+                        <div class="entry-head">
+                            <span class="entry-ver">v0.4.16</span>
+                            <span class="chip">Legacy update</span>
+                        </div>
+                        <h3>CQB &amp; motorized warfare</h3>
+                        <p>First close-quarters battle behaviour and initial heavy vehicle testing.</p>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="callout mt-32">
+                <div>
+                    <h2>Try the latest build.</h2>
+                    <p>DCO_AI is free on the Workshop. Tell us what you think on Discord.</p>
+                </div>
+                <div class="btn-row">
+                    <a class="btn btn-primary" data-link="workshop" href="#">Get it on Workshop</a>
+                    <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="assets/site.js"></script>
 </body>
 </html>

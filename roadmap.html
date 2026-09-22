@@ -3,810 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Roadmap — DCO_AI Reforger</title>
+    <meta name="description" content="DCO_AI Reforger development roadmap: every milestone and feature, what is live on the Workshop, what is in the dev build and what is planned.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        :root {
-            --yellow: #facc15;
-            --orange: #f97316;
-            --green: #22c55e;
-            --red: #ef4444;
-            --blue: #3b82f6;
-            --card: #111310;
-            --border: #1e2118;
-            --border-bright: #272b20;
-            --text-dim: #4a5240;
-            --text-mid: #7a8468;
-            --text: #b8c4a0;
+        .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+        .ms { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--c); margin-bottom: 12px; }
+        .ms[open] { border-color: color-mix(in srgb, var(--c) 45%, var(--border)); }
+        .ms summary { list-style: none; cursor: pointer; padding: 18px 20px; display: grid; grid-template-columns: auto 1fr 200px 56px 16px; gap: 16px; align-items: center; }
+        .ms summary::-webkit-details-marker { display: none; }
+        .ms summary:hover { background: color-mix(in srgb, var(--c) 4%, transparent); }
+        .ms-title { font-size: 17px; font-weight: 700; color: var(--white); }
+        .ms-counts { display: block; font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-top: 2px; font-weight: 400; }
+        .ms-pct { font-family: var(--mono); font-weight: 700; text-align: right; color: var(--c); }
+        .chev { width: 8px; height: 8px; border-right: 2px solid var(--text-dim); border-bottom: 2px solid var(--text-dim); transform: rotate(-45deg); transition: transform 0.2s; }
+        .ms[open] .chev { transform: rotate(45deg); border-color: var(--c); }
+        @media (max-width: 760px) {
+            .ms summary { grid-template-columns: 1fr 48px 16px; row-gap: 10px; }
+            .ms summary .tag { grid-column: 1 / -1; justify-self: start; }
+            .ms summary .bar { grid-column: 1 / -1; grid-row: 3; }
         }
-
-        * { box-sizing: border-box; }
-
-        body {
-            background-color: transparent;
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            padding: 16px;
-        }
-
-        /* ===== PAGE HEADER ===== */
-        .page-header {
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-bright);
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .page-title { font-size: 11px; font-weight: 700; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.15em; }
-        .page-sub { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
-
-        /* ===== PHASE TABS ===== */
-        .phase-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .phase-tab {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 5px 12px;
-            border: 1px solid var(--border-bright);
-            background: transparent;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .phase-tab:hover { border-color: var(--yellow); color: var(--yellow); }
-        .phase-tab.active { background: rgba(250,204,21,0.1); border-color: var(--yellow); color: var(--yellow); }
-
-        /* ===== MILESTONE ENTRY ===== */
-        .milestone-entry {
-            border: 1px solid var(--border-bright);
-            background: var(--card);
-            margin-bottom: 8px;
-            transition: border-color 0.2s;
-            overflow: hidden;
-        }
-        .milestone-entry.open { border-color: rgba(250,204,21,0.4); }
-        .milestone-entry.locked { opacity: 0.45; }
-        .milestone-entry.locked:hover { opacity: 0.65; }
-
-        /* Left accent bar */
-        .milestone-entry::before {
-            content: '';
-            display: block;
-            height: 2px;
-        }
-        .milestone-entry.phase-inf::before  { background: var(--yellow); }
-        .milestone-entry.phase-veh::before  { background: var(--blue); }
-        .milestone-entry.phase-sys::before  { background: var(--text-dim); }
-
-        .milestone-header {
-            padding: 14px 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            user-select: none;
-        }
-        .milestone-header:hover { background: rgba(250,204,21,0.03); }
-
-        .ms-tag {
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 2px 8px;
-            border-radius: 2px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .tag-inf  { background: rgba(250,204,21,0.1); color: var(--yellow); border: 1px solid rgba(250,204,21,0.2); }
-        .tag-veh  { background: rgba(59,130,246,0.1); color: #93c5fd;       border: 1px solid rgba(59,130,246,0.2); }
-        .tag-sys  { background: rgba(90,98,80,0.15);  color: var(--text-mid); border: 1px solid var(--border-bright); }
-
-        .ms-title { font-size: 13px; font-weight: 700; color: #d8e4c0; text-transform: uppercase; letter-spacing: 0.04em; flex: 1; }
-        .ms-locked-tag { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
-
-        .ms-chevron {
-            font-size: 10px;
-            color: var(--text-dim);
-            transition: transform 0.25s ease;
-            flex-shrink: 0;
-        }
-        .milestone-entry.open .ms-chevron { transform: rotate(90deg); color: var(--yellow); }
-
-        /* Progress mini bar */
-        .ms-prog-bar {
-            width: 60px;
-            height: 3px;
-            background: var(--border-bright);
-            border-radius: 2px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .ms-prog-fill { height: 100%; border-radius: 2px; }
-
-        /* ===== DETAIL ===== */
-        .milestone-detail {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .milestone-entry.open .milestone-detail { max-height: 1200px; }
-
-        .detail-inner {
-            padding: 0 16px 20px 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        .detail-intro {
-            padding: 12px 0;
-            font-size: 11px;
-            color: var(--text-mid);
-            font-style: italic;
-            border-bottom: 1px dashed var(--border-bright);
-            margin-bottom: 14px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-        }
-        @media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
-
-        .feature-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            padding: 8px 10px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border);
-            transition: border-color 0.15s;
-        }
-        .feature-item:hover { border-color: var(--border-bright); }
-        .feature-bullet {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            margin-top: 4px;
-        }
-        .feature-text { font-size: 11px; color: var(--text); line-height: 1.5; }
-        .feature-text .feat-name { font-weight: 700; color: #d0dab8; display: block; }
-        .feature-text .feat-desc { color: var(--text-mid); font-size: 10px; }
-
-        .detail-encrypted {
-            padding: 20px;
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-dim);
-            font-style: italic;
-            letter-spacing: 0.08em;
-        }
-        .detail-encrypted::before {
-            content: '█████ ████ █████████ — ';
-        }
-
-        /* ===== SUMMARY FOOTER ===== */
-        .summary-strip {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 20px;
-        }
-        @media (max-width: 480px) { .summary-strip { grid-template-columns: 1fr 1fr; } }
-
-        .sum-card {
-            background: var(--card);
-            border: 1px solid var(--border-bright);
-            padding: 12px 14px;
-        }
-        .sum-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
-        .sum-val { font-size: 18px; font-weight: 700; color: #fff; line-height: 1; }
-
-        /* ===== FIELD FOOTAGE + PITCH ===== */
-        .intel-brief {
-            display: grid;
-            grid-template-columns: 3fr 2fr;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding: 14px;
-            background: var(--card);
-            border: 1px solid var(--border-bright);
-        }
-        @media (max-width: 900px) { .intel-brief { grid-template-columns: 1fr; } }
-        .intel-video { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--border); }
-        .intel-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-        .intel-pitch { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
-        .intel-pitch h2 { font-size: 13px; font-weight: 700; color: #d8e4c0; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4; }
-        .intel-pitch p { font-size: 11px; color: var(--text-mid); line-height: 1.6; }
-        .intel-links { display: flex; gap: 8px; flex-wrap: wrap; }
-
-        /* ===== DONATE CTA ===== */
-        .btn-support {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            background: var(--yellow);
-            color: #000;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            text-decoration: none;
-            transition: background 0.15s, box-shadow 0.15s;
-        }
-        .btn-support:hover { background: #eab308; box-shadow: 0 0 12px rgba(250,204,21,0.35); }
-        .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            padding: 8px 14px;
-            border: 1px solid var(--border-bright);
-            color: var(--text-mid);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            text-decoration: none;
-        }
-        .btn-ghost:hover { border-color: var(--yellow); color: var(--yellow); }
-        .ms-fund {
-            margin-top: 14px;
-            padding-top: 12px;
-            border-top: 1px dashed var(--border-bright);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-            font-size: 10px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        /* ===== VERSION CHIP ===== */
-        .feat-ver {
-            display: inline-block;
-            margin-left: 4px;
-            padding: 0 5px;
-            font-size: 8px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            color: var(--green);
-            border: 1px solid rgba(34,197,94,0.35);
-            background: rgba(34,197,94,0.08);
-            vertical-align: 1px;
-        }
-        .ms-live-tag {
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--green);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-        .intel-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: 10px; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.06em; }
-        .intel-stats b { color: #fff; font-size: 13px; }
-
-        /* ===== LEGEND ===== */
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            margin: -8px 0 16px;
-            font-size: 9px;
-            color: var(--text-mid);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-        .legend span { display: inline-flex; align-items: center; gap: 6px; }
-        .legend i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+        .ms-body { padding: 4px 20px 20px; border-top: 1px solid var(--border); }
+        .ms-intro { color: var(--text-mid); font-size: 14px; padding: 14px 0 16px; }
+        .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        @media (max-width: 760px) { .feat-grid { grid-template-columns: 1fr; } }
+        .feat { display: flex; gap: 10px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); }
+        .feat .dot { margin-top: 7px; }
+        .feat-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .feat-name { font-weight: 600; color: var(--white); font-size: 14px; }
+        .feat-desc { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+        .ms-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--border-strong); font-size: 13px; color: var(--text-mid); }
+        .ms-foot b { color: var(--white); }
     </style>
 </head>
 <body>
+<main id="main">
 
-    <!-- HEADER -->
-    <div class="page-header">
-        <div>
-            <div class="page-title">// Operational_Milestones</div>
-            <div class="page-sub" style="margin-top:2px">Development Phase Registry — Click entry to expand</div>
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Roadmap · <span data-bind="phase">Alpha</span></div>
+            <h1>Development roadmap</h1>
+            <p class="lead">Every milestone and every feature, and exactly where it stands: live on the Workshop, in the development build, or planned. Progress is calculated from the features themselves.</p>
         </div>
-        <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">
-            Phase: <span style="color:var(--yellow)">ALPHA</span>
-        </div>
-    </div>
+    </header>
 
-    <!-- FIELD FOOTAGE + PITCH -->
-    <div class="intel-brief">
-        <div class="intel-video">
-            <iframe src="https://www.youtube.com/embed/ghiGmggwQLM" title="DCO AI gameplay footage" loading="lazy"
-                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="intel-pitch">
-            <div class="page-sub" style="color:var(--yellow)">// Field_Footage — Live Build</div>
-            <h2>Smarter, scarier AI for Arma Reforger — built by a small team, funded by players.</h2>
-            <div class="intel-stats">
-                <span><b>v0.4.136</b> live</span>
-                <span><b>34,178</b> downloads</span>
-                <span><b>95%</b> rating</span>
-            </div>
-            <p>Every milestone below is already in development. Donations buy dev time to ship them faster — and every contributor is listed in the database.</p>
-            <div class="intel-links">
-                <a href="donate.html" class="btn-support" onclick="goDonate(event)">▶ Support Development</a>
-                <a href="media.html" class="btn-ghost">More Footage</a>
-            </div>
-        </div>
-    </div>
+    <section class="section">
+        <div class="container">
+            <div class="stats mb-24" id="summary"></div>
 
-    <!-- PHASE FILTER TABS -->
-    <div class="phase-tabs">
-        <button class="phase-tab active" onclick="filterMilestones('all', this)">All Phases</button>
-        <button class="phase-tab" onclick="filterMilestones('inf', this)">[Infantry]</button>
-        <button class="phase-tab" onclick="filterMilestones('veh', this)">[Vehicle]</button>
-        <button class="phase-tab" onclick="filterMilestones('sys', this)">[System]</button>
-    </div>
-
-    <!-- BULLET LEGEND (same thresholds as features.html getStatusLabel) -->
-    <div class="legend">
-        <span><i style="background:var(--green)"></i>Complete</span>
-        <span><i style="background:var(--yellow)"></i>In Progress</span>
-        <span><i style="background:var(--orange)"></i>Early Dev</span>
-        <span><i style="background:var(--red)"></i>Planned</span>
-        <span><span class="feat-ver" style="margin:0">v0.4.x</span>Live on Workshop since</span>
-    </div>
-
-    <!-- MILESTONES LIST -->
-    <div id="milestone-list">
-
-        <!-- INFANTRY OVERHAUL -->
-        <div class="milestone-entry phase-inf" data-phase="inf">
-            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
-                <span class="ms-tag tag-inf">[Infantry]</span>
-                <span class="ms-title">New Combat Behaviour</span>
-                <div class="ms-prog-bar">
-                    <div class="ms-prog-fill" style="width:45%; background:var(--yellow)"></div>
+            <div class="toolbar">
+                <div class="legend">
+                    <span><i class="dot" style="background:var(--green)"></i>Complete</span>
+                    <span><i class="dot" style="background:var(--yellow)"></i>In progress</span>
+                    <span><i class="dot" style="background:var(--orange)"></i>Early dev</span>
+                    <span><i class="dot" style="background:var(--red)"></i>Planned</span>
+                    <span><span class="chip chip-live">v0.4.x</span> Live since</span>
+                    <span><span class="chip chip-dev">Dev build</span> Next update</span>
                 </div>
-                <span style="font-size:10px; color:var(--yellow); font-weight:700; min-width:30px;">45%</span>
-                <span class="ms-chevron">▶</span>
+                <div class="btn-row">
+                    <button class="btn btn-sm" id="expand">Expand all</button>
+                </div>
             </div>
-            <div class="milestone-detail">
-                <div class="detail-inner">
-                    <div class="detail-intro">
-                        Total overhaul on how AI behaves in individual and group combat. This is the core of DCO_AI — everything from aim to morale to squad coordination.
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--green)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Aim Improvement</span>
-                                <span class="feat-desc">AI zeros in on targets over time. Resets on LOS loss.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--green)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Vision Limiting</span>
-                                <span class="feat-desc">Slower detection and reduced accuracy at night.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--green)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Individual Morale</span>
-                                <span class="feat-desc">Emotional reactions to pressure, near-misses, wounds.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Suppression <span class="feat-ver">v0.4.102</span></span>
-                                <span class="feat-desc">AI suppresses enemies, lowering their accuracy.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Danger Reaction</span>
-                                <span class="feat-desc">Instinctual flinch, dodge, prone on incoming fire.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Vocal Info Sharing</span>
-                                <span class="feat-desc">Soldiers vocally relay contacts to nearby allies.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Close Combat Behaviour</span>
-                                <span class="feat-desc">Prioritize buildings, melee at range &lt;50m.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Group Threat Assessor</span>
-                                <span class="feat-desc">Squad prioritizes and assigns targets intelligently.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">AI Personality <span class="feat-ver">v0.4.108</span></span>
-                                <span class="feat-desc">Cautious / Standard / Aggressive / Reckless — each reacts differently under fire.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Dodge <span class="feat-ver">v0.4.123</span></span>
-                                <span class="feat-desc">Soldiers sidestep and dive away from incoming shots.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Cover-First Engagement <span class="feat-ver">v0.4.126</span></span>
-                                <span class="feat-desc">AI prioritizes cover while shooting and engaged.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Grenade & UGL Usage <span class="feat-ver">v0.4.134</span></span>
-                                <span class="feat-desc">Frag and underbarrel grenades with safety checks.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Building Occupying</span>
-                                <span class="feat-desc">AI automatically occupies and defends structures.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Building Clearance</span>
-                                <span class="feat-desc">Coordinated CQB and room-clearing procedures.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ms-fund">
-                        <span>Funding task: <b style="color:var(--text-mid)">Soldier &amp; Squad AI</b></span>
-                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
-                    </div>
+
+            <div id="milestones"></div>
+
+            <div class="callout mt-32">
+                <div>
+                    <h2>Want these sooner?</h2>
+                    <p>Every donation buys development time. Pick a milestone above, or back the whole roadmap.</p>
+                </div>
+                <div class="btn-row">
+                    <a class="btn btn-primary" href="donate.html">Support development</a>
+                    <a class="btn btn-discord" data-link="discord" href="#">Discuss on Discord</a>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- VEHICLE OVERHAUL -->
-        <div class="milestone-entry phase-veh" data-phase="veh">
-            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
-                <span class="ms-tag tag-veh">[Vehicle]</span>
-                <span class="ms-title">Vehicle Combat Overhaul</span>
-                <div class="ms-prog-bar">
-                    <div class="ms-prog-fill" style="width:10%; background:var(--blue)"></div>
-                </div>
-                <span style="font-size:10px; color:#93c5fd; font-weight:700; min-width:30px;">10%</span>
-                <span class="ms-chevron">▶</span>
-            </div>
-            <div class="milestone-detail">
-                <div class="detail-inner">
-                    <div class="detail-intro">
-                        Full overhaul on how vehicle AI handles combat — from armored tactics to motorized squad coordination and resupply operations.
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Basic Vehicle Behaviour</span>
-                                <span class="feat-desc">Detect enemies, move to LOS, seek cover when threatened.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Resupply Point</span>
-                                <span class="feat-desc">Vehicles navigate to and use resupply depots autonomously.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Mechanized Squad Combat</span>
-                                <span class="feat-desc">IFV/APC squad coordinates dismount and assault.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Vehicle Suppression</span>
-                                <span class="feat-desc">Vehicles pin down infantry using suppressive fire.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Vehicle Tactics</span>
-                                <span class="feat-desc">Flanking, bounding overwatch, fire-and-maneuver.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Vehicle Transport <span class="feat-ver">v0.4.60</span></span>
-                                <span class="feat-desc">Automated troop transport with tactical insertion.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ms-fund">
-                        <span>Funding task: <b style="color:var(--text-mid)">Vehicle &amp; Artillery</b></span>
-                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SQUAD AI -->
-        <div class="milestone-entry phase-inf" data-phase="inf">
-            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
-                <span class="ms-tag tag-inf">[Squad]</span>
-                <span class="ms-title">Squad AI & Command Layer</span>
-                <div class="ms-prog-bar">
-                    <div class="ms-prog-fill" style="width:5%; background:var(--yellow)"></div>
-                </div>
-                <span style="font-size:10px; color:var(--yellow); font-weight:700; min-width:30px;">5%</span>
-                <span class="ms-chevron">▶</span>
-            </div>
-            <div class="milestone-detail">
-                <div class="detail-inner">
-                    <div class="detail-intro">
-                        Squad-level coordination, radio communication, and inter-squad awareness systems. Transforms groups of individuals into cohesive tactical units.
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Radio Info Sharing</span>
-                                <span class="feat-desc">Squad leaders relay contacts over radio to nearby squads.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Squad Tactics</span>
-                                <span class="feat-desc">5 dynamic tactical modes: assault, flank, defend, recon, withdraw.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Group Cohesion</span>
-                                <span class="feat-desc">Squad stays together and coordinates movement.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Group Morale</span>
-                                <span class="feat-desc">Squad morale affects collective aggression and routing.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ms-fund">
-                        <span>Funding task: <b style="color:var(--text-mid)">Soldier &amp; Squad AI</b></span>
-                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- BATTLEGROUP -->
-        <div class="milestone-entry phase-sys" data-phase="sys">
-            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
-                <span class="ms-tag tag-sys">[Command]</span>
-                <span class="ms-title">Battlegroup & High Command</span>
-                <div class="ms-prog-bar">
-                    <div class="ms-prog-fill" style="width:8%; background:var(--text-mid)"></div>
-                </div>
-                <span style="font-size:10px; color:var(--text-mid); font-weight:700; min-width:30px;">8%</span>
-                <span class="ms-chevron">▶</span>
-            </div>
-            <div class="milestone-detail">
-                <div class="detail-inner">
-                    <div class="detail-intro">
-                        Strategic command layer — from battlegroup AO capture to high command resource allocation. This is the final tier of the DCO_AI hierarchy.
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Battlegroup Behaviour <span class="feat-ver">v0.4.60</span></span>
-                                <span class="feat-desc">Coordinate multiple squads to capture and hold AOs.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">High Command Logic <span class="feat-ver">v0.4.60</span></span>
-                                <span class="feat-desc">Macro-level AO assignment and strategic awareness.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Threat Response & QRF</span>
-                                <span class="feat-desc">Contact reports clustered into threats; QRF and reserves dispatched.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">FOB Builder</span>
-                                <span class="feat-desc">Commander establishes forward bases, firebases and mortar positions.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--orange)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Artillery Support</span>
-                                <span class="feat-desc">Player-requested fire missions with safety logic.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--red)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Player Command Interface</span>
-                                <span class="feat-desc">Give orders to AI at all command levels.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ms-fund">
-                        <span>Funding task: <b style="color:var(--text-mid)">High Cmd &amp; Gamemode</b></span>
-                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- GM / ZEUS TOOLKIT -->
-        <div class="milestone-entry phase-sys" data-phase="sys">
-            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
-                <span class="ms-tag tag-sys">[Game Master]</span>
-                <span class="ms-title">GM / Zeus Toolkit</span>
-                <span class="ms-live-tag">● Live</span>
-                <span class="ms-chevron">▶</span>
-            </div>
-            <div class="milestone-detail">
-                <div class="detail-inner">
-                    <div class="detail-intro">
-                        Tune DCO_AI live from the Game Master editor — globally or per unit. Built for mission makers and server owners.
-                    </div>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--green)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">GM Editor Attributes <span class="feat-ver">v0.4.127</span></span>
-                                <span class="feat-desc">Skill, accuracy, perception and dodge — global or per unit.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--green)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Hold Position Action <span class="feat-ver">v0.4.108</span></span>
-                                <span class="feat-desc">Context action to pin a group in place.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--green)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Suppression Coefficient <span class="feat-ver">v0.4.108</span></span>
-                                <span class="feat-desc">Scale how hard suppression hits, global or per unit.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Grenade / GL Usage Sliders <span class="feat-ver">v0.4.134</span></span>
-                                <span class="feat-desc">Control how often AI uses grenades and launchers.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Individual Fire Mode Rules <span class="feat-ver">v0.4.110</span></span>
-                                <span class="feat-desc">Per-unit fire mode behaviour.</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-bullet" style="background:var(--yellow)"></div>
-                            <div class="feature-text">
-                                <span class="feat-name">Server JSON Config <span class="feat-ver">v0.4.118</span></span>
-                                <span class="feat-desc">Server-side global settings without editing prefabs.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ms-fund">
-                        <span>Funding task: <b style="color:var(--text-mid)">Global systems</b></span>
-                        <a href="donate.html" class="btn-support" onclick="goDonate(event)">Fund this milestone →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- DCO GAME MODE - LOCKED -->
-        <div class="milestone-entry phase-sys locked" data-phase="sys">
-            <div class="milestone-header" onclick="toggleMilestone(this.parentElement)">
-                <span class="ms-tag tag-sys">[System]</span>
-                <span class="ms-title">DCO Game Mode</span>
-                <span class="ms-locked-tag">⬛ CLASSIFIED</span>
-                <span class="ms-chevron">▶</span>
-            </div>
-            <div class="milestone-detail">
-                <div class="detail-inner">
-                    <div class="detail-encrypted">
-                        Access Denied. Wait for update.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- SUMMARY STRIP -->
-    <div class="summary-strip">
-        <div class="sum-card">
-            <div class="sum-label">Milestones Total</div>
-            <div class="sum-val">6</div>
-        </div>
-        <div class="sum-card">
-            <div class="sum-label">Features Tracked</div>
-            <div class="sum-val" style="color:var(--yellow)">36</div>
-        </div>
-        <div class="sum-card">
-            <div class="sum-label">Latest Build · Alpha</div>
-            <div class="sum-val" style="color:var(--green); font-size:14px;">v0.4.136</div>
-        </div>
-    </div>
-
+</main>
+<script src="assets/site.js"></script>
 <script>
-    // Inside index.html shell: go through the sidebar link so its active state updates.
-    function goDonate(e) {
-        e.stopPropagation();
-        try {
-            const nav = parent !== window && parent.document.querySelector('.nav-link[href="donate.html"]');
-            if (nav) { e.preventDefault(); nav.click(); }
-        } catch (_) { /* cross-origin / file:// — plain link fallback */ }
-    }
+    DCO.ready.then(async () => {
+        const [features, milestones] = await Promise.all([DCO.load('features'), DCO.load('roadmap')]);
+        const releases = features.map(f => DCO.release(f.ver).key);
+        const count = key => releases.filter(k => k === key).length;
 
-    function toggleMilestone(entry) {
-        entry.classList.toggle('open');
-    }
+        document.getElementById('summary').innerHTML = `
+            <div class="stat"><div class="stat-val">${milestones.length}</div><div class="stat-label">Milestones</div></div>
+            <div class="stat"><div class="stat-val">${features.length}</div><div class="stat-label">Features</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--green)">${count('live')}</div><div class="stat-label">Live on Workshop</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--orange)">${count('dev')}</div><div class="stat-label">In dev build</div></div>`;
 
-    function filterMilestones(phase, btn) {
-        document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
+        document.getElementById('milestones').innerHTML = milestones.map(m => {
+            const list = features.filter(f => f.cat === m.cat).sort((a, b) => b.prog - a.prog || b.prio - a.prio);
+            const pct = Math.round(list.reduce((s, f) => s + f.prog, 0) / (list.length || 1));
+            const n = key => list.filter(f => DCO.release(f.ver).key === key).length;
+            return `
+            <details class="ms c-${m.color}" id="${encodeURIComponent(m.cat)}">
+                <summary>
+                    <span class="tag">${DCO.esc(m.tag)}</span>
+                    <span class="ms-title">${DCO.esc(m.title)}
+                        <span class="ms-counts">${list.length} features · ${n('live')} live · ${n('dev')} dev · ${n('planned')} planned</span>
+                    </span>
+                    <span class="bar"><span style="width:${pct}%"></span></span>
+                    <span class="ms-pct">${pct}%</span>
+                    <span class="chev" aria-hidden="true"></span>
+                </summary>
+                <div class="ms-body">
+                    <p class="ms-intro">${DCO.esc(m.intro)}</p>
+                    <div class="feat-grid">
+                        ${list.map(f => `
+                        <div class="feat">
+                            <i class="dot" style="background:${DCO.status(f.prog).color}" title="${DCO.status(f.prog).label} · ${f.prog}%"></i>
+                            <div>
+                                <div class="feat-head"><span class="feat-name">${DCO.esc(f.name)}</span>${DCO.release(f.ver).html}</div>
+                                <div class="feat-desc">${DCO.esc(f.desc.split('. ')[0].replace(/\.$/, ''))}.</div>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                    <div class="ms-foot">
+                        <span>Funding tier: <b>${DCO.esc(m.tier)}</b> · <a href="features.html?cat=${encodeURIComponent(m.cat)}">Feature details</a></span>
+                        <a class="btn btn-primary btn-sm" href="donate.html">Fund this milestone →</a>
+                    </div>
+                </div>
+            </details>`;
+        }).join('');
 
-        document.querySelectorAll('.milestone-entry').forEach(entry => {
-            if (phase === 'all') {
-                entry.style.display = '';
-            } else {
-                entry.style.display = entry.dataset.phase === phase ? '' : 'none';
-            }
+        // Open the milestone linked from the home page (roadmap.html#Commander)
+        if (location.hash) {
+            const target = document.getElementById(location.hash.slice(1));
+            if (target) { target.open = true; target.scrollIntoView(); }
+        } else {
+            document.querySelector('.ms').open = true;
+        }
+
+        const btn = document.getElementById('expand');
+        btn.addEventListener('click', () => {
+            const all = [...document.querySelectorAll('.ms')];
+            const open = !all.every(d => d.open);
+            all.forEach(d => d.open = open);
+            btn.textContent = open ? 'Collapse all' : 'Expand all';
         });
-    }
+    });
 </script>
 </body>
 </html>

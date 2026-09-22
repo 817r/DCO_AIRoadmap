@@ -1,242 +1,269 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REFORGER COMMAND CENTER</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>DCO_AI Reforger — Tactical AI for Arma Reforger</title>
+    <meta name="description" content="DCO_AI Reforger: soldiers with personalities, coordinated squads and an autonomous AI commander for Arma Reforger. Free on the Workshop, funded by players.">
+    <meta property="og:title" content="DCO_AI Reforger — Tactical AI for Arma Reforger">
+    <meta property="og:description" content="Soldiers that suppress, dodge and use cover. Squads that coordinate. An AI commander that runs the battle. Free on the Workshop.">
+    <meta property="og:image" content="https://817r.github.io/DCO_AIRoadmap/images/dragon_company.png">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        body { background-color: #1a1c14; color: #a4b494; font-family: 'JetBrains Mono', monospace; overflow: hidden; }
-        .sidebar { transition: transform 0.3s ease-in-out; z-index: 40; }
-        @media (max-width: 768px) {
-            .sidebar { position: fixed; transform: translateX(-100%); height: 100%; }
-            .sidebar.open { transform: translateX(0); }
-        }
-        .nav-link.active { border-left: 4px solid #facc15; background: rgba(250, 204, 21, 0.1); color: white; }
-        .volume-slider {
-            -webkit-appearance: none;
-            width: 80px;
-            height: 2px;
-            background: #3d4432;
-            outline: none;
-            cursor: pointer;
-        }
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 10px;
-            height: 10px;
-            background: #facc15;
-            border-radius: 0; /* Kotak agar terkesan militer */
-            cursor: pointer;
-        }
-        
-        .audio-control {
-            font-size: 10px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            border: 1px solid #3d4432;
-            padding: 4px 8px;
-            background: rgba(0,0,0,0.5);
-            transition: all 0.2s;
-        }
-        .audio-control:hover { border-color: #facc15; color: #facc15; }
-        .nav-link {
-        font-size: 16px !important; /* Diperbesar dari 14px */
-        letter-spacing: 1px;
-        }
-        .campaign-bar-bg {
-            background: rgba(61, 68, 50, 0.3);
-            border: 1px solid #3d4432;
-            height: 8px;
-            width: 150px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .campaign-bar-fill {
-            background: #facc15;
-            height: 100%;
-            box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
-            transition: width 1s ease-out;
-        }
+        .hero { padding: 64px 0 56px; background: radial-gradient(ellipse at 20% 0%, rgba(250, 204, 21, 0.1), transparent 55%); }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 48px; align-items: center; }
+        @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 32px; } }
+        .hero .kicker { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+        .hero .kicker .live { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
+        .hero h1 { margin-bottom: 18px; }
+        .hero .lead { margin-bottom: 28px; }
+        .hero .stats { margin-top: 40px; }
+
+        .pillar { position: relative; }
+        .pillar .icon { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: 0.1em; margin-bottom: 14px; display: block; }
+        .pillar .list { margin-top: 14px; }
+
+        .update { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+        @media (max-width: 760px) { .update { grid-template-columns: 1fr; gap: 16px; } }
+        .update-ver { font-family: var(--mono); font-size: 34px; font-weight: 700; color: var(--yellow); line-height: 1; }
+
+        .ms-row { display: grid; grid-template-columns: 130px 1fr 180px 48px; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); text-decoration: none; }
+        .ms-row:hover .ms-title { color: var(--yellow); }
+        .ms-title { font-weight: 600; color: var(--white); transition: color 0.15s; }
+        .ms-pct { font-family: var(--mono); font-weight: 700; font-size: 13px; text-align: right; }
+        @media (max-width: 640px) { .ms-row { grid-template-columns: 1fr 48px; } .ms-row .tag, .ms-row .bar { display: none; } }
+
+        .fund { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+        @media (max-width: 900px) { .fund { grid-template-columns: 1fr; } }
+        .fund-total { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+        .fund-total b { font-family: var(--mono); font-size: 40px; color: var(--white); line-height: 1; }
+        .tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 18px; }
+        @media (max-width: 640px) { .tiers { grid-template-columns: repeat(2, 1fr); } }
+        .tier { border: 1px solid var(--border); padding: 12px; }
+        .tier.reached { border-color: var(--yellow-line); background: var(--yellow-soft); }
+        .tier-amt { font-family: var(--mono); font-weight: 700; color: var(--white); }
+        .tier-label { font-size: 12px; color: var(--text-mid); }
+        .donor { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .donor b { color: var(--white); font-weight: 600; }
+
+        .team-mini { display: flex; gap: 16px; flex-wrap: wrap; }
+        .person { display: flex; align-items: center; gap: 12px; }
+        .person img { width: 56px; height: 56px; object-fit: cover; border: 1px solid var(--border-strong); }
+        .person b { color: var(--white); display: block; }
+        .person span { font-size: 13px; color: var(--text-mid); }
     </style>
 </head>
-<body class="flex flex-col h-screen">
-    <audio id="bgm">
-        <source id="audio-source" type="audio/mpeg">
-    </audio>
+<body>
+<main id="main">
 
-    <header class="h-20 border-b-2 border-yellow-500/50 bg-black flex items-center justify-between px-4 z-50">
-        <div class="flex items-center gap-3 border-l border-zinc-800 pl-3">
-            <button onclick="toggleMenu()" class="md:hidden text-yellow-500 text-2xl leading-none px-1" aria-label="Open menu">☰</button>
-            <div class="flex items-center bg-yellow-400 p-1 shrink-0">
-                <img src="images/dragon_company.png" alt="DCO_AI logo" class="h-10 sm:h-12 w-auto object-contain">
-                <span class="text-[12px] font-black text-black px-2 uppercase truncate hidden sm:block">
-                    Dragon Company AI
-                </span>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div>
+                <div class="kicker"><span class="live"></span> Live on Workshop · <span data-bind="version">v0.4.136</span></div>
+                <h1>Tactical AI for Arma Reforger that <span class="accent">fights like a real unit.</span></h1>
+                <p class="lead">Soldiers with personalities that suppress, dodge and fight from cover. Squads that coordinate. An AI commander that captures objectives and runs QRF and reserves. Free on the Workshop — built by a small team, funded by players.</p>
+                <div class="btn-row">
+                    <a class="btn btn-primary" href="donate.html">▶ Support development</a>
+                    <a class="btn" data-link="workshop" href="#">Get it on Workshop</a>
+                    <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                </div>
+            </div>
+            <div class="yt" data-yt="ghiGmggwQLM" data-title="DCO AI Testing — Forest Combat"></div>
+        </div>
+        <div class="container">
+            <div class="stats">
+                <div class="stat"><div class="stat-val" data-bind="downloads">34,178</div><div class="stat-label">Downloads</div></div>
+                <div class="stat"><div class="stat-val" data-bind="rating">95%</div><div class="stat-label">Workshop rating</div></div>
+                <div class="stat"><div class="stat-val" data-bind="releases">50</div><div class="stat-label">Releases</div></div>
+                <div class="stat"><div class="stat-val" id="feature-count">75</div><div class="stat-label">Features tracked</div></div>
             </div>
         </div>
+    </section>
 
-        <div class="campaign-stats flex items-center gap-4 border-l border-[#3d4432] pl-3 sm:pl-4 h-8 min-w-0">
-            <div class="flex flex-col items-end">
-                <span class="text-[11px] sm:text-[15px] font-bold text-zinc-500 uppercase tracking-widest">Funding_Progress</span>
-                <div class="flex items-center gap-3" title="$560 raised of $10,000 goal — see DONATION_SUPPORT">
-                    <div class="campaign-bar-bg hidden sm:block">
-                        <div class="campaign-bar-fill" style="width: 5.6%;"></div> </div>
-                    <span class="text-[13px] sm:text-[15px] font-black text-[#facc15] whitespace-nowrap">$560 / $10K</span>
+    <!-- WHAT IT DOES -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// What DCO_AI does</div>
+                    <h2>From one soldier to a whole battlegroup</h2>
+                    <p>An autonomous AI system that makes every level of the fight feel reactive, tactical and alive — with minimal setup for mission makers.</p>
+                </div>
+                <a class="btn btn-sm" href="features.html">All features →</a>
+            </div>
+            <div class="grid grid-3">
+                <div class="card pillar">
+                    <span class="icon">01 / SOLDIER</span>
+                    <h3>Soldiers that react</h3>
+                    <p>Perception, morale and personality drive every decision under fire.</p>
+                    <ul class="list"><li>Suppression, dodging &amp; cover-first combat</li><li>Four personalities, from Cautious to Reckless</li><li>Grenades and underbarrel launchers</li></ul>
+                </div>
+                <div class="card pillar">
+                    <span class="icon">02 / SQUAD</span>
+                    <h3>Squads that coordinate</h3>
+                    <p>Groups fight as a unit and adapt to how the battle is going.</p>
+                    <ul class="list"><li>Aggressive, Defensive, Evasive &amp; Dynamic modes</li><li>Fireteam target assignment</li><li>Squad suppression &amp; investigation</li></ul>
+                </div>
+                <div class="card pillar">
+                    <span class="icon">03 / COMMAND</span>
+                    <h3>An AI commander</h3>
+                    <p>A commander that reads the battlefield and runs the operation.</p>
+                    <ul class="list"><li>Captures and defends objectives</li><li>Threat response, QRF and reserves</li><li>Artillery fire missions</li></ul>
+                </div>
+                <div class="card pillar">
+                    <span class="icon">04 / VEHICLE</span>
+                    <h3>Vehicles in the fight</h3>
+                    <p>Vehicles act as combat assets, not taxis.</p>
+                    <ul class="list"><li>Support-by-fire positioning</li><li>Automatic vehicle &amp; turret usage</li><li>Dedicated transport to the LZ</li></ul>
+                </div>
+                <div class="card pillar">
+                    <span class="icon">05 / GAME MASTER</span>
+                    <h3>Tune it live</h3>
+                    <p>Game Master and server settings for everything that matters.</p>
+                    <ul class="list"><li>Skill, accuracy &amp; perception per unit</li><li>Personality, dodge &amp; grenade sliders</li><li>Server-side JSON config</li></ul>
+                </div>
+                <div class="card pillar">
+                    <span class="icon">06 / LOGISTICS</span>
+                    <h3>Keeps itself supplied</h3>
+                    <p>Soldiers stay in the fight without mission-maker babysitting.</p>
+                    <ul class="list"><li>Magazine-well matched resupply</li><li>Arsenal runs</li><li>Emergency rearm from the fallen</li></ul>
                 </div>
             </div>
         </div>
-        
-        <div class="flex items-center gap-3">
-            <a href="https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger" target="_blank" 
-            class="hidden sm:flex items-center gap-2 px-3 py-1 border border-yellow-500/30 bg-yellow-500/5 text-yellow-500 text-[15px] font-bold hover:bg-yellow-500 hover:text-black transition-all group">
-                <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse group-hover:bg-black"></span>
-                [ACCESS_WORKSHOP_MOD]
-            </a>
+    </section>
 
-            <!-- Music player + badge: desktop only, they push the header off-screen on phones -->
-            <div class="hidden lg:flex items-center gap-2 border-l border-zinc-800 pl-3">
-                    <div class="flex items-center gap-4 px-4 py-2 bg-black/50 border-b border-yellow-500/20">
-                        <div class="flex items-center gap-2">
-                            <div id="music-info" class="text-[13px] opacity-50 hidden md:block truncate max-w-[150px]">
-                                NOT_PLAYING
-                            </div>
-                            <div id="music-toggle" class="audio-control" onclick="toggleAudio()">
-                                [MUSIC_OFF]
-                            </div>
-                            <div class="audio-control" onclick="playNext()">
-                                [NEXT >>]
-                            </div>
-                        </div>
+    <!-- LATEST UPDATE -->
+    <section class="section">
+        <div class="container update">
+            <div>
+                <div class="kicker mb-16">// Latest update</div>
+                <div class="update-ver" data-bind="version">v0.4.136</div>
+                <p class="dim mt-8 mono" style="font-size:12px">JUN – SEP 2026</p>
+            </div>
+            <div>
+                <h2>Every soldier fights differently.</h2>
+                <p class="muted mt-8">Soldiers now have personalities, dodge incoming fire and use grenades and launchers — and Game Masters can tune all of it live.</p>
+                <div class="btn-row mt-24">
+                    <a class="btn btn-sm" href="devlog.html">Read the devlog</a>
+                    <a class="btn btn-sm" data-link="changelog" href="#">Full changelog</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                        <div class="flex items-center gap-2 border-l border-zinc-800 pl-4">
-                            <span class="text-[9px] text-zinc-500 uppercase">Vol</span>
-                            <input type="range" id="volume-control" class="volume-slider" min="0" max="1" step="0.01" value="0.3">
-                            <span id="vol-percent" class="text-[9px] text-yellow-500 font-bold w-6">30%</span>
-                        </div>
+    <!-- ROADMAP PREVIEW -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// Roadmap</div>
+                    <h2>Where development stands</h2>
+                    <p>Progress per milestone, calculated from every tracked feature.</p>
+                </div>
+                <a class="btn btn-sm" href="roadmap.html">Full roadmap →</a>
+            </div>
+            <div id="ms-list" style="border-top:1px solid var(--border)"></div>
+        </div>
+    </section>
+
+    <!-- FUNDING -->
+    <section class="section" id="funding">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// Funding</div>
+                    <h2>Funded by players</h2>
+                    <p>DCO_AI is free. Donations buy development time and hardware so features ship faster.</p>
+                </div>
+            </div>
+            <div class="fund">
+                <div class="card">
+                    <div class="fund-total"><b data-bind="raised">$560</b><span class="muted">raised of <span data-bind="goal">$10,000</span></span></div>
+                    <div class="bar lg glow"><span data-bar="funding" style="width:0"></span></div>
+                    <div class="tiers" id="tiers"></div>
+                    <div class="btn-row mt-24">
+                        <a class="btn btn-primary" href="donate.html">Support development</a>
+                        <a class="btn" data-link="kofi" href="#">Donate on Ko-fi</a>
                     </div>
-                <div class="text-[15px] font-bold bg-yellow-400 text-black px-2 py-1 uppercase truncate">
-                    ARMA REFORGER
+                </div>
+                <div class="card">
+                    <div class="kicker dim mb-16">Contributors · <span data-bind="contributors">3</span></div>
+                    <div id="donors"></div>
+                    <a class="btn btn-sm btn-block mt-16" href="donate.html#contributors">View contributor database</a>
                 </div>
             </div>
         </div>
-    </header>
+    </section>
 
-    <div class="flex flex-1 overflow-hidden relative">
-        <aside id="sidebar" class="sidebar w-64 bg-[#0d0e0a] border-r-2 border-army-green p-4 flex flex-col gap-2">
-            <p class="text-[10px] opacity-30 mb-4">NAV_LOGS</p>
-            <a href="home.html" target="content-frame" class="nav-link p-3 text-sm font-bold active" onclick="closeMenu()">[00] OVERVIEW</a>
-            <a href="about.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">[01] TEAM COMPOSITION</a>
-            <a href="roadmap.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">[02] MILESTONES</a>
-            <a href="features.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [03] DETAILED_FEATURES
-            </a>
-            <a href="devlog.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [04] DEVLOG
-            </a>
-            <a href="media.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [05] MEDIA
-            </a>
-            <a href="recruitment.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [06] RECRUITMENT
-            </a>
-            <a href="donate.html" target="content-frame" class="nav-link p-3 text-sm font-bold" onclick="closeMenu()">
-                [07] DONATION_SUPPORT
-            </a>
-            <div class="mt-auto p-3 border border-yellow-900/30 text-[9px] opacity-40">SYSTEM: STABLE</div>
-        </aside>
+    <!-- TEAM -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">// The team</div>
+                    <h2>Built by Dragon Company</h2>
+                    <p>A small, independent team designing, building and testing DCO_AI.</p>
+                </div>
+                <a class="btn btn-sm" href="about.html">Meet the team →</a>
+            </div>
+            <div class="team-mini">
+                <div class="person card"><img src="images/erlend.png" alt="" loading="lazy"><div><b>Erlend Kristensen</b><span>Founder · Lead AI Designer</span></div></div>
+                <div class="person card"><img src="images/rich.png" alt="" loading="lazy"><div><b>Richard</b><span>Co-Founder · Lead AI Programmer</span></div></div>
+            </div>
+        </div>
+    </section>
 
-        <main class="flex-1 relative bg-[#0d0e0a]">
-            <iframe name="content-frame" src="home.html" class="w-full h-full border-none"></iframe>
-        </main>
-    </div>
+    <!-- CTA -->
+    <section class="section">
+        <div class="container">
+            <div class="callout">
+                <div>
+                    <h2>Help us build the best AI in Reforger.</h2>
+                    <p>Back development, or join the community to test builds and shape what comes next.</p>
+                </div>
+                <div class="btn-row">
+                    <a class="btn btn-primary" href="donate.html">Support</a>
+                    <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script>
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
-        function closeMenu() { document.getElementById('sidebar').classList.remove('open'); }
-        
-        const links = document.querySelectorAll('.nav-link');
-        links.forEach(l => l.addEventListener('click', () => {
-            links.forEach(link => link.classList.remove('active'));
-            l.classList.add('active');
-        }));
+</main>
+<script src="assets/site.js"></script>
+<script>
+    DCO.ready.then(async site => {
+        const [features, milestones] = await Promise.all([DCO.load('features'), DCO.load('roadmap')]);
+        document.getElementById('feature-count').textContent = features.length;
 
-        // 1. Tentukan daftar file musik yang ada di folder Anda
-        const musicFolder = "music/"; // Nama folder musik Anda
-        const playlist = [
-            "The Victory.mp3",
-            "Los Del Rio - Macarena.mp3",
-            "bad boys what you gonna do.mp3"
-        ];
-        
-        let currentTrackIndex = 0;
-        const audio = document.getElementById('bgm');
-        const source = document.getElementById('audio-source');
-        const musicBtn = document.getElementById('music-toggle');
-        const musicInfo = document.getElementById('music-info');
+        // Roadmap preview: milestone % = average progress of its features
+        document.getElementById('ms-list').innerHTML = milestones.map(m => {
+            const list = features.filter(f => f.cat === m.cat);
+            const pct = Math.round(list.reduce((s, f) => s + f.prog, 0) / (list.length || 1));
+            return `<a class="ms-row c-${m.color}" href="roadmap.html#${encodeURIComponent(m.cat)}">
+                <span class="tag">${DCO.esc(m.tag)}</span>
+                <span class="ms-title">${DCO.esc(m.title)}</span>
+                <span class="bar"><span style="width:${pct}%"></span></span>
+                <span class="ms-pct" style="color:var(--c)">${pct}%</span>
+            </a>`;
+        }).join('');
 
-        // 2. Fungsi untuk memuat lagu
-        function loadTrack(index) {
-            source.src = musicFolder + playlist[index];
-            audio.load();
-            musicInfo.innerText = "TRACK: " + playlist[index].toUpperCase();
-        }
-
-        const volSlider = document.getElementById('volume-control');
-        const volPercent = document.getElementById('vol-percent');
-
-        // Set volume awal ke 30%
-        audio.volume = 0.3;
-
-        // Event listener untuk perubahan volume
-        volSlider.addEventListener('input', (e) => {
-            const value = e.target.value;
-            audio.volume = value;
-            volPercent.innerText = Math.round(value * 100) + "%";
-            
-            // Visual feedback jika mute
-            if (value == 0) {
-                volPercent.style.color = "#ef4444";
-            } else {
-                volPercent.style.color = "#facc15";
-            }
-        });
-
-        // 3. Fungsi Play/Pause
-        function toggleAudio() {
-            if (audio.paused) {
-                audio.play().catch(e => console.log("User interaction required"));
-                musicBtn.innerText = "[MUSIC_ON]";
-                musicBtn.style.color = "#facc15";
-                musicInfo.classList.remove('hidden');
-            } else {
-                audio.pause();
-                musicBtn.innerText = "[MUSIC_OFF]";
-                musicBtn.style.color = "";
-            }
-        }
-
-        // 4. Fungsi lagu berikutnya
-        function playNext() {
-            currentTrackIndex++;
-            if (currentTrackIndex >= playlist.length) {
-                currentTrackIndex = 0; // Kembali ke awal jika playlist habis
-            }
-            loadTrack(currentTrackIndex);
-            audio.play();
-            musicBtn.innerText = "[MUSIC_ON]";
-            musicBtn.style.color = "#facc15";
-        }
-
-        // 5. Event listener: jika lagu selesai, otomatis putar lagu berikutnya
-        audio.addEventListener('ended', function() {
-            playNext();
-        });
-
-        // Load lagu pertama saat startup
-        loadTrack(currentTrackIndex);
-    </script>
+        // Funding tiers + top contributors
+        const { raised } = DCO.funding(site);
+        document.getElementById('tiers').innerHTML = site.funding.tiers.map(t => `
+            <div class="tier${raised >= t.amount ? ' reached' : ''}">
+                <div class="tier-amt">$${DCO.fmt(t.amount)}${raised >= t.amount ? ' ✓' : ''}</div>
+                <div class="tier-label">${DCO.esc(t.label)}</div>
+            </div>`).join('');
+        document.getElementById('donors').innerHTML = [...site.donors]
+            .sort((a, b) => b.amount - a.amount).slice(0, 5)
+            .map(d => `<div class="donor"><b>${DCO.esc(d.name)}</b><span class="mono">${DCO.rank(site, d.amount).label}</span></div>`).join('');
+    });
+</script>
 </body>
 </html>

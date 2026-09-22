@@ -1,0 +1,66 @@
+[
+  {
+    "cat": "Soldier Systems",
+    "tag": "Infantry",
+    "title": "New Combat Behaviour",
+    "color": "yellow",
+    "tier": "Soldier & Squad AI",
+    "intro": "Total overhaul of how AI behaves in individual combat: aim, morale, suppression, cover, grenades and personality. This is the core of DCO_AI."
+  },
+  {
+    "cat": "Squad Systems",
+    "tag": "Squad",
+    "title": "Squad AI & Command Layer",
+    "color": "green",
+    "tier": "Soldier & Squad AI",
+    "intro": "Squad-level coordination, communication and shared awareness. Turns groups of individuals into cohesive tactical units."
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "tag": "Vehicle",
+    "title": "Vehicle Combat Overhaul",
+    "color": "blue",
+    "tier": "Vehicle & Artillery",
+    "intro": "Vehicles as active combat assets: support by fire, transport, mechanized assaults and resupply."
+  },
+  {
+    "cat": "Commander",
+    "tag": "Command",
+    "title": "Battlegroup & High Command",
+    "color": "orange",
+    "tier": "High Command & Game Mode",
+    "intro": "An autonomous AI commander that captures objectives, coordinates battlegroups, dispatches QRF, keeps reserves and calls in artillery."
+  },
+  {
+    "cat": "Logistics",
+    "tag": "Logistics",
+    "title": "Logistics & Resupply",
+    "color": "teal",
+    "tier": "Soldier & Squad AI",
+    "intro": "Soldiers keep themselves in the fight: finding the right ammo, using arsenals and scavenging from the fallen."
+  },
+  {
+    "cat": "Global Systems",
+    "tag": "Core",
+    "title": "Core AI Foundation",
+    "color": "red",
+    "tier": "Global Systems",
+    "intro": "Engine-level fixes and shared systems every other feature builds on."
+  },
+  {
+    "cat": "Game Master Tools",
+    "tag": "Game Master",
+    "title": "GM / Zeus Toolkit",
+    "color": "pink",
+    "tier": "Global Systems",
+    "intro": "Tune DCO_AI live from the Game Master editor, globally or per unit. Built for mission makers and server owners."
+  },
+  {
+    "cat": "Game Modes",
+    "tag": "Game Mode",
+    "title": "DCO Game Mode",
+    "color": "purple",
+    "tier": "High Command & Game Mode",
+    "intro": "Game modes built around the DCO AI commander: Conflict-style warfare, Capture & Hold and PvE."
+  }
+]

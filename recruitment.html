@@ -3,164 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Join Us — DCO_AI Reforger</title>
+    <meta name="description" content="Open positions on the DCO_AI Reforger team: programmers, media creators, server admins and testers.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        body { background-color: transparent; color: #d1d5db; font-family: 'JetBrains Mono', monospace; padding: 20px; }
-        .recruit-card { background: #1a1c1e; border: 1px solid #3d4432; border-radius: 4px; padding: 25px; margin-bottom: 25px; }
-        
-        /* Role Box Detail */
-        .role-entry { background: #111315; border: 1px solid #2d2f31; margin-bottom: 15px; overflow: hidden; border-left: 4px solid #3d4432; transition: all 0.3s; }
-        .role-entry:hover { border-left-color: #facc15; background: #16181b; }
-        
-        .role-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .role-content { padding: 0 15px 15px 15px; border-top: 1px dashed #2d2f31; margin-top: 5px; padding-top: 15px; }
-        
-        .req-tag { font-size: 9px; padding: 2px 6px; background: #22c55e/10; color: #4ade80; border: 1px solid #22c55e/30; border-radius: 2px; text-transform: uppercase; margin-right: 5px; }
-        .status-open { color: #facc15; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
-        
-        .apply-btn { background: #facc15; color: #000; font-weight: bold; padding: 12px; border-radius: 2px; display: block; width: 100%; text-align: center; text-transform: uppercase; transition: all 0.2s; }
-        .apply-btn:hover { background: #eab308; box-shadow: 0 0 15px rgba(250, 204, 21, 0.4); }
+        .layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+        .role { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--yellow); padding: 24px; margin-bottom: 14px; }
+        .role-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+        .role h3 { font-size: 19px; }
+        .role > p { color: var(--text-mid); font-size: 14px; margin-bottom: 16px; }
+        .label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+        .apply { position: sticky; top: calc(var(--nav-h) + 16px); }
+        .crit { padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .crit:last-of-type { border-bottom: 0; }
+        .crit b { display: block; color: var(--white); font-size: 14px; }
+        .crit span { font-size: 13px; color: var(--text-mid); }
     </style>
 </head>
 <body>
-    <div class="max-w-5xl mx-auto">
-        <h2 class="text-2xl font-black italic mb-6 text-yellow-500 uppercase tracking-tighter">// PERSONNEL_RECRUITMENT_OFFICE</h2>
+<main id="main">
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2">
-                <h3 class="text-xs font-bold text-zinc-500 mb-4 uppercase tracking-[0.3em] font-mono">>> AVAILABLE_MOS_POSITIONS</h3>
-
-                <div class="role-entry">
-                    <div class="role-header">
-                        <div>
-                            <span class="text-xs text-zinc-500 font-bold block mb-1">Programmers</span>
-                            <h4 class="text-white font-bold text-lg uppercase">Reforger Programmers</h4>
-                        </div>
-                        <span class="status-open">[OPEN]</span>
-                    </div>
-                    <div class="role-content">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
-                                <p class="text-[11px] opacity-70 leading-relaxed italic">Engage in direct combat operations, conduct reconnaissance and security patrols, and secure strategic objectives.</p>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
-                                <ul class="text-[10px] space-y-1 opacity-80">
-                                    <li>- Basic knowledge of infantry weapons and tactics.</li>
-                                    <li>- Proficiency in radio communication (TFAR/ACRE).</li>
-                                    <li>- Discipline in fire control and movement.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="role-entry">
-                    <div class="role-header">
-                        <div>
-                            <span class="text-xs text-zinc-500 font-bold block mb-1">Media</span>
-                            <h4 class="text-white font-bold text-lg uppercase">Media</h4>
-                        </div>
-                        <span class="status-open">[OPEN]</span>
-                    </div>
-                    <div class="role-content">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
-                                <p class="text-[11px] opacity-70 leading-relaxed italic">Provide immediate medical treatment to wounded personnel on the battlefield, including wound stabilization and evacuation coordination.</p>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
-                                <ul class="text-[10px] space-y-1 opacity-80">
-                                    <li>- Knowledge of basic trauma care and medical procedures.</li>
-                                    <li>- Familiarity with medical equipment (tourniquets, bandages, etc.).</li>
-                                    <li>- Ability to remain calm and effective under fire.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="role-entry">
-                    <div class="role-header">
-                        <div>
-                            <span class="text-xs text-zinc-500 font-bold block mb-1">Server admins</span>
-                            <h4 class="text-white font-bold text-lg uppercase">Server admins</h4>
-                        </div>
-                        <span class="status-open">[OPEN]</span>
-                    </div>
-                    <div class="role-content">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
-                                <p class="text-[11px] opacity-70 leading-relaxed italic">Manage and maintain game servers, ensure smooth operations, and handle technical issues during missions.</p>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
-                                <ul class="text-[10px] space-y-1 opacity-80">
-                                    <li>- Knowledge of server administration and hosting.</li>
-                                    <li>- Experience with troubleshooting technical issues.</li>
-                                    <li>- Ability to monitor and optimize server performance.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="role-entry">
-                    <div class="role-header">
-                        <div>
-                            <span class="text-xs text-zinc-500 font-bold block mb-1">Dedicated testers</span>
-                            <h4 class="text-white font-bold text-lg uppercase">Dedicated testers</h4>
-                        </div>
-                        <span class="status-open">[OPEN]</span>
-                    </div>
-                    <div class="role-content">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Role_Description:</span>
-                                <p class="text-[11px] opacity-70 leading-relaxed italic">Test game features extensively, report bugs, and provide detailed feedback on gameplay mechanics and balance.</p>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-yellow-500 font-bold uppercase block mb-2">Specific_Requirements:</span>
-                                <ul class="text-[10px] space-y-1 opacity-80">
-                                    <li>- Attention to detail and systematic testing approach.</li>
-                                    <li>- Experience with bug reporting and documentation.</li>
-                                    <li>- Strong communication skills for feedback delivery.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lg:col-span-1">
-                <div class="recruit-card">
-                    <h3 class="text-xs font-bold text-white mb-4 uppercase tracking-widest">[GENERAL_CRITERIA]</h3>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-black/40 border border-zinc-800">
-                            <span class="text-[10px] text-green-500 font-bold block mb-1">AGE_REQUIREMENT</span>
-                            <p class="text-[11px] opacity-60">Minimum 18 years (Mature mindset).</p>
-                        </div>
-                        <div class="p-3 bg-black/40 border border-zinc-800">
-                            <span class="text-[10px] text-green-500 font-bold block mb-1">COMMUNICATION</span>
-                            <p class="text-[11px] opacity-60">Quality microphone & Discord required.</p>
-                        </div>
-                        <div class="p-3 bg-black/40 border border-zinc-800">
-                            <span class="text-[10px] text-green-500 font-bold block mb-1">ATTENDANCE</span>
-                            <p class="text-[11px] opacity-60">Able to attend minimum 2 operations per month.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <a href="mailto:armadragoncompany@gmail.com" class="apply-btn">Send Application Email</a>
-                        <p class="text-[9px] text-center mt-3 opacity-40 uppercase tracking-tighter">Secure Terminal Access Only</p>
-                    </div>
-                </div>
-            </div>
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Join us</div>
+            <h1>Help build the best AI in Reforger</h1>
+            <p class="lead">DCO_AI is made by a small volunteer team. If you want to shape how AI fights in Arma Reforger, there's a place for you.</p>
         </div>
-    </div>
+    </header>
+
+    <section class="section">
+        <div class="container layout">
+            <div>
+                <div class="kicker mb-16">// Open positions</div>
+
+                <article class="role">
+                    <div class="role-head"><h3>Reforger Programmer</h3><span class="chip chip-live">Open</span></div>
+                    <p>Build and improve AI systems in Enfusion: soldier behaviour, squad tactics, the commander and Game Master tools.</p>
+                    <div class="label">What we're looking for</div>
+                    <ul class="list">
+                        <li>Enforce Script / Enfusion experience, or strong C++ / C# and willingness to learn it</li>
+                        <li>Comfortable with behaviour trees or AI state machines</li>
+                        <li>Can read and extend an existing codebase</li>
+                    </ul>
+                </article>
+
+                <article class="role">
+                    <div class="role-head"><h3>Media Creator</h3><span class="chip chip-live">Open</span></div>
+                    <p>Capture gameplay and test footage, edit showcase videos and screenshots, and help present new updates.</p>
+                    <div class="label">What we're looking for</div>
+                    <ul class="list">
+                        <li>Video capture and editing experience</li>
+                        <li>An eye for cinematic Arma footage</li>
+                        <li>Able to turn a changelog into a clear showcase</li>
+                    </ul>
+                </article>
+
+                <article class="role">
+                    <div class="role-head"><h3>Server Admin</h3><span class="chip chip-live">Open</span></div>
+                    <p>Run and maintain test servers, keep builds deployed and help troubleshoot issues during test sessions.</p>
+                    <div class="label">What we're looking for</div>
+                    <ul class="list">
+                        <li>Arma Reforger dedicated server administration</li>
+                        <li>Troubleshooting and performance monitoring</li>
+                        <li>Reliable availability during test sessions</li>
+                    </ul>
+                </article>
+
+                <article class="role">
+                    <div class="role-head"><h3>Dedicated Tester</h3><span class="chip chip-live">Open</span></div>
+                    <p>Test features extensively, report bugs and give detailed feedback on AI behaviour and balance.</p>
+                    <div class="label">What we're looking for</div>
+                    <ul class="list">
+                        <li>Attention to detail and a systematic testing approach</li>
+                        <li>Clear bug reports with steps to reproduce</li>
+                        <li>Good communication for feedback</li>
+                    </ul>
+                </article>
+            </div>
+
+            <aside class="card apply">
+                <div class="kicker mb-16">// General criteria</div>
+                <div class="crit"><b>Age</b><span>18 or older, with a mature mindset.</span></div>
+                <div class="crit"><b>Communication</b><span>Discord and a decent microphone.</span></div>
+                <div class="crit"><b>Availability</b><span>Able to join at least 2 sessions per month.</span></div>
+                <a class="btn btn-primary btn-block mt-24" data-link="email" href="#">Apply by email</a>
+                <a class="btn btn-discord btn-block mt-8" data-link="discord" href="#">Ask on Discord</a>
+                <p class="dim mt-16" style="font-size:12px">Send your role, a short intro and any relevant work to <span data-bind="email">armadragoncompany@gmail.com</span>.</p>
+            </aside>
+        </div>
+    </section>
+
+</main>
+<script src="assets/site.js"></script>
 </body>
 </html>

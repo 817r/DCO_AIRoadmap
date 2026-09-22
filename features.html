@@ -3,614 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Features — DCO_AI Reforger</title>
+    <meta name="description" content="Every DCO_AI Reforger feature with its release version, progress and description.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        :root {
-            --yellow: #facc15;
-            --orange: #f97316;
-            --green: #22c55e;
-            --red: #ef4444;
-            --bg: #0a0b08;
-            --card: #111310;
-            --border: #1e2118;
-            --border-bright: #2d3122;
-            --text-dim: #5a6350;
-            --text-mid: #8a9478;
-            --text: #c4cdb4;
-        }
+        .filters { display: grid; grid-template-columns: 1fr 220px 180px; gap: 10px; margin-bottom: 12px; }
+        @media (max-width: 760px) { .filters { grid-template-columns: 1fr; } }
+        .field { width: 100%; background: var(--surface); border: 1px solid var(--border-strong); color: var(--text); font: 14px var(--sans); padding: 10px 12px; }
+        .field:focus { outline: none; border-color: var(--yellow); }
+        .result-count { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
 
-        * { box-sizing: border-box; }
-
-        body {
-            background-color: transparent;
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            padding: 16px;
-            font-size: 13px;
+        .rows { border-top: 1px solid var(--border); }
+        .row { border-bottom: 1px solid var(--border); }
+        .row summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr 170px 110px 150px 16px; gap: 16px; align-items: center; padding: 14px 8px; }
+        .row summary::-webkit-details-marker { display: none; }
+        .row summary > .tag, .row summary > .chip { justify-self: start; }
+        .row summary:hover { background: var(--surface); }
+        .row[open] summary { background: var(--surface); }
+        .row-name { font-weight: 600; color: var(--white); }
+        .row-prog { display: grid; grid-template-columns: 1fr 40px; gap: 10px; align-items: center; }
+        .row-prog b { font-family: var(--mono); font-size: 12px; text-align: right; }
+        .chev { width: 8px; height: 8px; border-right: 2px solid var(--text-dim); border-bottom: 2px solid var(--text-dim); transform: rotate(-45deg); transition: transform 0.2s; }
+        .row[open] .chev { transform: rotate(45deg); border-color: var(--yellow); }
+        @media (max-width: 760px) {
+            .row summary { grid-template-columns: 1fr auto 16px; row-gap: 8px; }
+            .row summary .tag { grid-column: 1; grid-row: 2; justify-self: start; }
+            .row summary .row-prog { grid-column: 1 / -1; grid-row: 3; }
         }
-
-        /* === HEADER === */
-        .page-header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-bright);
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .page-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--yellow);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-        .page-title span { color: var(--text-dim); }
-
-        /* === STATS ROW === */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        @media (max-width: 640px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border-bright);
-            padding: 12px 14px;
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 2px;
-        }
-        .stat-card.s-done::before { background: var(--green); }
-        .stat-card.s-prog::before { background: var(--yellow); }
-        .stat-card.s-plan::before { background: var(--red); }
-        .stat-card.s-total::before { background: var(--text-dim); }
-
-        .stat-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
-        .stat-value { font-size: 22px; font-weight: 700; color: #fff; line-height: 1; }
-        .stat-value.green { color: var(--green); }
-        .stat-value.yellow { color: var(--yellow); }
-        .stat-value.red { color: var(--red); }
-
-        /* === LAYOUT === */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 16px;
-            align-items: start;
-        }
-        @media (max-width: 1024px) { .main-layout { grid-template-columns: 1fr; } }
-
-        /* === TABLE PANEL === */
-        .panel {
-            background: var(--card);
-            border: 1px solid var(--border-bright);
-        }
-        .panel-header {
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--border-bright);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .panel-title {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--yellow);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        select {
-            background: #0a0b08;
-            border: 1px solid var(--border-bright);
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            padding: 4px 8px;
-            outline: none;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-        select:focus { border-color: var(--yellow); }
-
-        /* === TABLE === */
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 560px; }
-
-        thead tr {
-            background: rgba(250,204,21,0.04);
-            border-bottom: 1px solid var(--border-bright);
-        }
-        th {
-            text-align: left;
-            font-size: 9px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            padding: 10px 12px;
-            white-space: nowrap;
-        }
-
-        tr.feature-row {
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            transition: background 0.15s;
-        }
-        tr.feature-row:hover { background: rgba(250,204,21,0.04); }
-        tr.feature-row.active-row {
-            background: rgba(250,204,21,0.07);
-            border-left: 2px solid var(--yellow);
-        }
-
-        td {
-            padding: 10px 12px;
-            vertical-align: middle;
-        }
-        td.cat-cell {
-            font-size: 9px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            white-space: nowrap;
-        }
-        td.name-cell {
-            font-weight: 700;
-            color: #e0e8d0;
-            font-size: 12px;
-        }
-        td.ver-cell { color: var(--text-dim); font-size: 10px; }
-        td.prio-cell { color: var(--text-mid); font-size: 11px; font-weight: 700; }
-
-        /* Progress cell */
-        .prog-cell-inner { display: flex; align-items: center; gap: 8px; }
-        .prog-bar-bg {
-            width: 60px;
-            height: 3px;
-            background: var(--border-bright);
-            border-radius: 2px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .prog-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
-        .fill-done { background: var(--green); }
-        .fill-prog { background: var(--yellow); }
-        .fill-plan { background: var(--red); }
-
-        .prog-text { font-size: 11px; font-weight: 700; min-width: 28px; }
-        .prog-text.done { color: var(--green); }
-        .prog-text.prog { color: var(--yellow); }
-        .prog-text.plan { color: var(--red); }
-
-        /* Cat badge */
-        .cat-badge {
-            display: inline-block;
-            font-size: 8px;
-            padding: 2px 5px;
-            border-radius: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        .cat-global { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
-        .cat-soldier { background: rgba(250,204,21,0.1); color: #fde047; border: 1px solid rgba(250,204,21,0.2); }
-        .cat-vehicle { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
-        .cat-squad { background: rgba(34,197,94,0.1); color: #86efac; border: 1px solid rgba(34,197,94,0.2); }
-        .cat-other { background: rgba(139,92,246,0.1); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.2); }
-        .cat-cmd { background: rgba(249,115,22,0.1); color: #fdba74; border: 1px solid rgba(249,115,22,0.25); }
-        .cat-log { background: rgba(20,184,166,0.1); color: #5eead4; border: 1px solid rgba(20,184,166,0.25); }
-        .cat-gm { background: rgba(236,72,153,0.1); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.25); }
-
-        /* Version: live on Workshop vs dev build only */
-        .ver-live { color: var(--green); }
-        .ver-dev { color: var(--orange); font-weight: 700; text-transform: uppercase; }
-
-        /* === DETAIL PANEL === */
-        .detail-panel {
-            background: var(--card);
-            border: 1px solid var(--border-bright);
-            position: sticky;
-            top: 16px;
-        }
-
-        .detail-empty {
-            padding: 32px 20px;
-            text-align: center;
-        }
-        .detail-empty-icon {
-            width: 40px; height: 40px;
-            border: 1px solid var(--border-bright);
-            margin: 0 auto 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-        }
-        .detail-empty p {
-            font-size: 10px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            line-height: 1.8;
-        }
-
-        .detail-content { padding: 0; }
-        .detail-top {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-bright);
-        }
-        .detail-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 8px;
-        }
-        .detail-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-        .detail-meta-item { font-size: 9px; color: var(--text-dim); }
-        .detail-meta-item span { color: var(--text-mid); }
-
-        .detail-prog-section { padding: 14px 16px; border-bottom: 1px solid var(--border-bright); }
-        .detail-prog-label {
-            font-size: 9px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .detail-prog-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--border-bright);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .detail-prog-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
-
-        .detail-desc-section { padding: 14px 16px; }
-        .detail-desc-label {
-            font-size: 9px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 8px;
-        }
-        .detail-desc-text {
-            font-size: 11px;
-            line-height: 1.8;
-            color: var(--text);
-            font-style: italic;
-        }
-
-        .detail-video-section { padding: 0 16px 16px; }
-        .video-wrap {
-            aspect-ratio: 16/9;
-            background: #000;
-            border: 1px solid var(--border-bright);
-            overflow: hidden;
-        }
-        .video-wrap video, .video-wrap iframe { width: 100%; height: 100%; object-fit: cover; }
-
-        /* === LEGEND === */
-        .legend-panel {
-            background: var(--card);
-            border: 1px solid var(--border-bright);
-            padding: 14px 16px;
-        }
-        .legend-title {
-            font-size: 9px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 12px;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 10px;
-            color: var(--text-mid);
-        }
-        .legend-item:last-child { border-bottom: none; }
-        .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
-        /* === FOOTER NOTE === */
-        .footer-note {
-            padding: 8px 14px;
-            font-size: 9px;
-            color: var(--text-dim);
-            border-top: 1px solid var(--border);
-            text-align: right;
-        }
+        .row-body { padding: 4px 8px 20px; background: var(--surface); display: grid; grid-template-columns: 1fr 360px; gap: 24px; }
+        .row-body.no-media { grid-template-columns: 1fr; }
+        @media (max-width: 900px) { .row-body { grid-template-columns: 1fr; } }
+        .row-body p { color: var(--text); font-size: 14px; max-width: 720px; }
+        .meta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+        .meta b { color: var(--text-mid); font-weight: 700; }
+        .row-body video { width: 100%; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--border); }
+        .empty { padding: 48px 0; text-align: center; color: var(--text-dim); }
     </style>
 </head>
 <body>
+<main id="main">
 
-    <!-- HEADER -->
-    <div class="page-header">
-        <div>
-            <div class="page-title"><span>//</span> FEATURE_DATABASE <span>// TACTICAL_SYSTEMS_REGISTRY</span></div>
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Feature database</div>
+            <h1>Every feature, tracked</h1>
+            <p class="lead">Everything in the DCO_AI codebase, grouped by system, with the Workshop version it shipped in and how far along it is.</p>
         </div>
-        <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em;">
-            LAST_SYNC: <span id="sync-time" style="color:var(--yellow)"></span>
-        </div>
-    </div>
+    </header>
 
-    <!-- STATS ROW -->
-    <div class="stats-row" id="stats-row">
-        <div class="stat-card s-total">
-            <div class="stat-label">Total Features</div>
-            <div class="stat-value" id="stat-total">—</div>
-        </div>
-        <div class="stat-card s-done">
-            <div class="stat-label">Complete / Near</div>
-            <div class="stat-value green" id="stat-done">—</div>
-        </div>
-        <div class="stat-card s-prog">
-            <div class="stat-label">In Progress</div>
-            <div class="stat-value yellow" id="stat-prog">—</div>
-        </div>
-        <div class="stat-card s-plan">
-            <div class="stat-label">Planned</div>
-            <div class="stat-value red" id="stat-plan">—</div>
-        </div>
-    </div>
+    <section class="section">
+        <div class="container">
+            <div class="stats mb-24" id="summary"></div>
 
-    <!-- MAIN LAYOUT -->
-    <div class="main-layout">
-
-        <!-- LEFT: TABLE -->
-        <div>
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-title">// Active Feature Registry</span>
-                    <select id="categoryFilter">
-                        <option value="All">All Categories</option>
-                    </select>
-                </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Feature Name</th>
-                                <th>Ver</th>
-                                <th>Prio</th>
-                                <th>Progress</th>
-                            </tr>
-                        </thead>
-                        <tbody id="featureTableBody"></tbody>
-                    </table>
-                </div>
-                <div class="footer-note">Click any row to view tactical details →</div>
+            <div class="filters">
+                <label class="sr-only" for="q">Search features</label>
+                <input class="field" id="q" type="search" placeholder="Search features…">
+                <label class="sr-only" for="cat">Category</label>
+                <select class="field" id="cat"><option value="">All categories</option></select>
+                <label class="sr-only" for="rel">Release</label>
+                <select class="field" id="rel">
+                    <option value="">Any release</option>
+                    <option value="live">Live on Workshop</option>
+                    <option value="dev">In dev build</option>
+                    <option value="planned">Planned</option>
+                </select>
             </div>
+            <div class="result-count" id="count"></div>
+            <div class="rows" id="rows"></div>
         </div>
+    </section>
 
-        <!-- RIGHT: DETAIL + LEGEND -->
-        <div style="display:flex; flex-direction:column; gap:12px;">
-
-            <div class="detail-panel" id="detailPanel">
-                <div class="panel-header">
-                    <span class="panel-title">// Feature Intel</span>
-                    <span id="detail-status-badge" style="font-size:9px; text-transform:uppercase; color:var(--text-dim);">NO SELECTION</span>
-                </div>
-                <div id="detailContent">
-                    <div class="detail-empty">
-                        <div class="detail-empty-icon">◈</div>
-                        <p>Select a feature<br>from the registry<br>to view details</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="legend-panel">
-                <div class="legend-title">// Progress Legend</div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div>
-                    <div>75–100% — Complete / Near Done</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background:var(--yellow);box-shadow:0 0 6px var(--yellow)"></div>
-                    <div>25–75% — In Active Development</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background:var(--red);box-shadow:0 0 6px var(--red)"></div>
-                    <div>0–25% — Planned / Early Stage</div>
-                </div>
-                <div class="legend-item">
-                    <span class="ver-live" style="font-size:10px;min-width:44px">v0.4.x</span>
-                    <div>Live on Workshop since that version</div>
-                </div>
-                <div class="legend-item">
-                    <span class="ver-dev" style="font-size:10px;min-width:44px">dev</span>
-                    <div>In development build, next Workshop update</div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
+</main>
+<script src="assets/site.js"></script>
 <script>
-    let features = [];
+    DCO.ready.then(async () => {
+        const [features, milestones] = await Promise.all([DCO.load('features'), DCO.load('roadmap')]);
+        const colorOf = Object.fromEntries(milestones.map(m => [m.cat, m.color]));
+        const order = milestones.map(m => m.cat);
+        features.sort((a, b) => order.indexOf(a.cat) - order.indexOf(b.cat) || b.prio - a.prio);
 
-    // Set sync time
-    const now = new Date();
-    document.getElementById('sync-time').textContent =
-        now.toISOString().slice(0,10).replace(/-/g,'_') + '_' +
-        now.toTimeString().slice(0,5).replace(':','H') + 'M';
+        const byStatus = key => features.filter(f => DCO.status(f.prog).key === key).length;
+        document.getElementById('summary').innerHTML = `
+            <div class="stat"><div class="stat-val">${features.length}</div><div class="stat-label">Features</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--green)">${byStatus('complete')}</div><div class="stat-label">Complete</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--yellow)">${byStatus('progress') + byStatus('early')}</div><div class="stat-label">In development</div></div>
+            <div class="stat"><div class="stat-val" style="color:var(--red)">${byStatus('planned')}</div><div class="stat-label">Planned</div></div>`;
 
-    function getCatClass(cat) {
-        if (cat.includes('Global')) return 'cat-global';
-        if (cat.includes('Soldier')) return 'cat-soldier';
-        if (cat.includes('Vehicle')) return 'cat-vehicle';
-        if (cat.includes('Squad')) return 'cat-squad';
-        if (cat.includes('Commander')) return 'cat-cmd';
-        if (cat.includes('Logistics')) return 'cat-log';
-        if (cat.includes('Game Master')) return 'cat-gm';
-        return 'cat-other';
-    }
+        const cat = document.getElementById('cat');
+        order.forEach(c => cat.insertAdjacentHTML('beforeend',
+            `<option value="${DCO.esc(c)}">${DCO.esc(c)} (${features.filter(f => f.cat === c).length})</option>`));
+        const params = new URLSearchParams(location.search);
+        if (params.get('cat')) cat.value = params.get('cat');
 
-    // "dev" = only in the development build, not on the Workshop yet
-    function verHtml(ver) {
-        return ver === 'dev'
-            ? '<span class="ver-dev" title="In development build, not on Workshop yet">dev</span>'
-            : `<span class="ver-live" title="Live on Workshop">${ver}</span>`;
-    }
+        const q = document.getElementById('q');
+        const rel = document.getElementById('rel');
 
-    function fillCategoryFilter(data) {
-        const select = document.getElementById('categoryFilter');
-        [...new Set(data.map(f => f.cat))].forEach(cat => {
-            const n = data.filter(f => f.cat === cat).length;
-            select.insertAdjacentHTML('beforeend', `<option value="${cat}">${cat} (${n})</option>`);
-        });
-    }
-
-    function getProgClass(prog) {
-        if (prog >= 75) return { fill: 'fill-done', text: 'done' };
-        if (prog >= 25) return { fill: 'fill-prog', text: 'prog' };
-        return { fill: 'fill-plan', text: 'plan' };
-    }
-
-    function getStatusLabel(prog) {
-        if (prog >= 75) return { label: 'COMPLETE', color: 'var(--green)' };
-        if (prog >= 25) return { label: 'IN PROGRESS', color: 'var(--yellow)' };
-        if (prog > 0)   return { label: 'EARLY DEV', color: 'var(--orange)' };
-        return { label: 'PLANNED', color: 'var(--red)' };
-    }
-
-    async function fetchFeatures() {
-        try {
-            const response = await fetch('features.json');
-            features = (await response.json()).sort((a, b) => b.prio - a.prio);
-            updateStats(features);
-            fillCategoryFilter(features);
-            renderTable();
-        } catch (e) {
-            document.getElementById('featureTableBody').innerHTML =
-                `<tr><td colspan="5" style="text-align:center;color:var(--red);padding:24px;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;">! ERROR_LOADING_DATA_STREAM !</td></tr>`;
+        function media(f) {
+            if (!f.video) return '';
+            const yt = f.video.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+            return yt
+                ? `<div class="yt" data-yt="${yt[1]}" data-title="${DCO.esc(f.name)}"></div>`
+                : `<video controls preload="none" src="${encodeURI(f.video)}"></video>`;
         }
-    }
 
-    function updateStats(data) {
-        document.getElementById('stat-total').textContent = data.length;
-        document.getElementById('stat-done').textContent = data.filter(f => f.prog >= 75).length;
-        document.getElementById('stat-prog').textContent = data.filter(f => f.prog >= 25 && f.prog < 75).length;
-        document.getElementById('stat-plan').textContent = data.filter(f => f.prog < 25).length;
-    }
+        function render() {
+            const term = q.value.trim().toLowerCase();
+            const list = features.filter(f =>
+                (!cat.value || f.cat === cat.value) &&
+                (!rel.value || DCO.release(f.ver).key === rel.value) &&
+                (!term || (f.name + ' ' + f.desc).toLowerCase().includes(term)));
 
-    function renderTable(filter = 'All') {
-        const body = document.getElementById('featureTableBody');
-        const filtered = filter === 'All' ? features : features.filter(f => f.cat === filter);
-
-        body.innerHTML = filtered.map((f, i) => {
-            const pc = getProgClass(f.prog);
-            const catClass = getCatClass(f.cat);
-            return `
-                <tr class="feature-row" data-idx="${features.indexOf(f)}" onclick="selectFeature(${features.indexOf(f)}, this)">
-                    <td class="cat-cell"><span class="cat-badge ${catClass}">${f.cat.replace(' Systems','').replace(' Behaviour','')}</span></td>
-                    <td class="name-cell">${f.name}</td>
-                    <td class="ver-cell">${verHtml(f.ver)}</td>
-                    <td class="prio-cell">${f.prio}</td>
-                    <td>
-                        <div class="prog-cell-inner">
-                            <div class="prog-bar-bg">
-                                <div class="prog-bar-fill ${pc.fill}" style="width:${f.prog}%"></div>
-                            </div>
-                            <span class="prog-text ${pc.text}">${f.prog}%</span>
+            document.getElementById('count').textContent = `Showing ${list.length} of ${features.length}`;
+            document.getElementById('rows').innerHTML = list.length ? list.map(f => {
+                const st = DCO.status(f.prog);
+                const m = media(f);
+                return `
+                <details class="row">
+                    <summary>
+                        <span class="row-name">${DCO.esc(f.name)}</span>
+                        <span class="tag c-${colorOf[f.cat] || 'yellow'}">${DCO.esc(f.cat)}</span>
+                        ${DCO.release(f.ver).html}
+                        <span class="row-prog"><span class="bar" style="--c:${st.color}"><span style="width:${f.prog}%"></span></span><b style="color:${st.color}">${f.prog}%</b></span>
+                        <span class="chev" aria-hidden="true"></span>
+                    </summary>
+                    <div class="row-body${m ? '' : ' no-media'}">
+                        <div>
+                            <p>${DCO.esc(f.desc)}</p>
+                            <div class="meta"><span>Status <b style="color:${st.color}">${st.label}</b></span><span>Progress <b>${f.prog}%</b></span><span>Priority <b>${f.prio}</b></span></div>
                         </div>
-                    </td>
-                </tr>`;
-        }).join('');
-    }
-
-    function selectFeature(idx, el) {
-        document.querySelectorAll('.feature-row').forEach(r => r.classList.remove('active-row'));
-        el.classList.add('active-row');
-
-        const f = features[idx];
-        const st = getStatusLabel(f.prog);
-        const pc = getProgClass(f.prog);
-
-        document.getElementById('detail-status-badge').textContent = st.label;
-        document.getElementById('detail-status-badge').style.color = st.color;
-
-        let videoHtml = '';
-        if (f.video && f.video !== '') {
-            const isYt = f.video.includes('youtube') || f.video.includes('youtu.be');
-            videoHtml = `
-                <div class="detail-video-section">
-                    <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">// Video Feed</div>
-                    <div class="video-wrap">
-                        ${isYt
-                            ? `<iframe src="${f.video}" frameborder="0" allowfullscreen></iframe>`
-                            : `<video controls><source src="${f.video}" type="video/mp4"></video>`
-                        }
+                        ${m}
                     </div>
-                </div>`;
+                </details>`;
+            }).join('') : '<div class="empty">No features match these filters.</div>';
+            DCO.initVideos(document.getElementById('rows'));
         }
 
-        document.getElementById('detailContent').innerHTML = `
-            <div class="detail-content">
-                <div class="detail-top">
-                    <div class="detail-name">${f.name}</div>
-                    <div class="detail-meta">
-                        <div class="detail-meta-item">CAT: <span>${f.cat}</span></div>
-                        <div class="detail-meta-item">VER: ${verHtml(f.ver)}</div>
-                        <div class="detail-meta-item">PRIO: <span>${f.prio}</span></div>
-                    </div>
-                </div>
-                <div class="detail-prog-section">
-                    <div class="detail-prog-label">
-                        <span>Development Progress</span>
-                        <span style="color:${st.color}">${f.prog}%</span>
-                    </div>
-                    <div class="detail-prog-bar">
-                        <div class="detail-prog-fill ${pc.fill}" style="width:0%"></div>
-                    </div>
-                </div>
-                <div class="detail-desc-section">
-                    <div class="detail-desc-label">// Tactical Description</div>
-                    <div class="detail-desc-text">${f.desc}</div>
-                </div>
-                ${videoHtml}
-            </div>`;
-
-        // Animate progress bar
-        setTimeout(() => {
-            const fill = document.querySelector('.detail-prog-fill');
-            if (fill) fill.style.width = f.prog + '%';
-        }, 50);
-    }
-
-    document.getElementById('categoryFilter').addEventListener('change', (e) => {
-        renderTable(e.target.value);
-        // Reset detail panel
-        document.getElementById('detailContent').innerHTML = `
-            <div class="detail-empty">
-                <div class="detail-empty-icon">◈</div>
-                <p>Select a feature<br>from the registry<br>to view details</p>
-            </div>`;
-        document.getElementById('detail-status-badge').textContent = 'NO SELECTION';
-        document.getElementById('detail-status-badge').style.color = 'var(--text-dim)';
+        [q, cat, rel].forEach(el => el.addEventListener('input', render));
+        render();
     });
-
-    window.onload = fetchFeatures;
 </script>
 </body>
 </html>
