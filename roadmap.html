@@ -11,6 +11,36 @@
     <link rel="stylesheet" href="assets/site.css">
     <style>
         .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+
+        /* Overall progress: Alpha → Beta 1.0 */
+        .overall { background: var(--surface); border: 1px solid var(--border); padding: 24px; margin-bottom: 16px; }
+        .overall-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .overall-top b { font-family: var(--mono); font-size: 34px; color: var(--white); line-height: 1; }
+        .overall-legend { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 10px; }
+
+        /* What ships next */
+        .next { background: linear-gradient(135deg, rgba(249,115,22,0.09), transparent 60%), var(--surface); border: 1px solid rgba(249,115,22,0.35); padding: 24px; margin-bottom: 32px; }
+        .next-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+        .next h2 { font-size: 20px; }
+        .next > p { color: var(--text-mid); font-size: 14px; margin-bottom: 16px; }
+        .next-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        @media (max-width: 900px) { .next-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .next-grid { grid-template-columns: 1fr; } }
+        .next-item { background: var(--bg); border: 1px solid var(--border); padding: 12px 14px; }
+        .next-item b { display: block; color: var(--white); font-size: 14px; }
+        .next-item span { font-size: 12px; color: var(--text-dim); font-family: var(--mono); }
+
+        /* Status filter */
+        .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+        .filter-chips button { padding: 6px 12px; border: 1px solid var(--border-strong); font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mid); }
+        .filter-chips button:hover { border-color: var(--yellow); color: var(--yellow); }
+        .filter-chips button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
+        #milestones[data-filter="live"] .feat:not([data-rel="live"]),
+        #milestones[data-filter="dev"] .feat:not([data-rel="dev"]),
+        #milestones[data-filter="planned"] .feat:not([data-rel="planned"]) { display: none; }
+        #milestones[data-filter="live"] .ms:not(:has(.feat[data-rel="live"])),
+        #milestones[data-filter="dev"] .ms:not(:has(.feat[data-rel="dev"])),
+        #milestones[data-filter="planned"] .ms:not(:has(.feat[data-rel="planned"])) { display: none; }
         .ms { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--c); margin-bottom: 12px; }
         .ms[open] { border-color: color-mix(in srgb, var(--c) 45%, var(--border)); }
         .ms summary { list-style: none; cursor: pointer; padding: 18px 20px; display: grid; grid-template-columns: auto 1fr 200px 56px 16px; gap: 16px; align-items: center; }
@@ -52,7 +82,40 @@
 
     <section class="section">
         <div class="container">
-            <div class="stats mb-24" id="summary"></div>
+            <div class="stats" id="summary"></div>
+
+            <div class="overall mt-16">
+                <div class="overall-top">
+                    <div>
+                        <div class="kicker dim">// Overall progress</div>
+                        <b id="overall-pct">0%</b>
+                    </div>
+                    <span class="muted" id="overall-note"></span>
+                </div>
+                <div class="bar lg glow"><span id="overall-bar" style="width:0"></span></div>
+                <div class="overall-legend"><span>Alpha · <span data-bind="version">v0.4.136</span></span><span>Beta 1.0</span></div>
+            </div>
+
+            <section class="next" id="next" hidden>
+                <div class="next-head">
+                    <h2>Shipping next</h2>
+                    <span class="chip chip-dev">In the dev build</span>
+                </div>
+                <p>Already built and being tested — these land in the next Workshop update.</p>
+                <div class="next-grid" id="next-grid"></div>
+            </section>
+
+            <div class="toolbar">
+                <div class="filter-chips" id="filters" role="group" aria-label="Filter features">
+                    <button aria-pressed="true" data-filter="">All features</button>
+                    <button aria-pressed="false" data-filter="live">Live</button>
+                    <button aria-pressed="false" data-filter="dev">Dev build</button>
+                    <button aria-pressed="false" data-filter="planned">Planned</button>
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-sm" id="expand">Expand all</button>
+                </div>
+            </div>
 
             <div class="toolbar">
                 <div class="legend">
@@ -62,9 +125,6 @@
                     <span><i class="dot" style="background:var(--red)"></i>Planned</span>
                     <span><span class="chip chip-live">v0.4.x</span> Live since</span>
                     <span><span class="chip chip-dev">Dev build</span> Next update</span>
-                </div>
-                <div class="btn-row">
-                    <button class="btn btn-sm" id="expand">Expand all</button>
                 </div>
             </div>
 
@@ -97,6 +157,22 @@
             <div class="stat"><div class="stat-val" style="color:var(--green)">${count('live')}</div><div class="stat-label">Live on Workshop</div></div>
             <div class="stat"><div class="stat-val" style="color:var(--orange)">${count('dev')}</div><div class="stat-label">In dev build</div></div>`;
 
+        // Overall progress = average of every tracked feature
+        const overall = Math.round(features.reduce((s, f) => s + f.prog, 0) / features.length);
+        document.getElementById('overall-pct').textContent = overall + '%';
+        requestAnimationFrame(() => { document.getElementById('overall-bar').style.width = overall + '%'; });
+        document.getElementById('overall-note').textContent =
+            `${count('live')} of ${features.length} features are already playable on the Workshop.`;
+
+        // Shipping next: whatever sits in the dev build
+        const next = features.filter(f => DCO.release(f.ver).key === 'dev');
+        if (next.length) {
+            document.getElementById('next').hidden = false;
+            document.getElementById('next-grid').innerHTML = next
+                .sort((a, b) => b.prog - a.prog)
+                .map(f => `<div class="next-item"><b>${DCO.esc(f.name)}</b><span>${DCO.esc(f.cat)} · ${f.prog}%</span></div>`).join('');
+        }
+
         document.getElementById('milestones').innerHTML = milestones.map(m => {
             const list = features.filter(f => f.cat === m.cat).sort((a, b) => b.prog - a.prog || b.prio - a.prio);
             const pct = Math.round(list.reduce((s, f) => s + f.prog, 0) / (list.length || 1));
@@ -116,7 +192,7 @@
                     <p class="ms-intro">${DCO.esc(m.intro)}</p>
                     <div class="feat-grid">
                         ${list.map(f => `
-                        <div class="feat">
+                        <div class="feat" data-rel="${DCO.release(f.ver).key}">
                             <i class="dot" style="background:${DCO.status(f.prog).color}" title="${DCO.status(f.prog).label} · ${f.prog}%"></i>
                             <div>
                                 <div class="feat-head"><span class="feat-name">${DCO.esc(f.name)}</span>${DCO.release(f.ver).html}</div>
@@ -139,6 +215,16 @@
         } else {
             document.querySelector('.ms').open = true;
         }
+
+        // Status filter: CSS hides the rest, milestones with nothing left drop out
+        const wrap = document.getElementById('milestones');
+        document.getElementById('filters').addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            document.querySelectorAll('#filters button').forEach(b => b.setAttribute('aria-pressed', b === btn));
+            wrap.dataset.filter = btn.dataset.filter;
+            if (btn.dataset.filter) document.querySelectorAll('.ms').forEach(d => d.open = true);
+        });
 
         const btn = document.getElementById('expand');
         btn.addEventListener('click', () => {

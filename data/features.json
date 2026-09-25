@@ -673,5 +673,14 @@
     "prog": 0,
     "desc": "Give orders to AI at all command levels.",
     "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Trench Warfare",
+    "ver": "planned",
+    "prio": 760,
+    "prog": 0,
+    "desc": "Improved pathfinding and movement so AI uses trenches and fighting positions properly. Announced as a focus for an upcoming update.",
+    "video": ""
   }
 ]
