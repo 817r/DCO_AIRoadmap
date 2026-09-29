@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guide — DCO_AI Reforger</title>
-    <meta name="description" content="Full DCO_AI Reforger guide: player command menu, fire missions, AI commander setup, garrisons, every behaviour setting with its default, server config and troubleshooting.">
+    <meta name="description" content="Full DCO_AI Reforger guide: player command menu, fire missions, AI commander setup in Game Master and in the Workbench World Editor, garrisons, every behaviour setting with its default, server config and troubleshooting.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -94,6 +94,8 @@
             table.ref { font-size: 13px; }
             table.ref th, table.ref td { padding: 9px 10px; }
             table.ref td.def { white-space: normal; }
+            /* Prefab paths and component names have no spaces to wrap at */
+            table.ref td { overflow-wrap: anywhere; }
             code, code.path { word-break: break-word; }
             ol.steps li { padding-left: 38px; }
         }
@@ -130,7 +132,8 @@
             <div class="roles" id="roles" role="group" aria-label="Show topics for">
                 <span class="roles-label">I'm a</span>
                 <button type="button" data-role="player" aria-pressed="false">Player</button>
-                <button type="button" data-role="gm" aria-pressed="false">Mission maker</button>
+                <button type="button" data-role="gm" aria-pressed="false">Game Master</button>
+                <button type="button" data-role="wb" aria-pressed="false">Workbench maker</button>
                 <button type="button" data-role="server" aria-pressed="false">Server owner</button>
                 <button type="button" data-role="" aria-pressed="true">Show everything</button>
             </div>
@@ -154,6 +157,10 @@
                     <li class="sub"><a href="#cmd-setup">Setting one up</a></li>
                     <li class="sub"><a href="#cmd-personality">Personality</a></li>
                     <li class="sub"><a href="#cmd-settings">Attack &amp; defence</a></li>
+                    <li><a href="#workbench">In the Workbench</a></li>
+                    <li class="sub"><a href="#wb-place">Placing DCO entities</a></li>
+                    <li class="sub"><a href="#wb-defaults">Baking in defaults</a></li>
+                    <li class="sub"><a href="#wb-vs-gm">Workbench vs Game Master</a></li>
                     <li><a href="#garrison">Garrisons</a></li>
                     <li><a href="#units">Squads &amp; units</a></li>
                     <li><a href="#behaviour">Behaviour reference</a></li>
@@ -184,12 +191,14 @@
                         <li>Load any scenario with AI.<span class="hint">Soldiers now suppress, dodge, fight from cover, share contacts and react as a group.</span></li>
                     </ol>
 
-                    <h3>Three ways to go further</h3>
-                    <div class="cards-3">
-                        <div class="mini"><b>Command AI as a player</b><span>Use your group command menu to report enemies, request support and call fire missions. Needs an AI commander in the mission.</span></div>
-                        <div class="mini"><b>Run an AI commander</b><span>Place one in the Game Master editor and assign it groups. It then fights the battle on its own.</span></div>
-                        <div class="mini"><b>Tune the behaviour</b><span>Adjust anything from skill to night discipline, per unit, per squad, globally or through a server config file.</span></div>
+                    <h3>Pick your seat</h3>
+                    <div class="cards-2">
+                        <div class="mini"><b>Player</b><span>Command the AI through your group command menu: report enemies, request support, call fire missions.</span></div>
+                        <div class="mini"><b>Game Master</b><span>Editing a running session. Place a commander, assign groups and drag the sliders live — nothing is saved.</span></div>
+                        <div class="mini"><b>Workbench mission maker</b><span>Building a scenario in the World Editor. Place the prefabs and set component attributes that ship with the mission.</span></div>
+                        <div class="mini"><b>Server owner</b><span>Tune everything from a JSON file in the profile folder, without opening an editor at all.</span></div>
                     </div>
+                    <div class="note"><b>Game Master and Workbench are not the same job.</b> Game Master changes last until the session ends; Workbench changes are saved into the mission. Both reach the same settings — see <a href="#wb-vs-gm" class="accent">Workbench vs Game Master</a>.</div>
 
                     <div class="note tip"><b>Version note.</b> Anything marked <span class="chip chip-dev">Dev build</span> here is written but not in the public Workshop version yet — check the <a href="roadmap.html" class="accent">roadmap</a> for what's live.</div>
                 </section>
@@ -274,6 +283,7 @@
                     <p>A commander turns loose groups into an operation: it takes objectives, defends what it holds, patrols the frontline, dispatches QRF, keeps a reserve and answers player requests.</p>
 
                     <h3 id="cmd-setup">Setting one up <span class="chip chip-live">v0.4.137</span></h3>
+                    <h4>In the Game Master editor</h4>
                     <ol class="steps">
                         <li>In the Game Master <b>content browser</b>, place the DCO commander entity (<code>E_AICommander</code>).<span class="hint">The mod registers it in the browser by itself — no config needed.</span></li>
                         <li>Set its <b>faction</b> and mode, then place or select the objectives it should fight over.</li>
@@ -281,6 +291,13 @@
                         <li>Assign vehicles the same way so the commander can use them for transport and support.</li>
                         <li>To hand a group back, clear the dropdown — it returns to whatever it was doing before.</li>
                     </ol>
+                    <h4>In the Workbench World Editor</h4>
+                    <ol class="steps">
+                        <li>Drag <code class="path">Prefabs/Commander/Commander.et</code> into the world and set its faction on <b>AICommander_AlgorithmComponent</b>.<span class="hint">It spawns its own manager entity — you never place that yourself.</span></li>
+                        <li>Place <code class="path">Commander_Objective.et</code> for each objective it should fight over.</li>
+                        <li>Either place groups and let the commander pick them up, or place a <code class="path">CommanderSpawner.et</code> to spawn and hand over groups for it.</li>
+                    </ol>
+                    <p class="muted">Full prefab list and the component attributes are in <a href="#workbench" class="accent">In the Workbench</a>.</p>
                     <div class="note"><b>Give it a moment.</b> By default the commander waits 60 s before its first decision cycle, then thinks every 30 s. Nothing will happen instantly.</div>
 
                     <h3 id="cmd-personality">Commander personality</h3>
@@ -331,12 +348,62 @@
                     <p>A Game Master-only debug overlay draws what the commander <em>believes</em>: contact reports and their age, threat clusters, the frontline and the thresholds behind each decision. If a threat isn't being answered, the overlay shows which threshold it fell short of — that's usually faster than guessing.</p>
                 </section>
 
+                <!-- WORKBENCH -->
+                <section class="block" id="workbench">
+                    <h2>In the Workbench</h2>
+                    <p>Everything the Game Master can do live, a mission maker can bake into the scenario instead — so the mission ships with its own AI settings and nobody has to touch a slider at runtime.</p>
+
+                    <h3 id="wb-place">Placing DCO entities</h3>
+                    <p>Drag these prefabs into your world hierarchy the same way as any other entity. The Game Master versions of the same things live under <code class="path">PrefabsEditable/DCO/</code> and appear in the in-game content browser instead.</p>
+                    <table class="ref">
+                        <thead><tr><th>Entity</th><th>Prefab</th><th>Use</th></tr></thead>
+                        <tbody>
+                            <tr><td>AI commander</td><td class="def">Prefabs/Commander/Commander.et</td><td>One per faction that should fight an operation.</td></tr>
+                            <tr><td>Commander objective</td><td class="def">Prefabs/Commander/Commander_Objective.et</td><td>What the commander attacks, defends and patrols around.</td></tr>
+                            <tr><td>Commander spawner</td><td class="def">Prefabs/Commander/CommanderSpawner.et</td><td>Spawns groups and hands them straight to a commander, with an AI cap.</td></tr>
+                            <tr><td>Logistics hub <span class="chip chip-dev">Dev</span></td><td class="def">Prefabs/Commander/LogisticsHub.et</td><td>Supply point the commander resupplies from.</td></tr>
+                            <tr><td>Garrison waypoint <span class="chip chip-dev">Dev</span></td><td class="def">Prefabs/AI/Waypoints/AIWaypoint_Garrison.et</td><td>Add as a waypoint under a group to hold a building.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note"><b>The commander manager is automatic.</b> <code>Commander.et</code> spawns <code class="path">CommanderManager.et</code> itself, so placing one by hand only gives you a duplicate.</div>
+
+                    <h3 id="wb-defaults">Baking in defaults</h3>
+                    <p>The settings in the <a href="#behaviour" class="accent">behaviour reference</a> are component attributes. Set them here and they are part of the mission, not a live tweak.</p>
+                    <table class="ref">
+                        <thead><tr><th>Component</th><th>Sits on</th><th>Covers</th></tr></thead>
+                        <tbody>
+                            <tr><td>DCO_GlobalAIComponent</td><td>The game mode entity</td><td>Every global value: skill, perception, cover, dodging, weapons, night, CQB, contact sharing, medics.</td></tr>
+                            <tr><td>DCO_GroupConfigComponent</td><td>Each <code>SCR_AIGroup</code></td><td>Per-squad cohesion and engagement distances.</td></tr>
+                            <tr><td>DCO_GroupContactReporterComponent</td><td>Each <code>SCR_AIGroup</code></td><td>Scan interval and reports per scan — the main contact-report cost.</td></tr>
+                            <tr><td>DCO_AIConfigComponent</td><td>A character prefab</td><td>Per-unit overrides: skill, personality, accuracy, dodging.</td></tr>
+                            <tr><td>DCO_ScenarioFactionsComponent</td><td>Any one entity in the world</td><td>Which factions players may pick; the rest become AI-only.</td></tr>
+                            <tr><td>DCO_BenchmarkLoggerComponent <span class="chip chip-dev">Dev</span></td><td>Any one entity in the world</td><td>Performance run files written to your profile folder.</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-16">The mod's own prefabs already carry these, so a group built from <code class="path">Prefabs/AI/Groups/Group_Base.et</code> or a mission built on the DCO game mode starts configured. On your own prefabs, add the component under <b>GameScripted/DCO</b>, <b>GameScripted/Group</b> or <b>GameScripted/Commander</b>.</p>
+
+                    <h3 id="wb-vs-gm">Workbench vs Game Master</h3>
+                    <table class="ref">
+                        <thead><tr><th>&nbsp;</th><th>Game Master</th><th>Workbench</th></tr></thead>
+                        <tbody>
+                            <tr><td>When</td><td>While the session is running</td><td>Before anyone joins</td></tr>
+                            <tr><td>Changes last</td><td>Until the session ends</td><td>Saved in the mission</td></tr>
+                            <tr><td>Reaches</td><td>Attribute panel on a selection, plus context actions like Hold Position</td><td>Component attributes on prefabs and world entities</td></tr>
+                            <tr><td>Placing entities</td><td>Content browser, <code class="path">PrefabsEditable/DCO/</code></td><td>World hierarchy, <code class="path">Prefabs/Commander/</code></td></tr>
+                            <tr><td>Debug overlay</td><td>Yes — draws what the commander believes</td><td>No, it needs a live session</td></tr>
+                            <tr><td>Good for</td><td>Testing a value, reacting to a live session, one-off ops</td><td>Shipping a scenario with settings that hold</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note warn"><b>Globals are copied at spawn.</b> A unit takes the global values when it spawns, in either editor. Changing a global in Game Master does not retrofit AI that is already on the map — respawn it, or set the per-unit attribute.</div>
+                    <div class="note tip">Server owners get a third route that overrides neither editor in a confusing way: the <a href="#server" class="accent">JSON config</a> is read at startup and can be switched off, in which case the editor values stand.</div>
+                </section>
+
                 <!-- GARRISON -->
                 <section class="block" id="garrison">
                     <h2>Garrisons <span class="chip chip-dev">Dev build</span></h2>
                     <p>Garrisoning puts a group into buildings by slot — windows, rooftops, balconies, doorways — instead of milling around inside a room.</p>
                     <ol class="steps">
-                        <li>Select a group in commanding mode and place the <b>Garrison (DCO)</b> waypoint on the building or position you want held.</li>
+                        <li>Select a group in commanding mode and place the <b>Garrison (DCO)</b> waypoint on the building or position you want held.<span class="hint">In the Workbench, add <code class="path">Prefabs/AI/Waypoints/AIWaypoint_Garrison.et</code> as a waypoint child of the group instead.</span></li>
                         <li>Pick the mode.<span class="hint">Hold never leaves the building · Defend allows a small flank team outside · Release garrisons until a trigger frees the group.</span></li>
                         <li>Adjust how it spreads and where it looks, using the settings below.</li>
                     </ol>
@@ -618,6 +685,8 @@
                             <tr><td>Commander does nothing</td><td>Groups must be assigned to it in their attributes, and it waits 60 s before the first cycle, then thinks every 30 s.</td></tr>
                             <tr><td>Commander dropdown shows only "None"</td><td>No commander exists for that faction yet, or the roster hasn't replicated to this machine. Place a commander of the same faction as the group.</td></tr>
                             <tr><td>Global slider changed nothing</td><td>Globals are copied into each unit when it spawns. Change the per-unit attribute, or respawn the AI.</td></tr>
+                            <tr><td>Game Master changes gone after restart</td><td>Expected — Game Master edits last for that session only. Set them on the components in the Workbench to keep them.</td></tr>
+                            <tr><td>Workbench attribute has no effect</td><td>Check it's on the entity that actually runs: globals belong on the game mode, squad values on the <code>SCR_AIGroup</code>. A server JSON config also overrides them at startup.</td></tr>
                             <tr><td>Fire mission refused</td><td>HE needs an observed target and no friendlies nearby. Report the contact from closer, or use smoke or illumination.</td></tr>
                             <tr><td>Fire mission gave fewer rounds</td><td>Tubes busy, queue loaded, a cautious commander, or danger close. The radio call names the reason.</td></tr>
                             <tr><td>My requests are ignored</td><td>Your group may be on fire-mission cooldown, or reliability may be low after abandoning tasks.</td></tr>
@@ -721,8 +790,9 @@
         // Role picker: keeps only the sections that reader needs in the contents
         const ROLES = {
             player: ['start', 'players', 'trouble'],
-            gm: ['start', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
-            server: ['start', 'server', 'behaviour', 'recipes', 'trouble'],
+            gm: ['start', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'workbench', 'trouble'],
+            wb: ['start', 'workbench', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
+            server: ['start', 'server', 'workbench', 'behaviour', 'recipes', 'trouble'],
         };
         let role = '';
 
@@ -736,9 +806,11 @@
                 a.closest('li').hidden = !!allowed && !allowed.includes(owner[id]);
             });
             if (!jump || !allowed) return;
-            // Open that role's main section, unless you're already reading one of its topics
-            const here = owner[location.hash.slice(1)] || '';
-            if (!allowed.includes(here) || here === 'start') show(allowed[1] || allowed[0]);
+            // Open that role's lead section. Roles overlap, so "already in an allowed
+            // section" isn't enough — picking Workbench while reading a shared section
+            // has to actually land you on the Workbench page.
+            const lead = allowed[1] || allowed[0];
+            if ((owner[location.hash.slice(1)] || '') !== lead) show(lead);
         }
 
         document.getElementById('roles').addEventListener('click', e => {
@@ -746,9 +818,9 @@
             if (btn) applyRole(btn.dataset.role, true);
         });
 
-        // The three cards in "Getting started" pick a role too
+        // The cards in "Getting started" pick a role too
         document.querySelectorAll('#start .mini').forEach((card, i) => {
-            const target = ['player', 'gm', 'server'][i];
+            const target = ['player', 'gm', 'wb', 'server'][i];
             card.style.cursor = 'pointer';
             card.setAttribute('role', 'button');
             card.setAttribute('tabindex', '0');
