@@ -100,6 +100,10 @@
             ol.steps li { padding-left: 38px; }
         }
 
+        /* Marks a setting the Game Master attribute panel does not expose */
+        .chip-wb { color: var(--text-dim); border-color: var(--border-strong); font-size: 9px; }
+        .legend { font-size: 12.5px; color: var(--text-dim); margin-top: 10px; }
+
         .note { border-left: 3px solid var(--orange); background: rgba(249,115,22,0.06); padding: 14px 18px; margin: 20px 0; font-size: 14px; color: var(--text-mid); }
         .note b { color: var(--white); }
         .note.tip { border-left-color: var(--green); background: rgba(34,197,94,0.06); }
@@ -156,7 +160,17 @@
                     <li><a href="#commander">The AI commander</a></li>
                     <li class="sub"><a href="#cmd-setup">Setting one up</a></li>
                     <li class="sub"><a href="#cmd-personality">Personality</a></li>
-                    <li class="sub"><a href="#cmd-settings">Attack &amp; defence</a></li>
+                    <li class="sub"><a href="#cmd-settings">Tempo</a></li>
+                    <li class="sub"><a href="#cmd-defence">Holding ground</a></li>
+                    <li class="sub"><a href="#cmd-arty">Artillery</a></li>
+                    <li class="sub"><a href="#cmd-threat">Threat response</a></li>
+                    <li class="sub"><a href="#cmd-spawn">Spawning &amp; logistics</a></li>
+                    <li><a href="#gm">In Game Master</a></li>
+                    <li class="sub"><a href="#gm-place">What you can place</a></li>
+                    <li class="sub"><a href="#gm-cats">Global categories</a></li>
+                    <li class="sub"><a href="#gm-cmd">Commander categories</a></li>
+                    <li class="sub"><a href="#gm-units">Squad &amp; unit categories</a></li>
+                    <li class="sub"><a href="#gm-limits">What it can't reach</a></li>
                     <li><a href="#workbench">In the Workbench</a></li>
                     <li class="sub"><a href="#wb-place">Placing DCO entities</a></li>
                     <li class="sub"><a href="#wb-defaults">Baking in defaults</a></li>
@@ -274,7 +288,17 @@
                         <div class="mini"><b>Map overlay</b><span>Colour palette for friendly AI on your map.</span></div>
                         <div class="mini"><b>Test &amp; reset</b><span>Fire a test notification, or reset all DCO display settings.</span></div>
                     </div>
-                    <p class="mt-16">How much the overlay shows is set by the mission, not by you: it can be off, limited to squads actually linked to you or sharing your objective (the default), or show everything. Friendly AI within about 800 m also broadcast operational radio traffic to you, and you get a warning if artillery is about to land within roughly 400 m.</p>
+                    <h4>What the mission decides for you</h4>
+                    <p>Four settings are not yours — they are in the <b>DCO Global Players</b> category, so a Game Master or mission maker sets them for everyone.</p>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>AI map overlay</td><td class="def">Linked only</td><td>Off, only squads linked to you or sharing your objective, or everything.</td></tr>
+                            <tr><td>Overlay radius</td><td class="def">—</td><td>How far out friendly AI appear on your map.</td></tr>
+                            <tr><td>Operation radio radius</td><td class="def">800 m</td><td>Friendly AI this close broadcast their radio traffic to you.</td></tr>
+                            <tr><td>Artillery warning radius</td><td class="def">400 m</td><td>You get a warning if shells are about to land this close.</td></tr>
+                        </tbody>
+                    </table>
                 </section>
 
                 <!-- COMMANDER -->
@@ -297,11 +321,11 @@
                         <li>Place <code class="path">Commander_Objective.et</code> for each objective it should fight over.</li>
                         <li>Either place groups and let the commander pick them up, or place a <code class="path">CommanderSpawner.et</code> to spawn and hand over groups for it.</li>
                     </ol>
-                    <p class="muted">Full prefab list and the component attributes are in <a href="#workbench" class="accent">In the Workbench</a>.</p>
+                    <p class="muted">What Game Master exposes is listed in <a href="#gm" class="accent">In Game Master</a>; the prefabs and component attributes are in <a href="#workbench" class="accent">In the Workbench</a>.</p>
                     <div class="note"><b>Give it a moment.</b> By default the commander waits 60 s before its first decision cycle, then thinks every 30 s. Nothing will happen instantly.</div>
 
                     <h3 id="cmd-personality">Commander personality</h3>
-                    <p>Five sliders, all <code>0.5</code> by default, shape how a commander fights. Two commanders with the same units and objectives behave very differently once you move these.</p>
+                    <p>Six sliders, all <code>0.5</code> by default, shape how a commander fights. Two commanders with the same units and objectives behave very differently once you move these. All six are in the <b>DCO Commander</b> attribute category.</p>
                     <table class="ref">
                         <thead><tr><th>Slider</th><th>At 0</th><th>At 1</th></tr></thead>
                         <tbody>
@@ -310,42 +334,166 @@
                             <tr><td>Risk taking</td><td>Refuses to commit to objectives it has no intel on</td><td>Happily attacks into the unknown</td></tr>
                             <tr><td>Resilience</td><td>Pulls groups back early</td><td>Keeps groups fighting much longer</td></tr>
                             <tr><td>Patience</td><td>Quickly reassigns groups stuck in a stalemate</td><td>Lets a stalled attack keep grinding</td></tr>
+                            <tr><td>Combat focus</td><td>Ignores small threats and stays on the objective</td><td>Chases contacts anywhere and reinforces easily</td></tr>
                         </tbody>
                     </table>
                     <p class="mt-16">On top of that, <b>mode</b> sets the overall posture — offensive, defensive or balanced — and <b>allowed tactics</b> lets you restrict which of the thirteen plays it may choose. All are enabled by default.</p>
 
-                    <h3 id="cmd-settings">Attack and defence settings</h3>
-                    <h4>Tempo &amp; commitment</h4>
+                    <h3 id="cmd-settings">Tempo &amp; commitment</h3>
+                    <p class="legend">A <span class="chip chip-wb">Workbench</span> tag means the Game Master attribute panel does not expose that one — set it on the commander prefab instead. See <a href="#gm-limits" class="accent">what Game Master does not reach</a>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
-                            <tr><td>Think interval</td><td class="def">30 s</td><td>How often the commander re-plans. Lower reacts faster but costs more performance.</td></tr>
-                            <tr><td>First decision delay</td><td class="def">60 s</td><td>Grace period after mission start.</td></tr>
+                            <tr><td>Think interval <span class="chip chip-wb">Workbench</span></td><td class="def">30 s</td><td>How often the commander re-plans. Lower reacts faster but costs more performance.</td></tr>
+                            <tr><td>First decision delay <span class="chip chip-wb">Workbench</span></td><td class="def">60 s</td><td>Grace period after mission start.</td></tr>
                             <tr><td>Objectives at once</td><td class="def">3</td><td>How many objectives it works on simultaneously.</td></tr>
-                            <tr><td>Synchronized attack</td><td class="def">On</td><td>Assault groups gather at a staging point and go in together.</td></tr>
-                            <tr><td>Sync wait timeout</td><td class="def">60 s</td><td>How long it waits for the full assault force before going with what it has.</td></tr>
-                            <tr><td>Recon wait timeout</td><td class="def">45 s</td><td>How long it waits for recon confirmation before attacking anyway.</td></tr>
-                            <tr><td>Reserve</td><td class="def">20%</td><td>Share of the force never committed to attacks, recon or flanks.</td></tr>
-                            <tr><td>All-in</td><td class="def">Off</td><td>Commits everything, with no reserve at all.</td></tr>
-                            <tr><td>Retreat threshold</td><td class="def">2</td><td>A group this small is forced to withdraw.</td></tr>
+                            <tr><td>Synchronized attack <span class="chip chip-wb">Workbench</span></td><td class="def">On</td><td>Assault groups gather at a staging point and go in together.</td></tr>
+                            <tr><td>Sync wait timeout <span class="chip chip-wb">Workbench</span></td><td class="def">60 s</td><td>How long it waits for the full assault force before going with what it has.</td></tr>
+                            <tr><td>Recon wait timeout <span class="chip chip-wb">Workbench</span></td><td class="def">45 s</td><td>How long it waits for recon confirmation before attacking anyway.</td></tr>
+                            <tr><td>Max frontline recon</td><td class="def">2</td><td>How many groups may be out scouting the frontline at once.</td></tr>
+                            <tr><td>Reserve policy</td><td class="def">20%</td><td>Share of the force never committed to attacks, recon or flanks.</td></tr>
+                            <tr><td>All-in</td><td class="def">Off</td><td>Commits everything, with no reserve at all. A second toggle decides whether rear defenders are included.</td></tr>
+                            <tr><td>Retreat threshold <span class="chip chip-wb">Workbench</span></td><td class="def">2</td><td>A group this small is forced to withdraw.</td></tr>
                         </tbody>
                     </table>
 
-                    <h4>Holding ground</h4>
+                    <h3 id="cmd-defence">Holding ground</h3>
+                    <p>The five defence plays and the feint are toggles in <b>DCO Commander</b>; the geometry underneath them is not.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
-                            <tr><td>Sectors per objective</td><td class="def">3 – 8</td><td>How the defence is divided up. The maximum is effectively the garrison manpower cap — raise it carefully.</td></tr>
-                            <tr><td>Arc per sector</td><td class="def">60 m</td><td>Smaller value means more, tighter sectors.</td></tr>
-                            <tr><td>Key defend positions</td><td class="def">2</td><td>Groups sent to evaluated key positions; the rest defend more loosely.</td></tr>
-                            <tr><td>Patrol frontline drift</td><td class="def">80 m</td><td>How far idle patrols creep toward the frontline each cycle.</td></tr>
-                            <tr><td>Patrol standoff</td><td class="def">400 m</td><td>Patrols stop creeping once this close to an enemy objective.</td></tr>
-                            <tr><td>Staging distance</td><td class="def">200 – 600 m</td><td>Where assault groups gather before the final push.</td></tr>
+                            <tr><td>Approach ambush</td><td class="def">On</td><td>Ambushes set on likely approach routes.</td></tr>
+                            <tr><td>Supply route ambush</td><td class="def">On</td><td>Ambushes on the enemy's logistics lines.</td></tr>
+                            <tr><td>Observation posts</td><td class="def">On</td><td>Watchers pushed out ahead of the defence.</td></tr>
+                            <tr><td>Immediate counterattack</td><td class="def">On</td><td>Retakes a lost objective straight away instead of regrouping.</td></tr>
+                            <tr><td>Counter-battery</td><td class="def">On</td><td>Answers incoming artillery by hunting the guns.</td></tr>
+                            <tr><td>Feint</td><td class="def">On</td><td>A diversionary attack to pull the defence off the real axis.</td></tr>
+                            <tr><td>Sectors per objective <span class="chip chip-wb">Workbench</span></td><td class="def">3 – 8</td><td>How the defence is divided up. The maximum is effectively the garrison manpower cap — raise it carefully.</td></tr>
+                            <tr><td>Arc per sector <span class="chip chip-wb">Workbench</span></td><td class="def">60 m</td><td>Smaller value means more, tighter sectors.</td></tr>
+                            <tr><td>Key defend positions <span class="chip chip-wb">Workbench</span></td><td class="def">2</td><td>Groups sent to evaluated key positions; the rest defend more loosely.</td></tr>
+                            <tr><td>Patrol frontline drift <span class="chip chip-wb">Workbench</span></td><td class="def">80 m</td><td>How far idle patrols creep toward the frontline each cycle.</td></tr>
+                            <tr><td>Patrol standoff <span class="chip chip-wb">Workbench</span></td><td class="def">400 m</td><td>Patrols stop creeping once this close to an enemy objective.</td></tr>
+                            <tr><td>Staging distance <span class="chip chip-wb">Workbench</span></td><td class="def">200 – 600 m</td><td>Where assault groups gather before the final push.</td></tr>
+                            <tr><td>Vehicle patrol</td><td class="def">On, 2.5×</td><td>Armored and vehicle-owning groups patrol mounted, over a wider radius.</td></tr>
                         </tbody>
                     </table>
 
-                    <h3>Watching it think</h3>
+                    <h3 id="cmd-arty">Artillery</h3>
+                    <p>How generous the commander is with its guns — these set the ceiling the player fire missions in <a href="#fire" class="accent">Calling fire missions</a> run into.</p>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>Rejection chance</td><td>Base odds a request is turned down outright.</td></tr>
+                            <tr><td>Point / area fire max uncertainty</td><td>How stale or vague a contact may be and still be shot at precisely, or as an area.</td></tr>
+                            <tr><td>Mission cooldown, per-shell cooldown, target cooldown</td><td>The three timers behind "your group is on cooldown".</td></tr>
+                            <tr><td>Accuracy &amp; dispersion multiplier</td><td>How tightly the salvo lands.</td></tr>
+                            <tr><td>Friendly safe radius</td><td>How close to friendlies HE is refused.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="cmd-threat">Reacting to threats</h3>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>Threat think interval</td><td class="def">45 s</td><td>Seconds between threat evaluations. Separate from the commander's own 30 s decision cycle.</td></tr>
+                            <tr><td>Engage &amp; priority thresholds</td><td class="def">—</td><td>How big a threat has to be before it is answered, and before it jumps the queue.</td></tr>
+                            <tr><td>Min response score</td><td class="def">—</td><td>Floor below which nothing is sent at all.</td></tr>
+                            <tr><td>Max reinforcements &amp; cooldown</td><td class="def">—</td><td>Caps how much force one threat can pull in, and how often.</td></tr>
+                            <tr><td>Threat expiry</td><td class="def">—</td><td>How long a contact keeps counting as a threat.</td></tr>
+                            <tr><td>Flank distance</td><td class="def">—</td><td>How wide the generated flanking routes swing.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip">If a threat isn't being answered, the debug overlay names the threshold it fell short of — faster than guessing which of these to move.</div>
+
+                    <h3 id="cmd-spawn">Spawning &amp; logistics</h3>
+                    <table class="ref">
+                        <thead><tr><th>Group</th><th>Contains</th></tr></thead>
+                        <tbody>
+                            <tr><td>Commander Spawner <span class="chip chip-live">13 settings</span></td><td>Target commander and faction, groups per spawn, spawn radius and safe radius, spawn at start, cooldown, trigger objective and event, manpower threshold, reinforcement stock, and whether the commander asks for or chooses the spawn itself.</td></tr>
+                            <tr><td>Logistics <span class="chip chip-dev">Dev</span></td><td>Auto MEDEVAC, auto extract, auto resupply, armed escort, hub faction, reinforcement stock.</td></tr>
+                            <tr><td>Player orders</td><td>Time to start moving and max travel time — how long a tasked element gets before the commander gives up on it.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="cmd-debug">Watching it think</h3>
                     <p>A Game Master-only debug overlay draws what the commander <em>believes</em>: contact reports and their age, threat clusters, the frontline and the thresholds behind each decision. If a threat isn't being answered, the overlay shows which threshold it fell short of — that's usually faster than guessing.</p>
+                </section>
+
+                <!-- GAME MASTER -->
+                <section class="block" id="gm">
+                    <h2>In Game Master</h2>
+                    <p>Game Master reaches DCO through two places: the content browser, for the four entities the mod registers, and the attribute panel, which gains <b>17 DCO categories</b> — about 195 settings in total. Which categories appear depends entirely on what you have selected.</p>
+
+                    <h3 id="gm-place">What you can place</h3>
+                    <table class="ref">
+                        <thead><tr><th>Entity</th><th>Where</th><th>Use</th></tr></thead>
+                        <tbody>
+                            <tr><td>AI Commander</td><td>Content browser, DCO group</td><td>One per faction. Everything else hangs off it.</td></tr>
+                            <tr><td>AI Commander Objective</td><td>Content browser, DCO group</td><td>What it attacks, defends and patrols around. Has its own name, radius and owning faction.</td></tr>
+                            <tr><td>Commander Spawner</td><td>Content browser, DCO group</td><td>Spawns groups and hands them to a commander, on a timer, an objective event or a manpower threshold.</td></tr>
+                            <tr><td>Logistics Hub <span class="chip chip-dev">Dev</span></td><td>Content browser, DCO group</td><td>Supply point for resupply, MEDEVAC and extraction runs.</td></tr>
+                            <tr><td>Garrison (DCO) waypoint <span class="chip chip-dev">Dev</span></td><td>Commanding mode, on a selected group</td><td>Not in the content browser — you place it as a waypoint the way you place a Move or Defend waypoint.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-cats">Global categories</h3>
+                    <p>Seventeen DCO categories in all. Which ones show up depends on the selection; these seven need none — open attributes with nothing selected.</p>
+                    <table class="ref">
+                        <thead><tr><th>Category</th><th class="def">Settings</th><th>Contains</th></tr></thead>
+                        <tbody>
+                            <tr><td>DCO Global Skill</td><td class="def">18</td><td>Skill preset, aim accuracy, time to max accuracy, perception, grenade and GL usage, smoke, magic magazine, LOD mode, profiling, census logging, faction AI cap, contact report rate.</td></tr>
+                            <tr><td>DCO Global Combat</td><td class="def">18</td><td>Superior ratio, overmatch assault, all six CQB settings, all four night settings, long-range hold, rifle and MG range, building sharing, cover preference.</td></tr>
+                            <tr><td>DCO Global Reaction</td><td class="def">11</td><td>Suppression effect, take cover chance, all six dodge settings, personality scaling, investigate distance and chance.</td></tr>
+                            <tr><td>DCO Global Contact Sharing</td><td class="def">11</td><td>On/off, voice and radio range, position error and its voice/radio multipliers, require radio, relay hops, player map markers and notifications, debug log.</td></tr>
+                            <tr><td>DCO Global Medic</td><td class="def">7</td><td>Cross-group medics, both search radii, treat players, recovery under fire, medics lent per group, timeout.</td></tr>
+                            <tr><td>DCO Global Idle</td><td class="def">6</td><td>Idle enter time, cover search distance, overrun distance, leave cover to assist or investigate, follow commander orders.</td></tr>
+                            <tr><td>DCO Global Players</td><td class="def">4</td><td>AI map overlay mode and radius, operation radio radius, artillery warning radius.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-cmd">Commander categories</h3>
+                    <p>With a commander, an objective, a spawner or a logistics hub selected.</p>
+                    <table class="ref">
+                        <thead><tr><th>Category</th><th class="def">Settings</th><th>Contains</th></tr></thead>
+                        <tbody>
+                            <tr><td>DCO Commander</td><td class="def">47</td><td>Faction, mode, name, the six personality sliders, allowed tactics, reserve and all-in, objectives at once, recon and vehicle patrol limits, the five defence plays, feint, the four logistics toggles, reinforcement stock, all thirteen spawner settings, player order timings.</td></tr>
+                            <tr><td>DCO Commander Artillery</td><td class="def">9</td><td>Rejection chance, point and area uncertainty limits, mission and per-shell cooldowns, target cooldown, accuracy, dispersion, friendly safe radius.</td></tr>
+                            <tr><td>DCO Commander Threat</td><td class="def">8</td><td>Engage and priority thresholds, minimum response score, reinforcement cap and cooldown, threat expiry, threat think interval, flank distance.</td></tr>
+                            <tr><td>DCO Objective</td><td class="def">3</td><td>Name, radius, controlling faction.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-units">Squad &amp; unit categories</h3>
+                    <p>With a group, a single soldier or a waypoint selected.</p>
+                    <table class="ref">
+                        <thead><tr><th>Category</th><th class="def">Settings</th><th>Contains</th></tr></thead>
+                        <tbody>
+                            <tr><td>DCO Squad Commander</td><td class="def">11</td><td>Which commander owns the group, and what it is allowed to do for it.</td></tr>
+                            <tr><td>DCO Squad</td><td class="def">6</td><td>Tactics dropdown, both engagement distances, dismount distance, investigate distance and chance.</td></tr>
+                            <tr><td>DCO Unit Skill</td><td class="def">8</td><td>Per-soldier skill preset, aim accuracy, accuracy time, perception, GL and smoke and grenade usage.</td></tr>
+                            <tr><td>DCO Unit Reaction</td><td class="def">9</td><td>Per-soldier suppression, cover and the full dodge set.</td></tr>
+                            <tr><td>DCO Unit</td><td class="def">2</td><td>Personality and magic magazine.</td></tr>
+                            <tr><td>Waypoint</td><td class="def">17</td><td>Completion radius and type, plus all fifteen garrison settings including the release triggers and debug draw.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip"><b>Context actions too.</b> Beyond the attribute panel, Game Master gets <b>Hold Position</b> as a right-click context action, and a commander debug overlay that draws contact reports, threat clusters, the frontline and the thresholds behind each decision.</div>
+
+                    <h3 id="gm-limits">What Game Master does not reach</h3>
+                    <p>The attribute panel is a curated subset. These are set on the commander prefab in the Workbench and cannot be changed from a running session:</p>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th class="def">Default</th><th>Why it matters</th></tr></thead>
+                        <tbody>
+                            <tr><td>Commander think interval</td><td class="def">30 s</td><td>The main decision cycle and the biggest commander cost. Not the same as the threat <b>Think Interval</b> in Game Master, which is threat evaluation and defaults to 45 s.</td></tr>
+                            <tr><td>First decision delay</td><td class="def">60 s</td><td>Grace period at mission start.</td></tr>
+                            <tr><td>Synchronized attack &amp; its timeout</td><td class="def">On, 60 s</td><td>Whether assault groups stage together before going in.</td></tr>
+                            <tr><td>Recon wait timeout</td><td class="def">45 s</td><td>How long it waits for recon confirmation.</td></tr>
+                            <tr><td>Retreat threshold</td><td class="def">2</td><td>Group size that forces a withdrawal.</td></tr>
+                            <tr><td>Sectors, arc and key defend positions</td><td class="def">3 – 8, 60 m, 2</td><td>The whole shape of a defence.</td></tr>
+                            <tr><td>Patrol drift, standoff and staging distance</td><td class="def">80 m, 400 m, 200 – 600 m</td><td>Where reserves wander and where assaults gather.</td></tr>
+                            <tr><td>Straggler pull-back <span class="chip chip-wb">Workbench</span></td><td class="def">On, 15 s</td><td>Lives on the group utility component.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note"><b>The server JSON is global only.</b> <code class="path">DCO_GlobalConfig.json</code> is written from the global component, so it covers the seven global categories above — not commander, squad, unit or waypoint values.</div>
                 </section>
 
                 <!-- WORKBENCH -->
@@ -388,7 +536,7 @@
                         <tbody>
                             <tr><td>When</td><td>While the session is running</td><td>Before anyone joins</td></tr>
                             <tr><td>Changes last</td><td>Until the session ends</td><td>Saved in the mission</td></tr>
-                            <tr><td>Reaches</td><td>Attribute panel on a selection, plus context actions like Hold Position</td><td>Component attributes on prefabs and world entities</td></tr>
+                            <tr><td>Reaches</td><td>17 curated attribute categories, ~195 settings, plus context actions like Hold Position</td><td>Every component attribute — a superset, including the commander timings Game Master leaves out</td></tr>
                             <tr><td>Placing entities</td><td>Content browser, <code class="path">PrefabsEditable/DCO/</code></td><td>World hierarchy, <code class="path">Prefabs/Commander/</code></td></tr>
                             <tr><td>Debug overlay</td><td>Yes — draws what the commander believes</td><td>No, it needs a live session</td></tr>
                             <tr><td>Good for</td><td>Testing a value, reacting to a live session, one-off ops</td><td>Shipping a scenario with settings that hold</td></tr>
@@ -416,8 +564,12 @@
                             <tr><td>Allow roof</td><td class="def">On</td><td>Use rooftop and balcony slots.</td></tr>
                             <tr><td>Refill delay</td><td class="def">5 – 15 s</td><td>Wait before a dead defender's slot is taken over.</td></tr>
                             <tr><td>Flank team size</td><td class="def">Defend mode</td><td>Number of soldiers allowed outside; 0 disables the flank team.</td></tr>
+                            <tr><td>Defend leash</td><td class="def">Defend mode</td><td>How far that flank team may go before it is pulled back.</td></tr>
+                            <tr><td>Fill order</td><td class="def">—</td><td>Which slots get taken first as the group moves in.</td></tr>
+                            <tr><td>Pull lone soldier</td><td class="def">On</td><td>A single defender left in a building is recovered instead of dying alone.</td></tr>
                         </tbody>
                     </table>
+                    <p class="legend">All of these are in the <b>Waypoint</b> attribute category with the waypoint selected — seventeen entries in total, including completion radius and type.</p>
 
                     <h4>Release triggers</h4>
                     <table class="ref">
@@ -439,14 +591,35 @@
                     <p>Settings exist at three levels. A unit uses its own value if set, otherwise its squad's, otherwise the global one.</p>
 
                     <h3>Per squad</h3>
+                    <p>In Game Master this is the <b>DCO Squad</b> category on a selected group.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
-                            <tr><td>Cohesion distance</td><td class="def">50 m</td><td>How far from the leader a member may drift before regrouping.</td></tr>
+                            <tr><td>Tactics</td><td class="def">Automatic</td><td>Squad posture: Automatic decides from numbers, threat and morale — or force Defensive, Balance, Aggressive or Evasive.</td></tr>
                             <tr><td>Engagement distance, infantry</td><td class="def">2500 m</td><td>Maximum range the squad will shoot at infantry. Lower it for close-terrain missions.</td></tr>
                             <tr><td>Engagement distance, vehicles</td><td class="def">800 m</td><td>Same for vehicle targets.</td></tr>
+                            <tr><td>Vehicle dismount distance</td><td class="def">700 m</td><td>How close to danger the squad rides before getting out.</td></tr>
                             <tr><td>Investigate distance / chance</td><td class="def">Follows global</td><td>Whether this squad goes looking at unidentified contacts.</td></tr>
-                            <tr><td>Cover preference</td><td class="def">Follows global</td><td>Balanced, indoor or outdoor positions when defending or idle.</td></tr>
+                            <tr><td>Cohesion distance <span class="chip chip-wb">Workbench</span></td><td class="def">50 m</td><td>How far from the leader a member may drift before regrouping.</td></tr>
+                            <tr><td>Cover preference <span class="chip chip-wb">Workbench</span></td><td class="def">Follow global</td><td>Balanced, indoor or outdoor positions when defending or idle. Only the global version is in Game Master.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>What a squad will do for its commander</h3>
+                    <p>The <b>DCO Squad Commander</b> category is where a group is handed to a commander — and where you decide how much of it the commander owns. Useful for keeping one squad out of the machine without unassigning it.</p>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>Commander</td><td>Which commander owns this group. Only same-faction commanders are listed; clearing it hands the group back.</td></tr>
+                            <tr><td>Commander can task</td><td>Off means the commander leaves this group on whatever it is already doing.</td></tr>
+                            <tr><td>Allow reinforce / call reinforcement</td><td>Whether it may be sent as reinforcement, and whether it may ask for some.</td></tr>
+                            <tr><td>Allow call artillery</td><td>Whether this group may request fire missions at all.</td></tr>
+                            <tr><td>Allow transport</td><td>Whether the commander may put it in vehicles.</td></tr>
+                            <tr><td>Allow patrol</td><td>Whether it gets pulled into frontline patrols when idle.</td></tr>
+                            <tr><td>Allow player support</td><td>Whether it may be attached to a player's squad on request.</td></tr>
+                            <tr><td>Send contact reports</td><td>Off makes the group silent — the commander stops learning from it.</td></tr>
+                            <tr><td>Dedicated transport &amp; allowed jobs</td><td>Marks the group as a transport team and restricts which runs it takes.</td></tr>
+                            <tr><td>AI LOD</td><td>Per-group override of the performance LOD setting.</td></tr>
                         </tbody>
                     </table>
 
@@ -473,6 +646,7 @@
                     <p>These are the global settings, all reachable from the DCO attribute categories in the editor and from the server config file. Values shown are the defaults.</p>
 
                     <h3 id="b-combat">Combat</h3>
+                    <p class="legend">Game Master: <b>DCO Global Combat</b>, except take cover chance, which is in <b>DCO Global Reaction</b>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -487,6 +661,7 @@
                     </table>
 
                     <h3 id="b-react">Reactions &amp; dodging</h3>
+                    <p class="legend">Game Master: <b>DCO Global Reaction</b>, or <b>DCO Unit Reaction</b> for one soldier.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -500,6 +675,7 @@
                     </table>
 
                     <h3 id="b-weapons">Weapon usage</h3>
+                    <p class="legend">Game Master: <b>DCO Global Skill</b>, or <b>DCO Unit Skill</b> for one soldier.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -511,6 +687,7 @@
                     </table>
 
                     <h3 id="b-cqb">Building clearing (CQB)</h3>
+                    <p class="legend">Game Master: <b>DCO Global Combat</b>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -524,6 +701,7 @@
                     </table>
 
                     <h3 id="b-night">Night</h3>
+                    <p class="legend">Game Master: <b>DCO Global Combat</b>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -535,6 +713,7 @@
                     </table>
 
                     <h3 id="b-idle">Idle &amp; stragglers</h3>
+                    <p class="legend">Game Master: <b>DCO Global Idle</b>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -548,6 +727,7 @@
                     </table>
 
                     <h3 id="b-share">Contact sharing</h3>
+                    <p class="legend">Game Master: <b>DCO Global Contact Sharing</b>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -563,6 +743,7 @@
                     </table>
 
                     <h3 id="b-medic">Medics</h3>
+                    <p class="legend">Game Master: <b>DCO Global Medic</b>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -642,11 +823,12 @@
 
                     <h3>The config file <span class="chip chip-live">v0.4.118</span></h3>
                     <ol class="steps">
-                        <li>Start the server once with DCO_AI loaded.<span class="hint">It writes <code class="path">$profile:DCO/DCO_GlobalConfig.json</code> containing every setting at its current value.</span></li>
+                        <li>Start the server once with DCO_AI loaded.<span class="hint">It writes <code class="path">$profile:DCO/DCO_GlobalConfig.json</code> containing every <em>global</em> setting at its current value.</span></li>
                         <li>Edit the values you care about and restart.</li>
                         <li>After a mod update that adds settings, the old file is copied to <code class="path">.bak</code> and only the missing keys are appended — your values are preserved.</li>
                     </ol>
                     <p class="muted mt-16">Reading the file can be switched off entirely, in which case the editor values are used as-is. Radio lines and default UI settings have their own files (<code class="path">DCO_Radio.json</code>, <code class="path">DCO_UI.json</code>).</p>
+                    <div class="note"><b>Globals only.</b> The file is written from the global AI component, so it covers the seven <code>DCO Global …</code> categories — skill, combat, reaction, contact sharing, idle, medic and players. Commander, squad, unit and waypoint values are not in it; those belong to the mission and have to be set in the <a href="#workbench" class="accent">Workbench</a> or live in <a href="#gm" class="accent">Game Master</a>.</div>
                     <div class="note warn"><b>Don't edit while the server runs.</b> The config is read at startup; changes made to a running server are overwritten on the next write.</div>
 
                     <h3>Performance</h3>
@@ -654,7 +836,7 @@
                         <thead><tr><th>Lever</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
                             <tr><td>LOD mode <span class="chip chip-dev">Dev</span></td><td class="def">On</td><td>Commander-owned groups simulate at reduced detail when nothing is watching. Groups without a commander always stay vanilla.</td></tr>
-                            <tr><td>Commander think interval</td><td class="def">30 s</td><td>The single biggest commander cost. 45–60 s is much cheaper and barely noticeable.</td></tr>
+                            <tr><td>Commander think interval <span class="chip chip-wb">Workbench</span></td><td class="def">30 s</td><td>The single biggest commander cost. 45–60 s is much cheaper and barely noticeable. Set on the commander prefab — it is neither in Game Master nor in the JSON.</td></tr>
                             <tr><td>Contact report scan</td><td class="def">15 s, 3 per scan</td><td>Lower frequency and fewer reports reduce chatter and work.</td></tr>
                             <tr><td>Faction AI cap</td><td class="def">0 (unlimited)</td><td>Caps how much the Commander Spawner may field.</td></tr>
                             <tr><td>Terrain cache <span class="chip chip-dev">Dev</span></td><td class="def">On</td><td>Terrain sampled once and reused instead of re-scanned per decision.</td></tr>
@@ -790,8 +972,8 @@
         // Role picker: keeps only the sections that reader needs in the contents
         const ROLES = {
             player: ['start', 'players', 'trouble'],
-            gm: ['start', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'workbench', 'trouble'],
-            wb: ['start', 'workbench', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
+            gm: ['start', 'gm', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
+            wb: ['start', 'workbench', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'gm', 'trouble'],
             server: ['start', 'server', 'workbench', 'behaviour', 'recipes', 'trouble'],
         };
         let role = '';
