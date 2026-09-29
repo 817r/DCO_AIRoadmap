@@ -10,12 +10,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/site.css">
     <style>
+        /* Compact header: with tabs the content should start near the top */
+        .page-head { padding: 32px 0 24px; }
+        .page-head h1 { font-size: clamp(26px, 4vw, 36px); }
+        .section { padding-top: 28px; }
+
         .guide { display: grid; grid-template-columns: 236px 1fr; gap: 44px; align-items: start; }
         @media (max-width: 960px) { .guide { grid-template-columns: 1fr; gap: 24px; } }
 
         .toc { position: sticky; top: calc(var(--nav-h) + 20px); max-height: calc(100vh - var(--nav-h) - 40px); overflow-y: auto; }
         @media (max-width: 960px) { .toc { position: static; max-height: none; } }
-        .toc h4 { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+        .toc summary { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; list-style: none; cursor: default; }
+        .toc summary::-webkit-details-marker { display: none; }
+        /* On phones the list is long, so it folds away and closes after you pick something */
+        @media (max-width: 960px) {
+            .toc summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-strong); padding: 12px 14px; color: var(--text); font-size: 12px; margin-bottom: 0; }
+            .toc summary::after { content: '▾'; color: var(--yellow); }
+            .toc details[open] summary { margin-bottom: 8px; }
+            .toc details[open] summary::after { content: '▴'; }
+        }
         .toc ul { list-style: none; display: flex; flex-direction: column; gap: 1px; }
         .toc a { display: block; padding: 6px 10px; font-size: 13.5px; color: var(--text-mid); text-decoration: none; border-left: 2px solid var(--border); }
         .toc a:hover { color: var(--white); border-left-color: var(--border-strong); }
@@ -24,6 +37,26 @@
 
         .block { padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--border); }
         .block:last-child { border-bottom: 0; }
+        /* One section at a time — only once JS is running, so the page still works without it */
+        body.tabbed .block { display: none; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
+        body.tabbed .block.active { display: block; }
+
+        /* Long sections are split again into sub-panels, so nothing needs long scrolling */
+        body.tabbed .sub-panel { display: none; }
+        body.tabbed .sub-panel.active { display: block; }
+        .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 4px; }
+        .pills button { padding: 7px 13px; border: 1px solid var(--border-strong); font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mid); }
+        .pills button:hover { border-color: var(--yellow); color: var(--yellow); }
+        .pills button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
+        .sub-panel > h3:first-child { margin-top: 20px; }
+
+        .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .pager a { display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none; font-size: 14px; color: var(--text-mid); max-width: 48%; }
+        .pager a:hover { color: var(--yellow); }
+        .pager span { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+        .pager a:last-child { text-align: right; align-items: flex-end; }
+        .pager a b { color: var(--white); font-weight: 600; }
+        .pager a:hover b { color: var(--yellow); }
         .block > h2 { margin-bottom: 10px; }
         .block > p, .block > .lead-p { color: var(--text-mid); max-width: 760px; }
         .block h3 { margin: 32px 0 10px; font-size: 17px; }
@@ -93,7 +126,8 @@
         <div class="container guide">
 
             <nav class="toc" aria-label="On this page">
-                <h4>On this page</h4>
+                <details id="toc-d" open>
+                <summary>On this page</summary>
                 <ul>
                     <li><a href="#start">Getting started</a></li>
                     <li><a href="#players">For players</a></li>
@@ -108,10 +142,19 @@
                     <li><a href="#garrison">Garrisons</a></li>
                     <li><a href="#units">Squads &amp; units</a></li>
                     <li><a href="#behaviour">Behaviour reference</a></li>
+                    <li class="sub"><a href="#b-combat">Combat</a></li>
+                    <li class="sub"><a href="#b-react">Reactions</a></li>
+                    <li class="sub"><a href="#b-weapons">Weapons</a></li>
+                    <li class="sub"><a href="#b-cqb">Building clearing</a></li>
+                    <li class="sub"><a href="#b-night">Night</a></li>
+                    <li class="sub"><a href="#b-idle">Idle &amp; stragglers</a></li>
+                    <li class="sub"><a href="#b-share">Contact sharing</a></li>
+                    <li class="sub"><a href="#b-medic">Medics</a></li>
                     <li><a href="#recipes">Common setups</a></li>
                     <li><a href="#server">For server owners</a></li>
                     <li><a href="#trouble">Troubleshooting</a></li>
                 </ul>
+                </details>
             </nav>
 
             <div>
@@ -347,7 +390,7 @@
                     <h2>Behaviour reference</h2>
                     <p>These are the global settings, all reachable from the DCO attribute categories in the editor and from the server config file. Values shown are the defaults.</p>
 
-                    <h3>Combat</h3>
+                    <h3 id="b-combat">Combat</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -361,7 +404,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Reactions &amp; dodging</h3>
+                    <h3 id="b-react">Reactions &amp; dodging</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -374,7 +417,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Weapon usage</h3>
+                    <h3 id="b-weapons">Weapon usage</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -385,7 +428,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Building clearing (CQB)</h3>
+                    <h3 id="b-cqb">Building clearing (CQB)</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -398,7 +441,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Night</h3>
+                    <h3 id="b-night">Night</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -409,7 +452,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Idle &amp; stragglers</h3>
+                    <h3 id="b-idle">Idle &amp; stragglers</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -422,7 +465,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Contact sharing</h3>
+                    <h3 id="b-share">Contact sharing</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -437,7 +480,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Medics</h3>
+                    <h3 id="b-medic">Medics</h3>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
@@ -589,16 +632,94 @@
 </main>
 <script src="assets/site.js"></script>
 <script>
-    // Highlight the section you're reading in the table of contents
-    const links = [...document.querySelectorAll('.toc a')];
-    const ids = new Set(links.map(a => a.getAttribute('href').slice(1)));
-    const spy = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (!e.isIntersecting) return;
-            links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    // Show one section at a time instead of one very long page.
+    // Without JS every section stays visible, so the content is never lost.
+    (function () {
+        const blocks = [...document.querySelectorAll('.block')];
+        const links = [...document.querySelectorAll('.toc a')];
+        document.body.classList.add('tabbed');
+
+        // Sub-headings (#fire, #cmd-setup, …) belong to the section that contains them
+        const owner = {};
+        blocks.forEach(b => {
+            owner[b.id] = b.id;
+            b.querySelectorAll('[id]').forEach(el => owner[el.id] = b.id);
         });
-    }, { rootMargin: '-15% 0px -75% 0px' });
-    document.querySelectorAll('.block, .block [id]').forEach(el => { if (ids.has(el.id)) spy.observe(el); });
+
+        // A section with two or more sub-headings becomes tabs of its own, so one
+        // view is at most a screen or two instead of six.
+        blocks.forEach(b => {
+            const heads = [...b.querySelectorAll(':scope > h3[id]')];
+            if (heads.length < 2) return;
+            heads.forEach(h => {
+                const panel = document.createElement('div');
+                panel.className = 'sub-panel';
+                panel.dataset.id = h.id;
+                h.before(panel);
+                let node = h;
+                while (node && !(node.tagName === 'H3' && node !== h && node.id)) {
+                    const next = node.nextElementSibling;
+                    panel.append(node);
+                    node = next;
+                }
+            });
+            const pills = heads.map(h =>
+                `<button type="button" data-goto="${h.id}" aria-pressed="false">${h.textContent.replace(/\s*(Dev build|v0\.4\.\d+)\s*$/, '').trim()}</button>`).join('');
+            (b.querySelector(':scope > .lead-p, :scope > p') || b.querySelector('h2'))
+                .insertAdjacentHTML('afterend', `<div class="pills" role="tablist">${pills}</div>`);
+        });
+
+        // Previous / next links so the guide can still be read straight through
+        blocks.forEach((b, i) => {
+            const prev = blocks[i - 1], next = blocks[i + 1];
+            const label = el => el.querySelector('h2').textContent.trim();
+            b.insertAdjacentHTML('beforeend', `<nav class="pager">
+                ${prev ? `<a href="#${prev.id}"><span>← Previous</span><b>${label(prev)}</b></a>` : '<span></span>'}
+                ${next ? `<a href="#${next.id}"><span>Next →</span><b>${label(next)}</b></a>` : ''}
+            </nav>`);
+        });
+
+        function show(id) {
+            const sectionId = owner[id] || blocks[0].id;
+            const section = document.getElementById(sectionId);
+            blocks.forEach(b => b.classList.toggle('active', b === section));
+
+            // Inside the section, open the matching sub-panel (or the first one)
+            const panels = [...section.querySelectorAll('.sub-panel')];
+            if (panels.length) {
+                const wanted = panels.find(p => p.dataset.id === id) || panels[0];
+                panels.forEach(p => p.classList.toggle('active', p === wanted));
+                section.querySelectorAll('.pills button').forEach(btn =>
+                    btn.setAttribute('aria-pressed', btn.dataset.goto === wanted.dataset.id));
+                id = wanted.dataset.id;
+            }
+
+            links.forEach(a => a.classList.toggle('active',
+                a.getAttribute('href') === '#' + id || (panels.length === 0 && a.getAttribute('href') === '#' + sectionId)));
+            scrollTo({ top: 0 });
+        }
+
+        // Phones: start with the contents folded, and fold it again after a choice
+        const toc = document.getElementById('toc-d');
+        const narrow = matchMedia('(max-width: 960px)');
+        const syncToc = () => toc.open = !narrow.matches;
+        syncToc();
+        narrow.addEventListener('change', syncToc);
+
+        document.addEventListener('click', e => {
+            if (e.target.closest('.toc a') && narrow.matches) toc.open = false;
+            const el = e.target.closest('a[href^="#"], .pills button');
+            if (!el) return;
+            const id = el.dataset.goto || el.getAttribute('href').slice(1);
+            if (!owner[id]) return;
+            e.preventDefault();
+            history.pushState(null, '', '#' + id);
+            show(id);
+        });
+        addEventListener('popstate', () => show(location.hash.slice(1)));
+
+        show(location.hash.slice(1));
+    })();
 </script>
 </body>
 </html>
