@@ -20,6 +20,14 @@
 
         .toc { position: sticky; top: calc(var(--nav-h) + 20px); max-height: calc(100vh - var(--nav-h) - 40px); overflow-y: auto; }
         @media (max-width: 960px) { .toc { position: static; max-height: none; } }
+        /* Role picker: trims the contents to what that reader needs */
+        .roles { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+        .roles-label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; }
+        .roles button { padding: 8px 14px; border: 1px solid var(--border-strong); font-size: 13px; font-weight: 600; color: var(--text-mid); }
+        .roles button:hover { border-color: var(--yellow); color: var(--yellow); }
+        .roles button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
+        .toc li[hidden] { display: none; }
+
         .toc summary { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; list-style: none; cursor: default; }
         .toc summary::-webkit-details-marker { display: none; }
         /* On phones the list is long, so it folds away and closes after you pick something */
@@ -119,6 +127,13 @@
             <div class="kicker">// Guide</div>
             <h1>How to use DCO_AI</h1>
             <p class="lead">Load the mod and every AI in your scenario already fights better — no setup needed. This guide covers the rest: commanding AI as a player, running an AI commander, garrisoning towns, and every setting worth touching, with its default value.</p>
+            <div class="roles" id="roles" role="group" aria-label="Show topics for">
+                <span class="roles-label">I'm a</span>
+                <button type="button" data-role="player" aria-pressed="false">Player</button>
+                <button type="button" data-role="gm" aria-pressed="false">Mission maker</button>
+                <button type="button" data-role="server" aria-pressed="false">Server owner</button>
+                <button type="button" data-role="" aria-pressed="true">Show everything</button>
+            </div>
         </div>
     </header>
 
@@ -696,8 +711,51 @@
 
             links.forEach(a => a.classList.toggle('active',
                 a.getAttribute('href') === '#' + id || (panels.length === 0 && a.getAttribute('href') === '#' + sectionId)));
+
+            // Landing outside the chosen role (prev/next, a shared link) widens the contents again
+            if (role && !ROLES[role].includes(sectionId)) applyRole('', false);
+            if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
             scrollTo({ top: 0 });
         }
+
+        // Role picker: keeps only the sections that reader needs in the contents
+        const ROLES = {
+            player: ['start', 'players', 'trouble'],
+            gm: ['start', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
+            server: ['start', 'server', 'behaviour', 'recipes', 'trouble'],
+        };
+        let role = '';
+
+        function applyRole(next, jump) {
+            role = next;
+            const allowed = ROLES[role];
+            document.querySelectorAll('#roles button').forEach(b =>
+                b.setAttribute('aria-pressed', b.dataset.role === role));
+            links.forEach(a => {
+                const id = a.getAttribute('href').slice(1);
+                a.closest('li').hidden = !!allowed && !allowed.includes(owner[id]);
+            });
+            if (!jump || !allowed) return;
+            // Open that role's main section, unless you're already reading one of its topics
+            const here = owner[location.hash.slice(1)] || '';
+            if (!allowed.includes(here) || here === 'start') show(allowed[1] || allowed[0]);
+        }
+
+        document.getElementById('roles').addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (btn) applyRole(btn.dataset.role, true);
+        });
+
+        // The three cards in "Getting started" pick a role too
+        document.querySelectorAll('#start .mini').forEach((card, i) => {
+            const target = ['player', 'gm', 'server'][i];
+            card.style.cursor = 'pointer';
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            const pick = () => { applyRole(target, false); show(ROLES[target][1]); };
+            card.addEventListener('click', pick);
+            card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+        });
 
         // Phones: start with the contents folded, and fold it again after a choice
         const toc = document.getElementById('toc-d');
