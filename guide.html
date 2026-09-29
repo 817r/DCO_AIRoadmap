@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide — DCO_AI Reforger</title>
+    <meta name="description" content="How to use DCO_AI Reforger: player command menu, Game Master setup, garrisons, AI commander and server configuration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
+    <style>
+        .guide { display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; }
+        @media (max-width: 900px) { .guide { grid-template-columns: 1fr; gap: 24px; } }
+
+        .toc { position: sticky; top: calc(var(--nav-h) + 20px); }
+        @media (max-width: 900px) { .toc { position: static; } }
+        .toc h4 { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+        .toc ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc a { display: block; padding: 6px 10px; font-size: 14px; color: var(--text-mid); text-decoration: none; border-left: 2px solid var(--border); }
+        .toc a:hover { color: var(--white); border-left-color: var(--border-strong); }
+        .toc a.active { color: var(--yellow); border-left-color: var(--yellow); background: var(--yellow-soft); }
+
+        .block { padding-bottom: 48px; margin-bottom: 48px; border-bottom: 1px solid var(--border); }
+        .block:last-child { border-bottom: 0; }
+        .block > h2 { margin-bottom: 8px; }
+        .block > p { color: var(--text-mid); max-width: 720px; }
+        .block h3 { margin: 28px 0 10px; font-size: 16px; }
+
+        ol.steps { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        ol.steps li { position: relative; padding-left: 44px; color: var(--text); font-size: 14px; }
+        ol.steps li::before {
+            counter-increment: step; content: counter(step);
+            position: absolute; left: 0; top: -2px;
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            font-family: var(--mono); font-size: 12px; font-weight: 700;
+            color: var(--yellow); border: 1px solid var(--yellow-line); background: var(--yellow-soft);
+        }
+        ol.steps b { color: var(--white); }
+
+        table.ref { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); margin-top: 16px; font-size: 14px; }
+        table.ref th { text-align: left; font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 14px; border-bottom: 1px solid var(--border-strong); }
+        table.ref td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        table.ref tr:last-child td { border-bottom: 0; }
+        table.ref td:first-child { color: var(--white); font-weight: 600; white-space: nowrap; }
+        table.ref code, code.path { font-family: var(--mono); font-size: 12.5px; color: var(--yellow); background: var(--yellow-soft); border: 1px solid rgba(250,204,21,0.15); padding: 1px 6px; white-space: nowrap; }
+        @media (max-width: 640px) {
+            table.ref td:first-child { white-space: normal; }
+            table.ref code, code.path { white-space: normal; word-break: break-word; }
+            ol.steps li { padding-left: 38px; }
+        }
+
+        .note { border-left: 3px solid var(--orange); background: rgba(249,115,22,0.06); padding: 14px 18px; margin: 20px 0; font-size: 14px; color: var(--text-mid); }
+        .note b { color: var(--white); }
+        .note.tip { border-left-color: var(--green); background: rgba(34,197,94,0.06); }
+
+        .cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+        @media (max-width: 700px) { .cards-2 { grid-template-columns: 1fr; } }
+        .mini { background: var(--surface); border: 1px solid var(--border); padding: 16px 18px; }
+        .mini b { display: block; color: var(--white); margin-bottom: 4px; }
+        .mini span { font-size: 13px; color: var(--text-mid); }
+    </style>
+</head>
+<body>
+<main id="main">
+
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Guide</div>
+            <h1>How to use DCO_AI</h1>
+            <p class="lead">DCO_AI runs on vanilla AI with no setup at all — just load the mod. Everything below is optional: commanding AI as a player, running an AI commander from the editor, garrisoning buildings and tuning behaviour for your server.</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container guide">
+
+            <nav class="toc" aria-label="On this page">
+                <h4>On this page</h4>
+                <ul>
+                    <li><a href="#start">Getting started</a></li>
+                    <li><a href="#players">For players</a></li>
+                    <li><a href="#gm">For Game Masters</a></li>
+                    <li><a href="#garrison">Garrisons</a></li>
+                    <li><a href="#tuning">Tuning AI behaviour</a></li>
+                    <li><a href="#server">For server owners</a></li>
+                    <li><a href="#trouble">Troubleshooting</a></li>
+                </ul>
+            </nav>
+
+            <div>
+
+                <!-- GETTING STARTED -->
+                <section class="block" id="start">
+                    <h2>Getting started</h2>
+                    <p>DCO_AI replaces how vanilla AI thinks. Any AI already in your scenario picks up the new behaviour — you don't have to rebuild missions or place special units.</p>
+                    <ol class="steps">
+                        <li>Subscribe to <b>DCO_AI Reforger</b> on the <a data-link="workshop" href="#" class="accent">Arma Reforger Workshop</a>.</li>
+                        <li>Enable it as a mod for your scenario, or add it to your server's mod list.</li>
+                        <li>Load any scenario with AI. That's it — soldiers now suppress, use cover, dodge and react as a group.</li>
+                        <li>Want a commander, player orders or garrisons? Continue below.</li>
+                    </ol>
+                    <div class="note tip"><b>Version note.</b> Features marked <span class="chip chip-dev">Dev build</span> on the <a href="roadmap.html" class="accent">roadmap</a> are written but not in the public Workshop build yet. Everything in this guide that is live is marked with its version.</div>
+                </section>
+
+                <!-- PLAYERS -->
+                <section class="block" id="players">
+                    <h2>For players</h2>
+                    <p>You talk to the AI commander through the same group command menu you already use to order your squad. Point at a place or an enemy, open the menu and pick an order.</p>
+
+                    <h3>Report what you see</h3>
+                    <p>Contact reports feed the commander's picture of the battlefield — it reacts to what its units and its players report.</p>
+                    <table class="ref">
+                        <thead><tr><th>Command</th><th>What it reports</th></tr></thead>
+                        <tbody>
+                            <tr><td>Report team</td><td>Roughly 4 infantry at the marked spot</td></tr>
+                            <tr><td>Report squad</td><td>Roughly 8 infantry</td></tr>
+                            <tr><td>Report platoon</td><td>Roughly 24 infantry</td></tr>
+                            <tr><td>Report vehicle</td><td>A vehicle contact</td></tr>
+                            <tr><td>Report armor</td><td>An armored contact — treated as an anti-armor threat</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Ask for help</h3>
+                    <div class="cards-2">
+                        <div class="mini"><b>Suppress</b><span>Put fire on a position so you can move.</span></div>
+                        <div class="mini"><b>Support</b><span>Ask a nearby element to support your attack.</span></div>
+                        <div class="mini"><b>Flank left / right</b><span>Send a flanking element around the marked side.</span></div>
+                        <div class="mini"><b>Armor</b><span>Request armored support at the marked spot.</span></div>
+                        <div class="mini"><b>Transport</b><span>Ask for a ride; accept the pickup when it arrives.</span></div>
+                        <div class="mini"><b>Extract</b><span>Ask to be pulled out of an area.</span></div>
+                        <div class="mini"><b>MEDEVAC</b><span>Call for a casualty evacuation.</span></div>
+                        <div class="mini"><b>Take a role</b><span>Assault, fix, block or recon — or ask for a different job.</span></div>
+                    </div>
+
+                    <h3>Call fire missions <span class="chip chip-live">v0.4.142</span></h3>
+                    <p>Mark a target and choose the shell type and how many rounds. The commander still has to approve the mission, and it corrects the fall of shot between salvos.</p>
+                    <table class="ref">
+                        <thead><tr><th>Type</th><th>Rounds you can ask for</th></tr></thead>
+                        <tbody>
+                            <tr><td>HE</td><td>1, 3, 5 or 8</td></tr>
+                            <tr><td>Smoke</td><td>1, 3 or 5</td></tr>
+                            <tr><td>Illumination</td><td>1, 2 or 3</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note">Changed your mind? There are cancel commands for fire missions, support, transport — or everything at once.</div>
+
+                    <h3>Your own HUD</h3>
+                    <p>DCO adds its own tab in the game settings, where each player controls their own display: where the order banner sits, its size and offset, whether contact toasts appear, how long they stay, their scale and sound, and the map overlay palette. The tab also has <b>Test notifications</b> and <b>Reset DCO</b>.</p>
+                </section>
+
+                <!-- GAME MASTERS -->
+                <section class="block" id="gm">
+                    <h2>For Game Masters</h2>
+                    <p>An AI commander turns loose groups into an operation: it takes objectives, defends what it holds, dispatches QRF, keeps reserves and answers player requests.</p>
+
+                    <h3>Put a commander in the field <span class="chip chip-live">v0.4.137</span></h3>
+                    <ol class="steps">
+                        <li>In the Game Master <b>content browser</b>, find the DCO commander entity (<code>E_AICommander</code>) and place it. The mod registers it automatically.</li>
+                        <li>Select a group, open its attributes and pick a commander from the <b>DCO Commander</b> dropdown. <span class="chip chip-live">v0.4.138</span></li>
+                        <li>Do the same for vehicles you want the commander to use for transport and support.</li>
+                        <li>Set the commander's mode — offensive, defensive or balanced — and its objectives.</li>
+                        <li>Release a group again at any time by clearing the dropdown; it goes back to normal behaviour.</li>
+                    </ol>
+                    <div class="note"><b>Nothing happening?</b> A commander only controls groups that were assigned to it. Unassigned groups keep doing what they were already doing.</div>
+
+                    <h3>What the commander does on its own</h3>
+                    <div class="cards-2">
+                        <div class="mini"><b>Objectives</b><span>Capture, destroy and recon, with priorities and contested states.</span></div>
+                        <div class="mini"><b>Group roles</b><span>Recon, assault, flank, transport, reserve, defend, armored, artillery and more.</span></div>
+                        <div class="mini"><b>Tactics <span class="chip chip-dev">Dev</span></b><span>Thirteen named plays, from fire and maneuver to hammer and anvil.</span></div>
+                        <div class="mini"><b>Defense <span class="chip chip-dev">Dev</span></b><span>Ambushes, observation posts, counter-attacks, counter-battery, feints.</span></div>
+                        <div class="mini"><b>Logistics <span class="chip chip-dev">Dev</span></b><span>Transport, extraction, MEDEVAC and resupply runs.</span></div>
+                        <div class="mini"><b>Fire support</b><span>Approves and corrects artillery missions, including at night.</span></div>
+                    </div>
+
+                    <h3>Watch it think</h3>
+                    <p>A Game Master-only debug overlay draws what the commander believes: contact reports, threat clusters, the frontline and the thresholds behind each decision. If a threat isn't being answered, the overlay shows which threshold it fell under.</p>
+                </section>
+
+                <!-- GARRISON -->
+                <section class="block" id="garrison">
+                    <h2>Garrisons <span class="chip chip-dev">Dev build</span></h2>
+                    <p>Garrisoning puts a group inside buildings by slot — windows, rooftops, balconies and doorways — instead of standing around in a room.</p>
+                    <ol class="steps">
+                        <li>Select a group in commanding mode and place the <b>Garrison (DCO)</b> waypoint on a building or position.</li>
+                        <li>Pick the mode: <b>Hold</b> never leaves the building, <b>Defend</b> allows a small flank team outside, <b>Release</b> garrisons until a trigger frees the group.</li>
+                        <li>Tune how it fills: slot share per building, maximum buildings per group, fill order, and whether rooftop slots are allowed.</li>
+                        <li>Set the firing arc weight — 1 puts everyone on windows facing the threat, 0 spreads them 360°.</li>
+                        <li>Set refill delays so slots left by casualties are taken over after a while.</li>
+                    </ol>
+                    <h3>Release triggers</h3>
+                    <table class="ref">
+                        <thead><tr><th>Trigger</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>Enemy distance</td><td>Enemy closer than the set distance frees the group</td></tr>
+                            <tr><td>Casualties</td><td>Losing the set percentage of the garrison frees it</td></tr>
+                            <tr><td>Sustained pressure</td><td>Most of the garrison pinned for the set time frees it</td></tr>
+                            <tr><td>Re-garrison</td><td>Optionally return to the buildings once it's safe again</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip">A debug option draws the slots in use: red for windows, orange for roofs, blue for doors, grey for interior positions.</div>
+                </section>
+
+                <!-- TUNING -->
+                <section class="block" id="tuning">
+                    <h2>Tuning AI behaviour</h2>
+                    <p>Almost everything is adjustable from the editor, either globally or on a single unit. DCO groups its settings into its own attribute categories.</p>
+                    <table class="ref">
+                        <thead><tr><th>Category</th><th>Covers</th></tr></thead>
+                        <tbody>
+                            <tr><td>DCO Global Skill</td><td>Skill, accuracy and aim-improvement time for everyone</td></tr>
+                            <tr><td>DCO Global Combat</td><td>Engagement behaviour, cover priority, weapon usage</td></tr>
+                            <tr><td>DCO Global Reaction</td><td>Dodging, danger reactions, suppression effect</td></tr>
+                            <tr><td>DCO Global Idle</td><td>What units do with no orders: spreading out, patrols, manning guns</td></tr>
+                            <tr><td>DCO Global Contact Sharing</td><td>How far and how fast contacts spread between units</td></tr>
+                            <tr><td>DCO Global Medic</td><td>Cross-group medics and casualty handling</td></tr>
+                            <tr><td>DCO Global Players</td><td>How aware AI is of players and player requests</td></tr>
+                            <tr><td>DCO Unit / Unit Skill / Unit Reaction</td><td>The same knobs on one selected unit, including personality</td></tr>
+                            <tr><td>DCO Squad / Squad Commander</td><td>Squad tactics, spacing and the squad's own command layer</td></tr>
+                            <tr><td>DCO Commander</td><td>Commander mode, assignment and behaviour</td></tr>
+                            <tr><td>DCO Commander Threat / Artillery</td><td>Threat thresholds, fire missions and counter-battery</td></tr>
+                            <tr><td>DCO Objective</td><td>Objective setup and control</td></tr>
+                            <tr><td>Waypoint</td><td>DCO options on waypoints, including garrison</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note"><b>Global vs per-unit.</b> Global values are copied into each unit when it spawns, so changing a global slider mid-mission only affects AI that spawns afterwards. For units already in the field, use the per-unit attributes.</div>
+                </section>
+
+                <!-- SERVER -->
+                <section class="block" id="server">
+                    <h2>For server owners</h2>
+                    <p>Server settings live in JSON files in your server's profile folder, so you can tune DCO without opening the editor or repacking anything.</p>
+
+                    <h3>The config file <span class="chip chip-live">v0.4.118</span></h3>
+                    <ol class="steps">
+                        <li>Start the server once with DCO_AI loaded. It writes <code class="path">$profile:DCO/DCO_GlobalConfig.json</code> filled with the current defaults.</li>
+                        <li>Edit the values you care about and restart.</li>
+                        <li>After a mod update that adds new settings, the old file is copied to <code class="path">.bak</code> and only the missing keys are added — your values are kept.</li>
+                    </ol>
+                    <p class="muted mt-16">Reading the file can be switched off entirely, in which case the values set in the editor are used as-is. Radio lines and default UI settings have their own files (<code class="path">DCO_Radio.json</code>, <code class="path">DCO_UI.json</code>).</p>
+
+                    <h3>Performance</h3>
+                    <div class="cards-2">
+                        <div class="mini"><b>LOD &amp; budgets <span class="chip chip-dev">Dev</span></b><span>Distant AI think less often, so large unit counts stay affordable.</span></div>
+                        <div class="mini"><b>Terrain cache <span class="chip chip-dev">Dev</span></b><span>Terrain is sampled once and reused for commander decisions.</span></div>
+                    </div>
+
+                    <h3>Benchmarking <span class="chip chip-dev">Dev build</span></h3>
+                    <p>A benchmark logger writes run files into a folder in your profile. A TICK line records FPS, live AI per faction, commander and objective state on an interval; a slower interval dumps per-group detail, and optionally each member and every vehicle AI has used. Useful when comparing settings or reporting a performance problem.</p>
+                </section>
+
+                <!-- TROUBLESHOOTING -->
+                <section class="block" id="trouble">
+                    <h2>Troubleshooting</h2>
+                    <table class="ref">
+                        <thead><tr><th>Symptom</th><th>Check</th></tr></thead>
+                        <tbody>
+                            <tr><td>Commander does nothing</td><td>Groups have to be assigned to it in their attributes. Without an assignment they keep their own behaviour.</td></tr>
+                            <tr><td>Commander dropdown only shows "None"</td><td>The commander roster hasn't reached this machine yet, or there's no commander for that faction. Place a commander for the same faction as the group.</td></tr>
+                            <tr><td>Global slider changed nothing</td><td>Global values are applied when a unit spawns. Change the per-unit attribute, or respawn the AI.</td></tr>
+                            <tr><td>Server JSON edits ignored</td><td>Reading the config file can be disabled in the editor; make sure it's on and the path matches.</td></tr>
+                            <tr><td>Feature from the roadmap missing</td><td>Check whether it's marked <span class="chip chip-dev">Dev build</span> — those aren't in the public Workshop version yet.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="callout mt-32">
+                        <div>
+                            <h2>Still stuck?</h2>
+                            <p>Ask on Discord — bug reports and mission-maker questions both welcome.</p>
+                        </div>
+                        <div class="btn-row">
+                            <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                            <a class="btn" href="features.html">Browse all features</a>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="assets/site.js"></script>
+<script>
+    // Highlight the section you're reading in the table of contents
+    const links = [...document.querySelectorAll('.toc a')];
+    const spy = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (!e.isIntersecting) return;
+            links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.block').forEach(b => spy.observe(b));
+</script>
+</body>
+</html>

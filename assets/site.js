@@ -6,6 +6,7 @@
         ['index.html', 'Home'],
         ['roadmap.html', 'Roadmap'],
         ['features.html', 'Features'],
+        ['guide.html', 'Guide'],
         ['devlog.html', 'Devlog'],
         ['media.html', 'Media'],
         ['about.html', 'Team'],

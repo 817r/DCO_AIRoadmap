@@ -110,10 +110,10 @@
   {
     "cat": "Soldier Systems",
     "name": "Vocal Info sharing",
-    "ver": "v0.1",
+    "ver": "dev",
     "prio": 880,
-    "prog": 15,
-    "desc": "Soldiers' ability to share info vocally about detected enemies, danger events, orders etc. within a certain radius. This will greatly improve battlefield awareness and responsiveness of nearby allies.",
+    "prog": 60,
+    "desc": "Contact sharing between nearby soldiers, tracked per source so the same enemy is not reported endlessly.",
     "video": ""
   },
   {
@@ -245,10 +245,10 @@
   {
     "cat": "Soldier Systems",
     "name": "CQB",
-    "ver": "planned",
+    "ver": "dev",
     "prio": 750,
-    "prog": 0,
-    "desc": "AI able to do advanced CQB tactics and Building Assault.",
+    "prog": 55,
+    "desc": "Room-by-room building clearing with a dedicated close-quarters utility: entry, sweep order and per-room assignment.",
     "video": ""
   },
   {
@@ -299,10 +299,10 @@
   {
     "cat": "Squad Systems",
     "name": "Radio Info sharing",
-    "ver": "v0.1",
+    "ver": "dev",
     "prio": 880,
-    "prog": 15,
-    "desc": "Squad leaders will use radio to share info about detected enemies, danger events, orders etc. with other squad leaders in the vicinity. This will greatly increase battlefield awareness and responsiveness of nearby allied squads.",
+    "prog": 60,
+    "desc": "Contacts propagate between groups and up to the commander, with radio callouts built from a phrase bank.",
     "video": ""
   },
   {
@@ -326,19 +326,19 @@
   {
     "cat": "Vehicle Behaviour",
     "name": "Basic vehicle behaviour",
-    "ver": "v0.1",
+    "ver": "dev",
     "prio": 900,
-    "prog": 30,
-    "desc": "Vehicles will detect enemies and will move to positions with LOS to engage with suppression or direct fires. Vehicles will also take cover behind terrain features when threatened.",
+    "prog": 45,
+    "desc": "Vehicles detect enemies, move to positions with line of sight, engage with suppressive or direct fire and take cover behind terrain when threatened.",
     "video": ""
   },
   {
     "cat": "Vehicle Behaviour",
     "name": "Support-by-Fire Positioning",
-    "ver": "v0.4",
+    "ver": "dev",
     "prio": 895,
-    "prog": 40,
-    "desc": "Armed vehicles keep a minimum stand-off distance from the enemy and position to support infantry with fire, acting as active combat assets instead of taxis.",
+    "prog": 55,
+    "desc": "Dedicated vehicle positioning logic with anti-tank threat awareness, stand-off distance and gunner behaviour.",
     "video": ""
   },
   {
@@ -425,10 +425,10 @@
   {
     "cat": "Commander",
     "name": "Artillery Request",
-    "ver": "v0.1",
+    "ver": "v0.4.142",
     "prio": 750,
-    "prog": 5,
-    "desc": "Commander will give approval for squads requesting artillery which will enable firemissions on target coordinates. Fire missions are corrected between salvos like a spotter would, shell count scales with visible enemies, and illumination rounds are used at night.",
+    "prog": 60,
+    "desc": "Fire missions on request: HE, smoke and illumination with selectable shell counts, approved by the commander, corrected between salvos and cancellable.",
     "video": ""
   },
   {
@@ -544,8 +544,8 @@
     "name": "Server JSON Config",
     "ver": "v0.4.118",
     "prio": 860,
-    "prog": 40,
-    "desc": "Server-side global settings file, so server owners can tune DCO_AI without editing prefabs. First pass.",
+    "prog": 70,
+    "desc": "Server-side settings in $profile:DCO/DCO_GlobalConfig.json. The file is generated from the current values on first run; when new keys appear the old file is backed up to .bak and only the missing keys are added, so admin values survive updates. Radio lines and UI defaults have their own files.",
     "video": ""
   },
   {
@@ -596,10 +596,10 @@
   {
     "cat": "Soldier Systems",
     "name": "Building Occupying",
-    "ver": "planned",
+    "ver": "dev",
     "prio": 745,
-    "prog": 0,
-    "desc": "AI automatically occupies and defends structures.",
+    "prog": 65,
+    "desc": "Garrison system: AI fills buildings by slot (windows, roof, balcony, doors) in Hold, Defend or Release mode, spreads across several buildings, refills slots when defenders die and breaks the leash when the enemy gets close or casualties mount.",
     "video": ""
   },
   {
@@ -614,10 +614,10 @@
   {
     "cat": "Squad Systems",
     "name": "Group Cohesion",
-    "ver": "planned",
+    "ver": "dev",
     "prio": 826,
-    "prog": 0,
-    "desc": "Squad stays together and coordinates movement.",
+    "prog": 45,
+    "desc": "Squad spacing keeps members apart without losing the group, and straggler watch pulls back anyone who falls behind.",
     "video": ""
   },
   {
@@ -668,10 +668,10 @@
   {
     "cat": "Commander",
     "name": "Player Command Interface",
-    "ver": "planned",
+    "ver": "v0.4.142",
     "prio": 710,
-    "prog": 0,
-    "desc": "Give orders to AI at all command levels.",
+    "prog": 70,
+    "desc": "Players command AI through the group radial menu: report contacts (team, squad, platoon, vehicle, armor), request suppression, support, flanks or armor, call transport, extraction and MEDEVAC, hand out roles, and cancel any standing order.",
     "video": ""
   },
   {
@@ -681,6 +681,186 @@
     "prio": 760,
     "prog": 0,
     "desc": "Improved pathfinding and movement so AI uses trenches and fighting positions properly. Announced as a focus for an upcoming update.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Commander Tactics",
+    "ver": "dev",
+    "prio": 958,
+    "prog": 60,
+    "desc": "Thirteen named tactics the commander picks from the situation: movement to contact, recon in force, fire and maneuver, flanking, hammer and anvil, pincer, infiltration, siege, bypass, raid, attack by fire, pursuit and delay.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Commander Defense",
+    "ver": "dev",
+    "prio": 948,
+    "prog": 55,
+    "desc": "Defensive play: ambushes along supply routes, observation posts, counter-attacks, counter-battery fire and feints — each one tunable from the Game Master editor.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Objective Memory & Prep Fire",
+    "ver": "dev",
+    "prio": 946,
+    "prog": 55,
+    "desc": "The commander remembers what it learned about each objective: intel, previous attack attempts and losses. It prepares fire before assaulting, consolidates after taking ground and calls in armor support.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Radio Comms & Callouts",
+    "ver": "dev",
+    "prio": 938,
+    "prog": 55,
+    "desc": "A phrase bank builds radio traffic with callsign, grid, direction, distance and ETA. Lines vary by faction, by the speaker's personality and by whether the situation is calm or critical.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Commander Spawner",
+    "ver": "v0.4.138",
+    "prio": 936,
+    "prog": 55,
+    "desc": "The commander can spawn and feed its own units, set up from the Game Master editor.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Terrain Cache",
+    "ver": "dev",
+    "prio": 925,
+    "prog": 50,
+    "desc": "Terrain is sampled and cached so the commander can judge cover, roads and open ground without re-scanning the map every decision.",
+    "video": ""
+  },
+  {
+    "cat": "Commander",
+    "name": "Player HUD & Map Overlay",
+    "ver": "dev",
+    "prio": 942,
+    "prog": 55,
+    "desc": "Order banners, contact toasts and a map overlay show what the commander is doing and what your squad has been told. Position, scale and sound are set per player.",
+    "video": ""
+  },
+  {
+    "cat": "Logistics",
+    "name": "Logistics Dispatch",
+    "ver": "dev",
+    "prio": 862,
+    "prog": 55,
+    "desc": "Commander-run logistics jobs: transport, extraction, MEDEVAC and resupply, coordinated from a logistics hub that also tracks casualties.",
+    "video": ""
+  },
+  {
+    "cat": "Logistics",
+    "name": "Medic Dispatch",
+    "ver": "dev",
+    "prio": 858,
+    "prog": 55,
+    "desc": "Medics are dispatched to casualties across groups, weighing distance, whether the casualty is unconscious and whether the area is under fire.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Close-Quarters Combat",
+    "ver": "dev",
+    "prio": 758,
+    "prog": 50,
+    "desc": "Dedicated close-range behaviour for room and corner fighting, separate from open-field combat.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Long-Range Engagement",
+    "ver": "dev",
+    "prio": 756,
+    "prog": 45,
+    "desc": "Distinct behaviour at long range: engagement distances, patience and positioning instead of charging every contact.",
+    "video": ""
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Night Behaviour",
+    "ver": "dev",
+    "prio": 754,
+    "prog": 50,
+    "desc": "Night changes how AI moves, spots and engages, beyond the existing detection penalty.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Squad Spacing",
+    "ver": "dev",
+    "prio": 833,
+    "prog": 50,
+    "desc": "Members hold sensible spacing so a single grenade or burst does not take out the whole squad.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Straggler Watch",
+    "ver": "dev",
+    "prio": 832,
+    "prog": 45,
+    "desc": "Anyone who falls behind or gets stuck is noticed and brought back to the group.",
+    "video": ""
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Group Strength Tracking",
+    "ver": "dev",
+    "prio": 831,
+    "prog": 45,
+    "desc": "The group tracks its own combat strength, which feeds morale, tactics and the commander's decisions.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "AI Commander Placement",
+    "ver": "v0.4.137",
+    "prio": 902,
+    "prog": 70,
+    "desc": "Place an AI Commander straight from the Game Master content browser, then assign groups and vehicles to it.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Garrison Waypoint",
+    "ver": "dev",
+    "prio": 868,
+    "prog": 60,
+    "desc": "A Garrison (DCO) waypoint in the commanding menu, with hold/defend/release mode, building count, slot fill, firing arc weight, roof slots, refill delays and release triggers.",
+    "video": ""
+  },
+  {
+    "cat": "Game Master Tools",
+    "name": "Expanded GM Attributes",
+    "ver": "dev",
+    "prio": 866,
+    "prog": 65,
+    "desc": "Seventeen DCO attribute categories in the editor, covering global skill, combat, reaction, idle, contact sharing, medic, players, squad, squad commander, objectives, commander threat and artillery, plus per-unit settings and group tooltips.",
+    "video": ""
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Performance & LOD Budgets",
+    "ver": "dev",
+    "prio": 982,
+    "prog": 50,
+    "desc": "Global level-of-detail and update budgets so large AI counts stay affordable on a server.",
+    "video": ""
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Benchmark Logger",
+    "ver": "dev",
+    "prio": 975,
+    "prog": 45,
+    "desc": "Writes FPS, live AI per faction, commander and objective state, plus per-group and per-vehicle dumps to log files for performance testing.",
     "video": ""
   }
 ]

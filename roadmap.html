@@ -168,9 +168,19 @@
         const next = features.filter(f => DCO.release(f.ver).key === 'dev');
         if (next.length) {
             document.getElementById('next').hidden = false;
-            document.getElementById('next-grid').innerHTML = next
-                .sort((a, b) => b.prog - a.prog)
-                .map(f => `<div class="next-item"><b>${DCO.esc(f.name)}</b><span>${DCO.esc(f.cat)} · ${f.prog}%</span></div>`).join('');
+            next.sort((a, b) => b.prog - a.prog);
+            const shown = next.slice(0, 9);
+            document.getElementById('next-grid').innerHTML = shown
+                .map(f => `<div class="next-item"><b>${DCO.esc(f.name)}</b><span>${DCO.esc(f.cat)} · ${f.prog}%</span></div>`).join('')
+                + (next.length > shown.length
+                    ? `<div class="next-item" style="display:flex;align-items:center"><a href="#" id="next-more" style="color:var(--orange);font-weight:600;text-decoration:none">+ ${next.length - shown.length} more in the dev build →</a></div>`
+                    : '');
+            const more = document.getElementById('next-more');
+            if (more) more.addEventListener('click', e => {
+                e.preventDefault();
+                document.querySelector('#filters button[data-filter="dev"]').click();
+                document.getElementById('milestones').scrollIntoView();
+            });
         }
 
         document.getElementById('milestones').innerHTML = milestones.map(m => {
