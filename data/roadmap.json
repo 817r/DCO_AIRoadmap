@@ -62,5 +62,13 @@
     "color": "purple",
     "tier": "High Command & Game Mode",
     "intro": "Game modes built around the DCO AI commander: Conflict-style warfare, Capture & Hold and PvE."
+  },
+  {
+    "cat": "Modding & API",
+    "tag": "API",
+    "title": "Modding & API",
+    "color": "cyan",
+    "tier": 1500,
+    "intro": "A published surface other addons build on: events to listen to, settings to change, AI state to read — with an audit trail so server owners can see which mod did what."
   }
 ]

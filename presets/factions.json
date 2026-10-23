@@ -1,0 +1,22 @@
+{
+  "_comment": "DCO AI - Asymmetric factions. Global values apply to everyone; the factions block overrides them per faction. Layer order, last wins: global file, GM global, this faction block, GM faction. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "aiSkillDefault": 2,
+  "aiAggression": 1,
+  "factions": {
+    "US": {
+      "aiSkillDefault": 3,
+      "aimAccuracy": 1.2,
+      "aiAggression": 1.2
+    },
+    "USSR": {
+      "aiSkillDefault": 2,
+      "aiAggression": 1
+    },
+    "FIA": {
+      "aiSkillDefault": 1,
+      "aiAggression": 1.6,
+      "takeCoverChance": 0.5,
+      "personalityWeightReckless": 20
+    }
+  }
+}

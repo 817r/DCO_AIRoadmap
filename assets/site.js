@@ -7,6 +7,8 @@
         ['roadmap.html', 'Roadmap'],
         ['features.html', 'Features'],
         ['guide.html', 'Guide'],
+        ['modding.html', 'Modding'],
+        ['server-config.html', 'Server'],
         ['devlog.html', 'Devlog'],
         ['media.html', 'Media'],
         ['about.html', 'Team'],

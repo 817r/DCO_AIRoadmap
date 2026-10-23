@@ -167,12 +167,20 @@
                     <li class="sub"><a href="#cmd-spawn">Spawning &amp; logistics</a></li>
                     <li><a href="#gm">In Game Master</a></li>
                     <li class="sub"><a href="#gm-place">What you can place</a></li>
-                    <li class="sub"><a href="#gm-cats">Global categories</a></li>
-                    <li class="sub"><a href="#gm-cmd">Commander categories</a></li>
-                    <li class="sub"><a href="#gm-units">Squad &amp; unit categories</a></li>
+                    <li class="sub"><a href="#gm-cmd-setup">Setting up a commander</a></li>
+                    <li class="sub"><a href="#gm-obj-setup">Setting up an objective</a></li>
+                    <li class="sub"><a href="#gm-spawner">Spawners &amp; logistics</a></li>
+                    <li class="sub"><a href="#gm-wp">The two waypoints</a></li>
+                    <li class="sub"><a href="#gm-window">The Settings window</a></li>
+                    <li class="sub"><a href="#gm-global">Global folders</a></li>
+                    <li class="sub"><a href="#gm-cmd">Commander folders</a></li>
+                    <li class="sub"><a href="#gm-sel">Group, unit &amp; waypoint</a></li>
+                    <li class="sub"><a href="#gm-watch">Watching it work</a></li>
                     <li class="sub"><a href="#gm-limits">What it can't reach</a></li>
                     <li><a href="#workbench">In the Workbench</a></li>
+                    <li class="sub"><a href="#wb-scene">What every scene needs</a></li>
                     <li class="sub"><a href="#wb-place">Placing DCO entities</a></li>
+                    <li class="sub"><a href="#wb-groups">Groups under a commander</a></li>
                     <li class="sub"><a href="#wb-defaults">Baking in defaults</a></li>
                     <li class="sub"><a href="#wb-vs-gm">Workbench vs Game Master</a></li>
                     <li><a href="#garrison">Garrisons</a></li>
@@ -210,10 +218,20 @@
                         <div class="mini"><b>Player</b><span>Command the AI through your group command menu: report enemies, request support, call fire missions.</span></div>
                         <div class="mini"><b>Game Master</b><span>Editing a running session. Place a commander, assign groups and drag the sliders live — nothing is saved.</span></div>
                         <div class="mini"><b>Workbench mission maker</b><span>Building a scenario in the World Editor. Place the prefabs and set component attributes that ship with the mission.</span></div>
-                        <div class="mini"><b>Server owner</b><span>Tune everything from a JSON file in the profile folder, without opening an editor at all.</span></div>
+                        <div class="mini"><b>Server owner</b><span>Tune everything from JSON files in the profile folder, without opening an editor at all.</span></div>
                     </div>
-                    <div class="note"><b>Game Master and Workbench are not the same job.</b> Game Master changes last until the session ends; Workbench changes are saved into the mission. Both reach the same settings — see <a href="#wb-vs-gm" class="accent">Workbench vs Game Master</a>.</div>
+                    <div class="note"><b>Game Master and Workbench are not the same job.</b> Game Master changes last until the session ends; Workbench changes are saved into the mission. They reach almost the same settings — see <a href="#wb-vs-gm" class="accent">Workbench vs Game Master</a>.</div>
 
+                    <h3 id="start-5min">Five minutes to two AI sides fighting</h3>
+                    <p>All of this is done inside Game Master — no Workbench needed.</p>
+                    <ol class="steps">
+                        <li>Place an <b>AI Commander</b> for each AI side.<span class="hint">Set its <b>Faction Key</b> and a short <b>Commander UID</b>, and pick a mode. Without a faction it refuses every group.</span></li>
+                        <li>Place two or more <b>AI Commander Objectives</b>.<span class="hint">Name, radius (a town 100–150 m, a farm 40–60 m) and <b>Controlled By</b> for whoever starts with it. Leave that empty for neutral.</span></li>
+                        <li>Place AI groups near their side and set each group's <b>Commander</b>.<span class="hint">A group without one still fights with DCO behaviour, it just never gets orders. A spawner does this step for you.</span></li>
+                        <li>Optional: a <b>Spawner</b> per side, a <b>Logistics Hub</b>, and a mortar team.<span class="hint">A mortar plus a group of up to 4 whose leader stands within 40 m of it becomes a mortar crew by itself, once it has a commander.</span></li>
+                        <li>Press <b>F2</b> for <b>DCO Settings</b> and load a preset.<span class="hint">Recommended to start; Players Defend or Players Attack for coop.</span></li>
+                        <li>Unpause.<span class="hint">The commander thinks for the first time after about a minute, then every 30 s.</span></li>
+                    </ol>
                     <div class="note tip"><b>Version note.</b> Anything marked <span class="chip chip-dev">Dev build</span> here is written but not in the public Workshop version yet — check the <a href="roadmap.html" class="accent">roadmap</a> for what's live.</div>
                 </section>
 
@@ -340,20 +358,20 @@
                     <p class="mt-16">On top of that, <b>mode</b> sets the overall posture — offensive, defensive or balanced — and <b>allowed tactics</b> lets you restrict which of the thirteen plays it may choose. All are enabled by default.</p>
 
                     <h3 id="cmd-settings">Tempo &amp; commitment</h3>
-                    <p class="legend">A <span class="chip chip-wb">Workbench</span> tag means the Game Master attribute panel does not expose that one — set it on the commander prefab instead. See <a href="#gm-limits" class="accent">what Game Master does not reach</a>.</p>
+                    <p class="legend">Since v0.4.144 nearly all of these are in the Game Master Settings window. The few that still are not carry a <span class="chip chip-wb">Workbench</span> tag — set those on the commander prefab. See <a href="#gm-limits" class="accent">what Game Master does not reach</a>.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
                             <tr><td>Think interval <span class="chip chip-wb">Workbench</span></td><td class="def">30 s</td><td>How often the commander re-plans. Lower reacts faster but costs more performance.</td></tr>
                             <tr><td>First decision delay <span class="chip chip-wb">Workbench</span></td><td class="def">60 s</td><td>Grace period after mission start.</td></tr>
                             <tr><td>Objectives at once</td><td class="def">3</td><td>How many objectives it works on simultaneously.</td></tr>
-                            <tr><td>Synchronized attack <span class="chip chip-wb">Workbench</span></td><td class="def">On</td><td>Assault groups gather at a staging point and go in together.</td></tr>
+                            <tr><td>Synchronized attack</td><td class="def">On</td><td>Assault groups gather at a staging point and go in together.</td></tr>
                             <tr><td>Sync wait timeout <span class="chip chip-wb">Workbench</span></td><td class="def">60 s</td><td>How long it waits for the full assault force before going with what it has.</td></tr>
-                            <tr><td>Recon wait timeout <span class="chip chip-wb">Workbench</span></td><td class="def">45 s</td><td>How long it waits for recon confirmation before attacking anyway.</td></tr>
+                            <tr><td>Recon wait timeout</td><td class="def">45 s</td><td>How long it waits for recon confirmation before attacking anyway.</td></tr>
                             <tr><td>Max frontline recon</td><td class="def">2</td><td>How many groups may be out scouting the frontline at once.</td></tr>
                             <tr><td>Reserve policy</td><td class="def">20%</td><td>Share of the force never committed to attacks, recon or flanks.</td></tr>
                             <tr><td>All-in</td><td class="def">Off</td><td>Commits everything, with no reserve at all. A second toggle decides whether rear defenders are included.</td></tr>
-                            <tr><td>Retreat threshold <span class="chip chip-wb">Workbench</span></td><td class="def">2</td><td>A group this small is forced to withdraw.</td></tr>
+                            <tr><td>Retreat threshold</td><td class="def">2</td><td>A group this small is forced to withdraw.</td></tr>
                         </tbody>
                     </table>
 
@@ -369,11 +387,11 @@
                             <tr><td>Counter-battery</td><td class="def">On</td><td>Answers incoming artillery by hunting the guns.</td></tr>
                             <tr><td>Feint</td><td class="def">On</td><td>A diversionary attack to pull the defence off the real axis.</td></tr>
                             <tr><td>Sectors per objective <span class="chip chip-wb">Workbench</span></td><td class="def">3 – 8</td><td>How the defence is divided up. The maximum is effectively the garrison manpower cap — raise it carefully.</td></tr>
-                            <tr><td>Arc per sector <span class="chip chip-wb">Workbench</span></td><td class="def">60 m</td><td>Smaller value means more, tighter sectors.</td></tr>
+                            <tr><td>Arc per sector</td><td class="def">60 m</td><td>Smaller value means more, tighter sectors.</td></tr>
                             <tr><td>Key defend positions <span class="chip chip-wb">Workbench</span></td><td class="def">2</td><td>Groups sent to evaluated key positions; the rest defend more loosely.</td></tr>
-                            <tr><td>Patrol frontline drift <span class="chip chip-wb">Workbench</span></td><td class="def">80 m</td><td>How far idle patrols creep toward the frontline each cycle.</td></tr>
+                            <tr><td>Patrol frontline drift</td><td class="def">80 m</td><td>How far idle patrols creep toward the frontline each cycle.</td></tr>
                             <tr><td>Patrol standoff <span class="chip chip-wb">Workbench</span></td><td class="def">400 m</td><td>Patrols stop creeping once this close to an enemy objective.</td></tr>
-                            <tr><td>Staging distance <span class="chip chip-wb">Workbench</span></td><td class="def">200 – 600 m</td><td>Where assault groups gather before the final push.</td></tr>
+                            <tr><td>Staging distance</td><td class="def">200 – 600 m</td><td>Where assault groups gather before the final push.</td></tr>
                             <tr><td>Vehicle patrol</td><td class="def">On, 2.5×</td><td>Armored and vehicle-owning groups patrol mounted, over a wider radius.</td></tr>
                         </tbody>
                     </table>
@@ -422,78 +440,171 @@
                 <!-- GAME MASTER -->
                 <section class="block" id="gm">
                     <h2>In Game Master</h2>
-                    <p>Game Master reaches DCO through two places: the content browser, for the four entities the mod registers, and the attribute panel, which gains <b>17 DCO categories</b> — about 195 settings in total. Which categories appear depends entirely on what you have selected.</p>
+                    <p>Game Master reaches DCO through three places: the content browser for the entities you place, the command mode for DCO's own waypoints, and the <b>DCO Settings</b> window, which holds <b>839 settings</b> across <b>16 folders</b>. Everything you change there is live — it applies to the running session at once.</p>
 
                     <h3 id="gm-place">What you can place</h3>
+                    <p>Edit mode, content browser, filter by the <b>DCO</b> addon.</p>
                     <table class="ref">
-                        <thead><tr><th>Entity</th><th>Where</th><th>Use</th></tr></thead>
+                        <thead><tr><th>Entity</th><th>Use</th></tr></thead>
                         <tbody>
-                            <tr><td>AI Commander</td><td>Content browser, DCO group</td><td>One per faction. Everything else hangs off it.</td></tr>
-                            <tr><td>AI Commander Objective</td><td>Content browser, DCO group</td><td>What it attacks, defends and patrols around. Has its own name, radius and owning faction.</td></tr>
-                            <tr><td>Commander Spawner</td><td>Content browser, DCO group</td><td>Spawns groups and hands them to a commander, on a timer, an objective event or a manpower threshold.</td></tr>
-                            <tr><td>Logistics Hub <span class="chip chip-dev">Dev</span></td><td>Content browser, DCO group</td><td>Supply point for resupply, MEDEVAC and extraction runs.</td></tr>
-                            <tr><td>Garrison (DCO) waypoint <span class="chip chip-dev">Dev</span></td><td>Commanding mode, on a selected group</td><td>Not in the content browser — you place it as a waypoint the way you place a Move or Defend waypoint.</td></tr>
+                            <tr><td>AI Commander</td><td>The brain of one side. One per AI faction. Set its <b>Faction Key</b> and a short <b>Commander UID</b> — without a faction it rejects every group.</td></tr>
+                            <tr><td>AI Commander Objective</td><td>An area the commanders fight over. Give it a name, a radius (a town 100–150 m, a farm 40–60 m) and <b>Controlled By</b> for the side that starts with it. Leave that empty for a neutral objective.</td></tr>
+                            <tr><td>AI Commander Spawner</td><td>Brings reinforcements to a commander, on a timer, an objective event, a manpower threshold or on the commander's own request.</td></tr>
+                            <tr><td>AI Commander Logistics Hub</td><td>Where transport, casualties and resupply gather. Optional — without one the commander uses an objective of its own.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note"><b>The commander manager places itself.</b> The Game Master commander spawns it automatically. The Workbench base prefabs do not — see <a href="#workbench" class="accent">In the Workbench</a>.</div>
+
+                    <h3 id="gm-cmd-setup">Setting up a commander</h3>
+                    <p>Place it anywhere — position does not matter, it is a brain, not a unit. Select it and open <b>DCO Settings</b>.</p>
+                    <table class="ref">
+                        <thead><tr><th>Row</th><th class="def">Set it to</th><th>What happens if you don't</th></tr></thead>
+                        <tbody>
+                            <tr><td>Faction</td><td class="def">Required</td><td>It rejects every group and the start-up check logs <code>faction=EMPTY</code>. This is the single most common reason a commander does nothing.</td></tr>
+                            <tr><td>Name</td><td class="def">Required</td><td>A short unique UID like <code>Viking</code>. Empty, duplicated, or containing <code>;</code> or <code>|</code> and DCO renames it to <code>&lt;FACTION&gt;-N</code>. Spawners and objectives refer to commanders by this name.</td></tr>
+                            <tr><td>Commander Mode</td><td class="def">Balanced</td><td>Offensive only attacks, Defensive only defends, Balanced assigns defenders first and attacks with the rest. It never changes on its own.</td></tr>
+                            <tr><td>The six personality sliders</td><td class="def">0.5</td><td>Aggression, Adaptability, Risk Taking, Resilience, Patience, Combat Focus. Leave them until the mission runs, then adjust what annoys you.</td></tr>
+                            <tr><td>Preset: Load / Save As</td><td class="def">Optional</td><td>Save a commander you like and reuse it in the next mission.</td></tr>
                         </tbody>
                     </table>
 
-                    <h3 id="gm-cats">Global categories</h3>
-                    <p>Seventeen DCO categories in all. Which ones show up depends on the selection; these seven need none — open attributes with nothing selected.</p>
+                    <h3 id="gm-obj-setup">Setting up an objective</h3>
+                    <p>Place it on what the fight is about — a town centre, a crossroads, a depot. The ring is drawn in the world so you can see the capture area.</p>
                     <table class="ref">
-                        <thead><tr><th>Category</th><th class="def">Settings</th><th>Contains</th></tr></thead>
+                        <thead><tr><th>Row</th><th class="def">Set it to</th><th>Why</th></tr></thead>
                         <tbody>
-                            <tr><td>DCO Global Skill</td><td class="def">18</td><td>Skill preset, aim accuracy, time to max accuracy, perception, grenade and GL usage, smoke, magic magazine, LOD mode, profiling, census logging, faction AI cap, contact report rate.</td></tr>
-                            <tr><td>DCO Global Combat</td><td class="def">18</td><td>Superior ratio, overmatch assault, all six CQB settings, all four night settings, long-range hold, rifle and MG range, building sharing, cover preference.</td></tr>
-                            <tr><td>DCO Global Reaction</td><td class="def">11</td><td>Suppression effect, take cover chance, all six dodge settings, personality scaling, investigate distance and chance.</td></tr>
-                            <tr><td>DCO Global Contact Sharing</td><td class="def">11</td><td>On/off, voice and radio range, position error and its voice/radio multipliers, require radio, relay hops, player map markers and notifications, debug log.</td></tr>
-                            <tr><td>DCO Global Medic</td><td class="def">7</td><td>Cross-group medics, both search radii, treat players, recovery under fire, medics lent per group, timeout.</td></tr>
-                            <tr><td>DCO Global Idle</td><td class="def">6</td><td>Idle enter time, cover search distance, overrun distance, leave cover to assist or investigate, follow commander orders.</td></tr>
-                            <tr><td>DCO Global Players</td><td class="def">4</td><td>AI map overlay mode and radius, operation radio radius, artillery warning radius.</td></tr>
+                            <tr><td>Name</td><td class="def">Required</td><td>Max 32 characters. It shows up in overlays, logs and briefings — an unnamed objective is miserable to debug.</td></tr>
+                            <tr><td>Radius</td><td class="def">30 m</td><td>Towns 100–150 m, a farm or crossroads 40–60 m. Units inside count toward control.</td></tr>
+                            <tr><td>Controlled By</td><td class="def">Neutral</td><td>Who starts with it, at full control. Leave neutral and both sides race for it.</td></tr>
+                            <tr><td>Base Value &amp; Strategic Value</td><td class="def">50, Moderate</td><td>How badly commanders want it. High multiplies the base value by 1.67, Low halves it.</td></tr>
+                            <tr><td>Handled By</td><td class="def">All Commanders</td><td>Which commanders may plan it at all. <i>Only Checked</i> and <i>All Except Checked</i> use the <b>Commanders</b> list below it.</td></tr>
+                            <tr><td>Max Attack Groups / Defend Groups</td><td class="def">4 / 2</td><td>How much force a commander commits here.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note warn"><b>An objective nobody handles never changes hands.</b> Control only advances while some commander is actively working on it. If you set <i>Handled By</i> to <i>Only Checked</i> and forget to tick anyone, the objective sits there forever — the start-up check reports it as <code>handled_by=nobody</code>.</div>
+                    <p class="mt-16">Beyond the basics, an objective can also be a <b>Type</b> other than Capture — Defend, Hold until, Destroy or Recon, each with its own time limit and fail condition — and can sit in a <b>Phase</b> so it only opens once earlier objectives have fallen. Both phases and attack/defend roles are on by default.</p>
+
+                    <h3 id="gm-spawner">Spawners and logistics</h3>
+                    <p>Place it behind your side's line. It builds groups near itself and hands them to a commander.</p>
+                    <ol class="steps">
+                        <li>Pick a <b>Preset</b> — that fills in the trigger for you.<span class="hint">One-shot, Counterattack wave, Steady top-up, Commander on call, or Custom.</span></li>
+                        <li>Set <b>Target Commander</b> and <b>Faction</b>.<span class="hint">Weakest of faction is the default, or name a commander. Empty faction means all.</span></li>
+                        <li>Leave the force pool empty unless you want specific groups.<span class="hint">Empty means random groups from that faction's catalogue. <b>Commander Chooses</b> lets it pick AT against armour, recon for unclear contacts, motorized for distant objectives.</span></li>
+                        <li>Decide where the men come from with <b>Take From Stock</b>.<span class="hint">None, men, or points from the commander's Reinforcement Stock. −1 is unlimited.</span></li>
+                    </ol>
+                    <div class="note"><b>Pick the preset that matches the side.</b> <i>Counterattack wave</i> fires when an objective your side <em>holds</em> is lost, so it only works for a defender with a trigger objective owned from the start. An attacker that owns nothing will never trigger it — give attackers <i>Commander on call</i> or <i>Steady top-up</i>.</div>
+                    <div class="note tip"><b>Nothing spawning?</b> The 300 m <b>Safe Radius</b> blocks it while any player or enemy is inside — that is what stops men appearing in front of players. Right-click &rsaquo; <b>Spawn anyway</b> skips it once. A <code>spawner_idle</code> line every two minutes says why a ready spawner is holding.</div>
+
+                    <h4>The logistics hub</h4>
+                    <p>Optional, but transport, MEDEVAC, extraction and resupply all gather here. It has one row of its own — <b>Hub Faction</b>, where Auto means the nearest commander.</p>
+                    <div class="note"><b>A hub alone does nothing.</b> It needs a transport team to work with. Any group of at most 3 men sitting in one unarmed vehicle with a driver and four free cargo seats becomes a transport team by itself; otherwise tick <b>Dedicated Transport</b> on a group and set its allowed jobs. Without a team every request waits five minutes and is cancelled. For resupply specifically the vehicle must be an ammo truck, and an arsenal or ammo truck at the hub lets low-ammo squads within 200 m restock on their own.</div>
+
+                    <h3 id="gm-wp">Using the two waypoints</h3>
+                    <ol class="steps">
+                        <li>Switch to <b>command mode</b> and select the group.<span class="hint">These are not in the content browser — they appear in the waypoint list, next to Move and Defend.</span></li>
+                        <li>Place <b>Garrison (DCO)</b> on the building or position to hold, or <b>Do CQB (DCO)</b> within 25 m of the building to clear.</li>
+                        <li>Its settings dialog opens by itself.<span class="hint">The waypoint waits up to 60 s while you set it up, so take your time.</span></li>
+                    </ol>
+                    <div class="note tip">Garrison falls back gracefully: no building means field fighting positions, and failing that it behaves like a vanilla Defend. Do CQB is stricter — it needs a building with rooms on the navmesh, an outside door, and at least two men in the group.</div>
+
+                    <h4>Waypoints, in command mode</h4>
+                    <p>Select a group, then pick from the waypoint list. These two are not in the content browser.</p>
+                    <table class="ref">
+                        <thead><tr><th>Waypoint</th><th class="def">Default</th><th>What the group does</th></tr></thead>
+                        <tbody>
+                            <tr><td>Garrison (DCO)</td><td class="def">Defend</td><td>Occupies buildings around the point and fights from windows. With no building it takes field fighting positions; as a last resort it defends like the vanilla Defend waypoint.</td></tr>
+                            <tr><td>Do CQB (DCO)</td><td class="def">25 m</td><td>Clears the building nearest the waypoint, room by room, within that search radius. Two attempts before it gives up.</td></tr>
                         </tbody>
                     </table>
 
-                    <h3 id="gm-cmd">Commander categories</h3>
-                    <p>With a commander, an objective, a spawner or a logistics hub selected.</p>
+                    <h4>Right-click actions</h4>
                     <table class="ref">
-                        <thead><tr><th>Category</th><th class="def">Settings</th><th>Contains</th></tr></thead>
+                        <thead><tr><th>Action</th><th>On</th></tr></thead>
                         <tbody>
-                            <tr><td>DCO Commander</td><td class="def">47</td><td>Faction, mode, name, the six personality sliders, allowed tactics, reserve and all-in, objectives at once, recon and vehicle patrol limits, the five defence plays, feint, the four logistics toggles, reinforcement stock, all thirteen spawner settings, player order timings.</td></tr>
-                            <tr><td>DCO Commander Artillery</td><td class="def">9</td><td>Rejection chance, point and area uncertainty limits, mission and per-shell cooldowns, target cooldown, accuracy, dispersion, friendly safe radius.</td></tr>
-                            <tr><td>DCO Commander Threat</td><td class="def">8</td><td>Engage and priority thresholds, minimum response score, reinforcement cap and cooldown, threat expiry, threat think interval, flank distance.</td></tr>
-                            <tr><td>DCO Objective</td><td class="def">3</td><td>Name, radius, controlling faction.</td></tr>
+                            <tr><td>DCO Settings</td><td>The current selection — opens the window scoped to it.</td></tr>
+                            <tr><td>Hold Position / Unhold Position</td><td>A group, to pin it where it stands.</td></tr>
+                            <tr><td>Save as group preset</td><td>An AI group, to reuse its composition in a spawner.</td></tr>
+                            <tr><td>Spawn now / Spawn anyway</td><td>A spawner. <i>Anyway</i> skips the 300 m safe radius once, but never the faction AI cap.</td></tr>
+                            <tr><td>Turn spawner on/off</td><td>A spawner.</td></tr>
                         </tbody>
                     </table>
 
-                    <h3 id="gm-units">Squad &amp; unit categories</h3>
-                    <p>With a group, a single soldier or a waypoint selected.</p>
+                    <h3 id="gm-window">The DCO Settings window</h3>
+                    <p>Open it with <b>F2</b>, the <b>DCO Settings</b> toolbar button, or the right-click action on a selection. What it shows depends on what you have selected.</p>
                     <table class="ref">
-                        <thead><tr><th>Category</th><th class="def">Settings</th><th>Contains</th></tr></thead>
+                        <thead><tr><th>Target</th><th class="def">Settings</th><th>Reached by</th></tr></thead>
                         <tbody>
-                            <tr><td>DCO Squad Commander</td><td class="def">11</td><td>Which commander owns the group, and what it is allowed to do for it.</td></tr>
-                            <tr><td>DCO Squad</td><td class="def">6</td><td>Tactics dropdown, both engagement distances, dismount distance, investigate distance and chance.</td></tr>
-                            <tr><td>DCO Unit Skill</td><td class="def">8</td><td>Per-soldier skill preset, aim accuracy, accuracy time, perception, GL and smoke and grenade usage.</td></tr>
-                            <tr><td>DCO Unit Reaction</td><td class="def">9</td><td>Per-soldier suppression, cover and the full dodge set.</td></tr>
-                            <tr><td>DCO Unit</td><td class="def">2</td><td>Personality and magic magazine.</td></tr>
-                            <tr><td>Waypoint</td><td class="def">17</td><td>Completion radius and type, plus all fifteen garrison settings including the release triggers and debug draw.</td></tr>
+                            <tr><td>Global</td><td class="def">448</td><td>Open it with nothing selected. Applies to the whole session.</td></tr>
+                            <tr><td>Commander</td><td class="def">256</td><td>Select an AI Commander.</td></tr>
+                            <tr><td>Group</td><td class="def">42</td><td>Select an AI group.</td></tr>
+                            <tr><td>Character</td><td class="def">21</td><td>Select a single soldier.</td></tr>
+                            <tr><td>Waypoint</td><td class="def">72</td><td>Select a DCO waypoint or an objective.</td></tr>
                         </tbody>
                     </table>
-                    <div class="note tip"><b>Context actions too.</b> Beyond the attribute panel, Game Master gets <b>Hold Position</b> as a right-click context action, and a commander debug overlay that draws contact reports, threat clusters, the frontline and the thresholds behind each decision.</div>
+                    <p class="mt-16">Three view modes decide how much you see: <b>Simple</b> (a handful of rows with plain levels), <b>Advanced</b>, and <b>Expert</b> (everything, debug switches included). A blue <b>Beta</b> tag marks a setting still being tested — type <code>beta</code> in the search box to list them all.</p>
+                    <div class="note tip"><b>Faction values sit on top of global ones.</b> The window has a faction target as well, and inherited values show dimmed with a tag so you can see what you are actually overriding.</div>
 
-                    <h3 id="gm-limits">What Game Master does not reach</h3>
-                    <p>The attribute panel is a curated subset. These are set on the commander prefab in the Workbench and cannot be changed from a running session:</p>
+                    <h3 id="gm-global">Global folders</h3>
+                    <p>448 settings, open with nothing selected. The count after each category is how many rows it holds.</p>
+                    <table class="ref">
+                        <thead><tr><th>Folder</th><th class="def">Settings</th><th>What's inside</th></tr></thead>
+                        <tbody>
+                            <tr><td>System <span class="chip">world-wide</span></td><td class="def">25</td><td>World-wide DCO switches: AI skill base, simulation detail, profiling and census.<div class="legend"><b>DCO Global: System</b> <span class="rng">10</span> · <b>DCO Global: Skill</b> <span class="rng">15</span></div></td></tr>
+                            <tr><td>Individual</td><td class="def">272</td><td>How each soldier fights and reacts, before squad or unit overrides.<div class="legend"><b>DCO Global: Individual Behaviors</b> <span class="rng">95</span> · <b>DCO Global: Reaction</b> <span class="rng">92</span> · <b>DCO Global: CQB &amp; Buildings</b> <span class="rng">41</span> · <b>DCO Global: Night &amp; Range</b> <span class="rng">7</span> · <b>DCO Global: Medic</b> <span class="rng">8</span> · <b>DCO Global: Specialists &amp; Rearm</b> <span class="rng">9</span> · <b>DCO Global: Vehicles</b> <span class="rng">20</span></div></td></tr>
+                            <tr><td>Squad</td><td class="def">60</td><td>Squad drills, idle behaviour and contact sharing between squads.<div class="legend"><b>DCO Global: Squad Drills &amp; Movement</b> <span class="rng">16</span> · <b>DCO Global: Idle</b> <span class="rng">6</span> · <b>DCO Global: Contact Sharing</b> <span class="rng">38</span></div></td></tr>
+                            <tr><td>Players <span class="chip">world-wide</span></td><td class="def">7</td><td>World-wide player awareness: map overlay, operation radio and artillery warnings.<div class="legend"><b>DCO Global: Players</b> <span class="rng">7</span></div></td></tr>
+                            <tr><td>Commander</td><td class="def">40</td><td>Defaults for every AI commander: contact reports, stock, spawner cap, re-evaluation.<div class="legend"><b>DCO Global: Commander</b> <span class="rng">40</span></div></td></tr>
+                            <tr><td>Group presets <span class="chip">world-wide</span></td><td class="def">1</td><td>Saved groups the spawners can use: this server, your PC and the built-in presets.<div class="legend"><b>DCO Global: Group presets</b> <span class="rng">1</span></div></td></tr>
+                            <tr><td>Doctrine</td><td class="def">43</td><td>How commanders plan attacks, defend and call support. Pick a faction to set its doctrine (US, USSR and FIA start from their built-in doctrine; other factions follow the Global base). Commanders inherit the doctrine of their faction.<div class="legend"><b>DCO Doctrine: Battle plan</b> <span class="rng">6</span> · <b>DCO Doctrine: Defensive plan</b> <span class="rng">5</span> · <b>DCO Doctrine: Support and numbers</b> <span class="rng">14</span> · <b>DCO Doctrine: Force sizes</b> <span class="rng">18</span></div></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-cmd">Commander folders</h3>
+                    <p>256 settings, with an AI Commander selected.</p>
+                    <table class="ref">
+                        <thead><tr><th>Folder</th><th class="def">Settings</th><th>What's inside</th></tr></thead>
+                        <tbody>
+                            <tr><td>General</td><td class="def">45</td><td>Commander identity, mode, player orders and presets.<div class="legend"><b>DCO Commander</b> <span class="rng">13</span> · <b>DCO Commander: Player Orders</b> <span class="rng">10</span> · <b>DCO Commander: Rules of Engagement</b> <span class="rng">22</span></div></td></tr>
+                            <tr><td>Doctrine</td><td class="def">27</td><td>The doctrine of this commander (inherited from its faction until changed) and its own personality.<div class="legend"><b>DCO Commander: Doctrine</b> <span class="rng">16</span> · <b>DCO Commander: Personality</b> <span class="rng">11</span></div></td></tr>
+                            <tr><td>Attack</td><td class="def">72</td><td>How this commander attacks: allowed tactics, reserves and threat response.<div class="legend"><b>DCO Commander: Style &amp; Attack</b> <span class="rng">47</span> · <b>DCO Commander: Threat Response</b> <span class="rng">25</span></div></td></tr>
+                            <tr><td>Defense</td><td class="def">33</td><td>How this commander defends: ambushes, observation posts, patrols and counterattacks.<div class="legend"><b>DCO Commander: Defense &amp; Recon</b> <span class="rng">33</span></div></td></tr>
+                            <tr><td>Support</td><td class="def">51</td><td>Artillery and logistics for this commander.<div class="legend"><b>DCO Commander: Artillery</b> <span class="rng">28</span> · <b>DCO Commander: Logistics</b> <span class="rng">23</span></div></td></tr>
+                            <tr><td>Force</td><td class="def">28</td><td>Reinforcement spawner linked to this commander.<div class="legend"><b>DCO Commander: Spawner</b> <span class="rng">28</span></div></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-sel">Group, unit and waypoint folders</h3>
+                    <p>135 settings, with a group, a single soldier, a waypoint or an objective selected.</p>
+                    <table class="ref">
+                        <thead><tr><th>Folder</th><th class="def">Settings</th><th>What's inside</th></tr></thead>
+                        <tbody>
+                            <tr><td>Squad</td><td class="def">42</td><td>Settings of this group and what its commander may ask of it.<div class="legend"><b>DCO Squad</b> <span class="rng">30</span> · <b>DCO Squad: Commander Permissions</b> <span class="rng">12</span></div></td></tr>
+                            <tr><td>Unit</td><td class="def">21</td><td>Settings of this soldier.<div class="legend"><b>DCO Unit</b> <span class="rng">3</span> · <b>DCO Unit: Skill</b> <span class="rng">9</span> · <b>DCO Unit: Reaction</b> <span class="rng">9</span></div></td></tr>
+                            <tr><td>Waypoint</td><td class="def">72</td><td>Garrison and assault building waypoints, commander objective settings.<div class="legend"><b>DCO Waypoint</b> <span class="rng">18</span> · <b>DCO Waypoint: Garrison Release</b> <span class="rng">6</span> · <b>DCO Objective</b> <span class="rng">48</span></div></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-watch">Watching it work</h3>
+                    <table class="ref">
+                        <thead><tr><th>Tool</th><th>Shows</th></tr></thead>
+                        <tbody>
+                            <tr><td>Hover a group</td><td>Its task, posture, threat and morale, and who its leader is.</td></tr>
+                            <tr><td>Hover a soldier</td><td>Personality, skill and leadership.</td></tr>
+                            <tr><td>Intent overlay — <b>Ctrl + I</b></td><td>The commander's plan on the map or in the world view: objectives with owner and confidence, its focus and why, believed enemy positions, group lines coloured by role, and a side card with its last six decisions. Enable it first under Global &rsaquo; Performance &amp; Debug; it is Game Master only, never shown to players.</td></tr>
+                            <tr><td>Setup checks</td><td>About 20 s in, DCO checks the scene and tells every Game Master online if something is wrong — a commander with no faction or UID, an objective nobody handles, a missing navmesh. Details land in <code>dco.log</code> as <code>setup_check</code> lines.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="gm-limits">What Game Master still does not reach</h3>
+                    <p>Two things, and that is the whole list. Everything else on this page is in the window — including the sector counts, staging distances, patrol standoff and first-think delay that used to be prefab-only.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Why it matters</th></tr></thead>
                         <tbody>
-                            <tr><td>Commander think interval</td><td class="def">30 s</td><td>The main decision cycle and the biggest commander cost. Not the same as the threat <b>Think Interval</b> in Game Master, which is threat evaluation and defaults to 45 s.</td></tr>
-                            <tr><td>First decision delay</td><td class="def">60 s</td><td>Grace period at mission start.</td></tr>
-                            <tr><td>Synchronized attack &amp; its timeout</td><td class="def">On, 60 s</td><td>Whether assault groups stage together before going in.</td></tr>
-                            <tr><td>Recon wait timeout</td><td class="def">45 s</td><td>How long it waits for recon confirmation.</td></tr>
-                            <tr><td>Retreat threshold</td><td class="def">2</td><td>Group size that forces a withdrawal.</td></tr>
-                            <tr><td>Sectors, arc and key defend positions</td><td class="def">3 – 8, 60 m, 2</td><td>The whole shape of a defence.</td></tr>
-                            <tr><td>Patrol drift, standoff and staging distance</td><td class="def">80 m, 400 m, 200 – 600 m</td><td>Where reserves wander and where assaults gather.</td></tr>
-                            <tr><td>Straggler pull-back <span class="chip chip-wb">Workbench</span></td><td class="def">On, 15 s</td><td>Lives on the group utility component.</td></tr>
+                            <tr><td>Commander think interval</td><td class="def">30 s</td><td>The main decision cycle and the biggest commander cost. <b>Not</b> the <i>Think Interval</i> under <i>Commander: Threat Response</i> — that one is threat evaluation and defaults to 45 s. The shipped <code>US_Commander.et</code> raises the real one to 150 s, so a Workbench mission is already slower than the script default.</td></tr>
+                            <tr><td>Key defend positions</td><td class="def">2</td><td>How many groups go to evaluated key positions rather than defending loosely.</td></tr>
                         </tbody>
                     </table>
-                    <div class="note"><b>The server JSON is global only.</b> <code class="path">DCO_GlobalConfig.json</code> is written from the global component, so it covers the seven global categories above — not commander, squad, unit or waypoint values.</div>
+                    <div class="note"><b>Game Master changes are not saved.</b> They last for the session. To keep them, use <b>Save to server config</b> if your server allows it (<code>gmSaveConfig</code>: gm, admin or off — admin by default), save a settings preset, or set the value in the <a href="#workbench" class="accent">Workbench</a>.</div>
                 </section>
 
                 <!-- WORKBENCH -->
@@ -501,55 +612,96 @@
                     <h2>In the Workbench</h2>
                     <p>Everything the Game Master can do live, a mission maker can bake into the scenario instead — so the mission ships with its own AI settings and nobody has to touch a slider at runtime.</p>
 
+                    <h3 id="wb-scene">What every scene needs</h3>
+                    <p>Four things have to be in the world before any of the rest works.</p>
+                    <table class="ref">
+                        <thead><tr><th>Need</th><th>What to place</th><th>Why</th></tr></thead>
+                        <tbody>
+                            <tr><td>Game mode</td><td class="def">Prefabs/MP/Modes/GameMode_Base.et</td><td>DCO overrides this prefab and puts <code>DCO_GlobalAIComponent</code> on it. Every global setting lives there. The vanilla <code>GameMode_Editor_Full.et</code> works too.</td></tr>
+                            <tr><td>AI world + navmesh</td><td class="def">Prefabs/AI/SCR_AIWorld.et</td><td>DCO overrides it to add formations and the cover manager. No navmesh means no movement and no indoor CQB plans.</td></tr>
+                            <tr><td>Faction manager</td><td class="def">SCR_FactionManager</td><td>Without it the commander's faction list is empty.</td></tr>
+                            <tr><td>Commander manager</td><td class="def">Prefabs/Commander/CommanderManager.et</td><td><b>Place this yourself.</b> Commanders and objectives register with it. The Game Master commander spawns one automatically; the Workbench base prefabs do not.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note warn"><b>The one that catches everyone.</b> A Workbench mission with commanders but no <code>CommanderManager</code> looks correct and does nothing. Only the Game Master prefab carries the manager reference.</div>
+
                     <h3 id="wb-place">Placing DCO entities</h3>
-                    <p>Drag these prefabs into your world hierarchy the same way as any other entity. The Game Master versions of the same things live under <code class="path">PrefabsEditable/DCO/</code> and appear in the in-game content browser instead.</p>
+                    <p>Drag these into your world hierarchy like any other entity. The Game Master versions live under <code class="path">PrefabsEditable/DCO/</code> and appear in the in-game content browser instead.</p>
                     <table class="ref">
                         <thead><tr><th>Entity</th><th>Prefab</th><th>Use</th></tr></thead>
                         <tbody>
-                            <tr><td>AI commander</td><td class="def">Prefabs/Commander/Commander.et</td><td>One per faction that should fight an operation.</td></tr>
-                            <tr><td>Commander objective</td><td class="def">Prefabs/Commander/Commander_Objective.et</td><td>What the commander attacks, defends and patrols around.</td></tr>
-                            <tr><td>Commander spawner</td><td class="def">Prefabs/Commander/CommanderSpawner.et</td><td>Spawns groups and hands them straight to a commander, with an AI cap.</td></tr>
-                            <tr><td>Logistics hub <span class="chip chip-dev">Dev</span></td><td class="def">Prefabs/Commander/LogisticsHub.et</td><td>Supply point the commander resupplies from.</td></tr>
-                            <tr><td>Garrison waypoint <span class="chip chip-dev">Dev</span></td><td class="def">Prefabs/AI/Waypoints/AIWaypoint_Garrison.et</td><td>Add as a waypoint under a group to hold a building.</td></tr>
+                            <tr><td>AI commander</td><td class="def">Prefabs/Commander/US_Commander.et</td><td>Based on <code class="path">Commander.et</code>. Set Faction Key and a short Commander UID. Note it ships with a 150 s think interval, not the script's 30 s.</td></tr>
+                            <tr><td>Commander objective</td><td class="def">Prefabs/Commander/Commander_Objective.et</td><td>What the commander attacks, defends and patrols around. Prefab values: base value 70, radius 145 m.</td></tr>
+                            <tr><td>Commander spawner</td><td class="def">Prefabs/Commander/CommanderSpawner.et</td><td>Spawns groups and hands them straight to a commander. 300 m safe radius, 300 s cooldown.</td></tr>
+                            <tr><td>Logistics hub</td><td class="def">Prefabs/Commander/LogisticsHub.et</td><td>Where transport, casualties and resupply gather. One attribute: Hub Faction.</td></tr>
+                            <tr><td>Garrison waypoint</td><td class="def">Prefabs/AI/Waypoints/AIWaypoint_Garrison.et</td><td>Add as a waypoint under a group to hold a building.</td></tr>
+                            <tr><td>Do CQB waypoint</td><td class="def">Prefabs/AI/Waypoints/AIWaypoint_DoCQB.et</td><td>Clears the nearest building room by room, within 25 m of the waypoint.</td></tr>
                         </tbody>
                     </table>
-                    <div class="note"><b>The commander manager is automatic.</b> <code>Commander.et</code> spawns <code class="path">CommanderManager.et</code> itself, so placing one by hand only gives you a duplicate.</div>
+                    <h4>The order that works</h4>
+                    <ol class="steps">
+                        <li>Place <code class="path">CommanderManager.et</code> once, anywhere in the world.<span class="hint">Everything else registers with it. Skip this and nothing runs.</span></li>
+                        <li>Place one commander per AI side and set <b>Faction Key</b> and <b>Commander UID</b> on <code>AICommander_AlgorithmComponent</code>.<span class="hint">Category <i>Commander 01</i>. The UID is how spawners and objectives refer to it.</span></li>
+                        <li>Place the objectives and give each a name, a radius and an initial owner.<span class="hint"><b>Initial Owner Commander UID</b> is the Workbench name for what Game Master calls <i>Controlled By</i>.</span></li>
+                        <li>Place the groups, then tick <b>Auto Assign</b> on each.<span class="hint">Optionally set <b>Dedicated Co</b> to a commander UID; empty means a random commander of the same faction. It retries for a minute, then gives up with a log line.</span></li>
+                        <li>Optional: a spawner per side, a logistics hub with a transport team, and a mortar plus a crew of up to four within 40 m.</li>
+                    </ol>
+                    <div class="note tip"><b>Destroy objectives are Workbench-only.</b> The <b>Destroy Targets</b> list takes entity names, which Game Master has no way to enter. Everything else about objectives works in both.</div>
+
+                    <div class="note"><b>Two prefabs you never place.</b> <code class="path">CommanderManager.et</code> is spawned by the Game Master commander (but not the Workbench one, see above), and <code class="path">Prefabs/DCO/DCO_FactionSettings.et</code> is spawned by DCO itself — one per faction that has a block in the server config.</div>
+
+                    <h3 id="wb-groups">Getting groups under a commander</h3>
+                    <p>A group built on <code class="path">Prefabs/AI/Groups/Group_Base.et</code> already carries the DCO group components. What it will not do is join a commander by itself.</p>
+                    <table class="ref">
+                        <thead><tr><th>Where</th><th>How</th></tr></thead>
+                        <tbody>
+                            <tr><td>Workbench</td><td>On the group, tick <b>Auto Assign</b> and optionally set <b>Dedicated Co</b> to a commander UID (category <i>Commander</i>). With no UID it joins a random commander of its faction. Vehicles have the same pair.</td></tr>
+                            <tr><td>Game Master</td><td>The group's <b>Commander</b> attribute — a dropdown of same-faction commanders.</td></tr>
+                            <tr><td>Spawner</td><td>Groups it spawns are assigned the moment they appear.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip">A group with no commander still fights with DCO's soldier and squad behaviour. It just never receives orders.</div>
 
                     <h3 id="wb-defaults">Baking in defaults</h3>
                     <p>The settings in the <a href="#behaviour" class="accent">behaviour reference</a> are component attributes. Set them here and they are part of the mission, not a live tweak.</p>
                     <table class="ref">
                         <thead><tr><th>Component</th><th>Sits on</th><th>Covers</th></tr></thead>
                         <tbody>
-                            <tr><td>DCO_GlobalAIComponent</td><td>The game mode entity</td><td>Every global value: skill, perception, cover, dodging, weapons, night, CQB, contact sharing, medics.</td></tr>
+                            <tr><td>DCO_GlobalAIComponent</td><td>The game mode entity</td><td>Every global value: skill, perception, cover, dodging, weapons, night, CQB, contact sharing, medics, player awareness.</td></tr>
+                            <tr><td>AICommander_AlgorithmComponent</td><td>A commander</td><td>Faction, UID, mode, doctrine, and the timings Game Master cannot reach. Its categories are numbered — <i>Commander 02. Timing</i>, <i>04. Attack</i>, <i>06. Staging &amp; Routes</i>, <i>08. Defend &amp; Garrison</i>, <i>15. Player Tasking</i> — so the panel always lists them in the same order.</td></tr>
                             <tr><td>DCO_GroupConfigComponent</td><td>Each <code>SCR_AIGroup</code></td><td>Per-squad cohesion and engagement distances.</td></tr>
+                            <tr><td>DCO_GroupUtilityComponent</td><td>Each <code>SCR_AIGroup</code></td><td>Auto Assign, Dedicated Co, allowed jobs and the commander permissions.</td></tr>
                             <tr><td>DCO_GroupContactReporterComponent</td><td>Each <code>SCR_AIGroup</code></td><td>Scan interval and reports per scan — the main contact-report cost.</td></tr>
-                            <tr><td>DCO_AIConfigComponent</td><td>A character prefab</td><td>Per-unit overrides: skill, personality, accuracy, dodging.</td></tr>
+                            <tr><td>DCO_AIConfigComponent</td><td>The AI agent</td><td>Per-soldier skill, aim, perception, personality and leadership. The character prefab itself carries <code>DCO_AIIdentifierComponent</code>, which holds the unit's role capabilities.</td></tr>
                             <tr><td>DCO_ScenarioFactionsComponent</td><td>Any one entity in the world</td><td>Which factions players may pick; the rest become AI-only.</td></tr>
-                            <tr><td>DCO_BenchmarkLoggerComponent <span class="chip chip-dev">Dev</span></td><td>Any one entity in the world</td><td>Performance run files written to your profile folder.</td></tr>
+                            <tr><td>DCO_VictoryComponent</td><td>The game mode entity</td><td>Ends the mission from DCO objectives and commander stock. See the <a href="modding.html#victory" class="accent">modding page</a>.</td></tr>
+                            <tr><td>DCO_BenchmarkLoggerComponent</td><td>Any one entity in the world</td><td>Performance and battle run files written to your profile folder.</td></tr>
                         </tbody>
                     </table>
-                    <p class="mt-16">The mod's own prefabs already carry these, so a group built from <code class="path">Prefabs/AI/Groups/Group_Base.et</code> or a mission built on the DCO game mode starts configured. On your own prefabs, add the component under <b>GameScripted/DCO</b>, <b>GameScripted/Group</b> or <b>GameScripted/Commander</b>.</p>
+                    <p class="mt-16">The mod's own prefabs already carry these, so a group built from <code class="path">Group_Base.et</code> or a mission built on the DCO game mode starts configured. On your own prefabs, add the component under <b>GameScripted/DCO</b>, <b>GameScripted/Group</b> or <b>GameScripted/Commander</b>.</p>
 
                     <h3 id="wb-vs-gm">Workbench vs Game Master</h3>
                     <table class="ref">
                         <thead><tr><th>&nbsp;</th><th>Game Master</th><th>Workbench</th></tr></thead>
                         <tbody>
                             <tr><td>When</td><td>While the session is running</td><td>Before anyone joins</td></tr>
-                            <tr><td>Changes last</td><td>Until the session ends</td><td>Saved in the mission</td></tr>
-                            <tr><td>Reaches</td><td>17 curated attribute categories, ~195 settings, plus context actions like Hold Position</td><td>Every component attribute — a superset, including the commander timings Game Master leaves out</td></tr>
+                            <tr><td>Changes last</td><td>Until the session ends, unless someone saves them</td><td>Saved in the mission</td></tr>
+                            <tr><td>Reaches</td><td>839 settings in the DCO Settings window, plus the right-click actions</td><td>Every component attribute, including the handful the window leaves out</td></tr>
                             <tr><td>Placing entities</td><td>Content browser, <code class="path">PrefabsEditable/DCO/</code></td><td>World hierarchy, <code class="path">Prefabs/Commander/</code></td></tr>
-                            <tr><td>Debug overlay</td><td>Yes — draws what the commander believes</td><td>No, it needs a live session</td></tr>
+                            <tr><td>Commander manager</td><td>Spawned for you</td><td>You place it</td></tr>
+                            <tr><td>Intent overlay</td><td>Ctrl + I, Game Master only</td><td>Always available in Workbench play mode</td></tr>
                             <tr><td>Good for</td><td>Testing a value, reacting to a live session, one-off ops</td><td>Shipping a scenario with settings that hold</td></tr>
                         </tbody>
                     </table>
-                    <div class="note warn"><b>Globals are copied at spawn.</b> A unit takes the global values when it spawns, in either editor. Changing a global in Game Master does not retrofit AI that is already on the map — respawn it, or set the per-unit attribute.</div>
-                    <div class="note tip">Server owners get a third route that overrides neither editor in a confusing way: the <a href="#server" class="accent">JSON config</a> is read at startup and can be switched off, in which case the editor values stand.</div>
+                    <div class="note warn"><b>Globals are copied at spawn.</b> A unit takes the global values when it spawns, in either editor. Changing a global in Game Master does not retrofit AI already on the map — respawn it, or set the per-unit value.</div>
+                    <div class="note tip">Server owners get a third route that overrides neither editor confusingly: the <a href="server-config.html" class="accent">config folder</a> is read once at startup, and can be switched off so the editor values stand.</div>
                 </section>
 
                 <!-- GARRISON -->
                 <section class="block" id="garrison">
                     <h2>Garrisons <span class="chip chip-dev">Dev build</span></h2>
                     <p>Garrisoning puts a group into buildings by slot — windows, rooftops, balconies, doorways — instead of milling around inside a room.</p>
+                    <h3 id="gar-setup">Setting it up</h3>
                     <ol class="steps">
                         <li>Select a group in commanding mode and place the <b>Garrison (DCO)</b> waypoint on the building or position you want held.<span class="hint">In the Workbench, add <code class="path">Prefabs/AI/Waypoints/AIWaypoint_Garrison.et</code> as a waypoint child of the group instead.</span></li>
                         <li>Pick the mode.<span class="hint">Hold never leaves the building · Defend allows a small flank team outside · Release garrisons until a trigger frees the group.</span></li>
@@ -563,24 +715,39 @@
                             <tr><td>Threat weight</td><td class="def">0.7</td><td>1 puts everyone on windows facing the threat, 0 covers a full 360°.</td></tr>
                             <tr><td>Allow roof</td><td class="def">On</td><td>Use rooftop and balcony slots.</td></tr>
                             <tr><td>Refill delay</td><td class="def">5 – 15 s</td><td>Wait before a dead defender's slot is taken over.</td></tr>
-                            <tr><td>Flank team size</td><td class="def">Defend mode</td><td>Number of soldiers allowed outside; 0 disables the flank team.</td></tr>
-                            <tr><td>Defend leash</td><td class="def">Defend mode</td><td>How far that flank team may go before it is pulled back.</td></tr>
-                            <tr><td>Fill order</td><td class="def">—</td><td>Which slots get taken first as the group moves in.</td></tr>
+                            <tr><td>Flank team size</td><td class="def">4</td><td>Soldiers allowed outside in Defend mode — one fireteam. 0 disables the flank team.</td></tr>
+                            <tr><td>Defend leash</td><td class="def">+50 m</td><td>How far past the waypoint radius that flank team may go before it is pulled back.</td></tr>
+                            <tr><td>Fill order</td><td class="def">Building first</td><td>Fill one building before spreading, or man the best windows across several.</td></tr>
+                            <tr><td>Floor spread</td><td class="def">0.5</td><td>How strongly members are spread across floors rather than stacked on one.</td></tr>
+                            <tr><td>Rotate when idle / suppressed</td><td class="def">30 s / on</td><td>Move to another window after that long without seeing anyone, or after 8 s under constant fire.</td></tr>
+                            <tr><td>Field positions</td><td class="def">On</td><td>With no building, dig in outside instead of falling back to the vanilla Defend behaviour.</td></tr>
                             <tr><td>Pull lone soldier</td><td class="def">On</td><td>A single defender left in a building is recovered instead of dying alone.</td></tr>
                         </tbody>
                     </table>
                     <p class="legend">All of these are in the <b>Waypoint</b> attribute category with the waypoint selected — seventeen entries in total, including completion radius and type.</p>
 
-                    <h4>Release triggers</h4>
+                    <h3 id="gar-release">Release triggers</h3>
                     <table class="ref">
                         <thead><tr><th>Trigger</th><th>Frees the group when…</th></tr></thead>
                         <tbody>
-                            <tr><td>Enemy distance</td><td>An enemy comes closer than the set distance</td></tr>
-                            <tr><td>Casualties</td><td>The set percentage of the garrison is lost</td></tr>
-                            <tr><td>Sustained pressure</td><td>Most of the garrison stays pinned for the set time</td></tr>
+                            <tr><td>Enemy distance <span class="chip chip-live">30 m</span></td><td>An enemy comes this close to a garrison member</td></tr>
+                            <tr><td>Casualties <span class="chip chip-live">50%</span></td><td>That share of the garrison is lost</td></tr>
+                            <tr><td>Sustained pressure <span class="chip chip-live">20 s</span></td><td>Most of the garrison stays suppressed for that long</td></tr>
                             <tr><td>Re-garrison</td><td>Optional: go back into the buildings once it's safe again</td></tr>
                         </tbody>
                     </table>
+                    <h3 id="cqb-wp">Clearing a building: Do CQB</h3>
+                    <p>The second DCO waypoint. The group clears the building nearest the waypoint, room by room, and you never place an indoor navigation graph — DCO builds one from the soldier navmesh at runtime.</p>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>CQB target radius</td><td class="def">25 m</td><td>How far from the waypoint to look for the building. The nearest one wins.</td></tr>
+                            <tr><td>CQB attempts</td><td class="def">2</td><td>Tries before giving up and moving on, 15 s apart.</td></tr>
+                            <tr><td>Hold after clear</td><td class="def">Off</td><td>Stay inside afterwards. The waypoint then never completes.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note">The plan fails when the building has no rooms on the navmesh, no outside door, or the group has fewer than two men. A building another friendly group is already clearing is skipped.</div>
+
                     <div class="note tip">A debug option draws the slots in use — red windows, orange roof, blue doors, grey interior — which makes it obvious when a building offers fewer firing positions than you expected.</div>
                     <div class="note">By default one building belongs to one group. If you want several groups sharing a large structure, turn on building sharing in <b>DCO Global Combat</b>.</div>
                 </section>
@@ -590,7 +757,7 @@
                     <h2>Squads &amp; units</h2>
                     <p>Settings exist at three levels. A unit uses its own value if set, otherwise its squad's, otherwise the global one.</p>
 
-                    <h3>Per squad</h3>
+                    <h3 id="u-squad">Per squad</h3>
                     <p>In Game Master this is the <b>DCO Squad</b> category on a selected group.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th class="def">Default</th><th>Effect</th></tr></thead>
@@ -600,12 +767,12 @@
                             <tr><td>Engagement distance, vehicles</td><td class="def">800 m</td><td>Same for vehicle targets.</td></tr>
                             <tr><td>Vehicle dismount distance</td><td class="def">700 m</td><td>How close to danger the squad rides before getting out.</td></tr>
                             <tr><td>Investigate distance / chance</td><td class="def">Follows global</td><td>Whether this squad goes looking at unidentified contacts.</td></tr>
-                            <tr><td>Cohesion distance <span class="chip chip-wb">Workbench</span></td><td class="def">50 m</td><td>How far from the leader a member may drift before regrouping.</td></tr>
-                            <tr><td>Cover preference <span class="chip chip-wb">Workbench</span></td><td class="def">Follow global</td><td>Balanced, indoor or outdoor positions when defending or idle. Only the global version is in Game Master.</td></tr>
+                            <tr><td>Cohesion distance</td><td class="def">50 m</td><td>How far from the leader a member may drift before regrouping.</td></tr>
+                            <tr><td>Cover preference</td><td class="def">Follow global</td><td>Balanced, indoor or outdoor positions when defending or idle.</td></tr>
                         </tbody>
                     </table>
 
-                    <h3>What a squad will do for its commander</h3>
+                    <h3 id="u-perms">What a squad will do for its commander</h3>
                     <p>The <b>DCO Squad Commander</b> category is where a group is handed to a commander — and where you decide how much of it the commander owns. Useful for keeping one squad out of the machine without unassigning it.</p>
                     <table class="ref">
                         <thead><tr><th>Setting</th><th>Effect</th></tr></thead>
@@ -623,7 +790,7 @@
                         </tbody>
                     </table>
 
-                    <h3>Per unit</h3>
+                    <h3 id="u-unit">Per unit</h3>
                     <p>Select a single soldier in the editor to override skill, personality, perception, accuracy, suppression sensitivity, dodging, grenade usage, unlimited ammo and hold position. Useful for making one sniper deadly without touching the rest of the map.</p>
 
                     <h4>Personality</h4>
@@ -819,31 +986,32 @@
                 <!-- SERVER -->
                 <section class="block" id="server">
                     <h2>For server owners</h2>
-                    <p>Server settings live in JSON files in the profile folder, so you can tune DCO without opening the editor or repacking anything.</p>
+                    <p>Server settings live in a folder of JSON files in the profile folder, so you can tune DCO without opening the editor or repacking anything.</p>
 
-                    <h3>The config file <span class="chip chip-live">v0.4.118</span></h3>
+                    <h3 id="srv-file">The config folder <span class="chip chip-live">v0.4.144</span></h3>
+                    <p>This is the short version. Every key, with its shipped value and range, plus ready-to-copy templates, is on the <a href="server-config.html" class="accent">server config page</a>.</p>
                     <ol class="steps">
-                        <li>Start the server once with DCO_AI loaded.<span class="hint">It writes <code class="path">$profile:DCO/DCO_GlobalConfig.json</code> containing every <em>global</em> setting at its current value.</span></li>
+                        <li>Start the server once with DCO_AI loaded.<span class="hint">It writes <code class="path">$profile:DCO/Config/</code> — <code>Core.json</code>, <code>Soldiers.json</code>, <code>Squads.json</code>, <code>Commander.json</code>, <code>Vehicles.json</code>, plus <code>Advanced/</code> and <code>Factions/</code>.</span></li>
                         <li>Edit the values you care about and restart.</li>
                         <li>After a mod update that adds settings, the old file is copied to <code class="path">.bak</code> and only the missing keys are appended — your values are preserved.</li>
                     </ol>
                     <p class="muted mt-16">Reading the file can be switched off entirely, in which case the editor values are used as-is. Radio lines and default UI settings have their own files (<code class="path">DCO_Radio.json</code>, <code class="path">DCO_UI.json</code>).</p>
-                    <div class="note"><b>Globals only.</b> The file is written from the global AI component, so it covers the seven <code>DCO Global …</code> categories — skill, combat, reaction, contact sharing, idle, medic and players. Commander, squad, unit and waypoint values are not in it; those belong to the mission and have to be set in the <a href="#workbench" class="accent">Workbench</a> or live in <a href="#gm" class="accent">Game Master</a>.</div>
+                    <div class="note"><b>Coming from a single file?</b> An old <code class="path">DCO_GlobalConfig.json</code> is split into the folder automatically on first start, every value kept, and renamed to <code>.migrated.bak</code>. Full key reference and ready-made templates: <a href="server-config.html" class="accent">server config</a>.</div>
                     <div class="note warn"><b>Don't edit while the server runs.</b> The config is read at startup; changes made to a running server are overwritten on the next write.</div>
 
-                    <h3>Performance</h3>
+                    <h3 id="srv-perf">Performance</h3>
                     <table class="ref">
                         <thead><tr><th>Lever</th><th class="def">Default</th><th>Effect</th></tr></thead>
                         <tbody>
                             <tr><td>LOD mode <span class="chip chip-dev">Dev</span></td><td class="def">On</td><td>Commander-owned groups simulate at reduced detail when nothing is watching. Groups without a commander always stay vanilla.</td></tr>
-                            <tr><td>Commander think interval <span class="chip chip-wb">Workbench</span></td><td class="def">30 s</td><td>The single biggest commander cost. 45–60 s is much cheaper and barely noticeable. Set on the commander prefab — it is neither in Game Master nor in the JSON.</td></tr>
+                            <tr><td>Commander think interval <span class="chip chip-wb">Workbench</span></td><td class="def">30 s</td><td>The single biggest commander cost. 45–60 s is much cheaper and barely noticeable. Set on the commander prefab: it is in neither the Settings window nor the server config. The shipped <code>US_Commander.et</code> already uses 150 s.</td></tr>
                             <tr><td>Contact report scan</td><td class="def">15 s, 3 per scan</td><td>Lower frequency and fewer reports reduce chatter and work.</td></tr>
                             <tr><td>Faction AI cap</td><td class="def">0 (unlimited)</td><td>Caps how much the Commander Spawner may field.</td></tr>
                             <tr><td>Terrain cache <span class="chip chip-dev">Dev</span></td><td class="def">On</td><td>Terrain sampled once and reused instead of re-scanned per decision.</td></tr>
                         </tbody>
                     </table>
 
-                    <h3>Benchmarking <span class="chip chip-dev">Dev build</span></h3>
+                    <h3 id="srv-bench">Benchmarking</h3>
                     <p>The benchmark logger writes run files into a folder in your profile, named with a prefix you choose so you can compare scenarios.</p>
                     <table class="ref">
                         <thead><tr><th>Line</th><th class="def">Interval</th><th>Contains</th></tr></thead>
@@ -886,6 +1054,8 @@
                         </div>
                         <div class="btn-row">
                             <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                            <a class="btn" href="server-config.html">Server config</a>
+                            <a class="btn" href="modding.html">Modding API</a>
                             <a class="btn" href="features.html">Browse all features</a>
                         </div>
                     </div>

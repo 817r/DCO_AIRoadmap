@@ -1,0 +1,13 @@
+{
+  "_comment": "DCO AI - Hard. Veteran AI that pushes and rarely breaks. Read the aiAggression note before tuning further: above 1 it scales takeCoverChance, dodgeChance and suppressionEffect DOWN. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "aiSkillDefault": 3,
+  "aimAccuracy": 1.3,
+  "aimSpeed": 1.2,
+  "aiPerception": 2,
+  "aiAggression": 1.5,
+  "suppressionEffect": 0.7,
+  "personalityWeightMeasured": 60,
+  "personalityWeightCautious": 3,
+  "personalityWeightAggressive": 30,
+  "personalityWeightReckless": 7
+}

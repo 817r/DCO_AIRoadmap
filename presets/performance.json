@@ -1,0 +1,7 @@
+{
+  "_comment": "DCO AI - Performance. For a big PvE server where frame time matters more than the last 5% of behaviour. Turn perfProfiling on for one session to measure, then off. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "lodMode": 1,
+  "perfProfiling": false,
+  "contactReportMaxPerScan": 2,
+  "contactReportScanInterval": 25
+}

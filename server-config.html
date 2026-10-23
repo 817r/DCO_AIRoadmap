@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server config — DCO_AI Reforger</title>
+    <meta name="description" content="DCO_AI Reforger server config reference: how DCO_GlobalConfig.json works, ready-to-copy templates, per-faction values, and all 132 named keys with their shipped value and range.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
+    <style>
+        .page-head { padding: 32px 0 24px; }
+        .page-head h1 { font-size: clamp(26px, 4vw, 36px); }
+        .section { padding-top: 28px; }
+
+        .guide { display: grid; grid-template-columns: 220px 1fr; gap: 44px; align-items: start; }
+        @media (max-width: 960px) { .guide { grid-template-columns: 1fr; gap: 24px; } }
+        /* Grid items default to min-width:auto, which lets wide tables and code
+           blocks push the column past the viewport. */
+        .guide > * { min-width: 0; }
+
+        .toc { position: sticky; top: calc(var(--nav-h) + 20px); max-height: calc(100vh - var(--nav-h) - 40px); overflow-y: auto; }
+        @media (max-width: 960px) { .toc { position: static; max-height: none; } }
+        .toc summary { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; list-style: none; cursor: default; }
+        .toc summary::-webkit-details-marker { display: none; }
+        @media (max-width: 960px) {
+            .toc summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-strong); padding: 12px 14px; color: var(--text); font-size: 12px; margin-bottom: 0; }
+            .toc summary::after { content: '▾'; color: var(--yellow); }
+            .toc details[open] summary { margin-bottom: 8px; }
+            .toc details[open] summary::after { content: '▴'; }
+        }
+        .toc ul { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+        .toc a { display: block; padding: 6px 10px; font-size: 13.5px; color: var(--text-mid); text-decoration: none; border-left: 2px solid var(--border); }
+        .toc a:hover { color: var(--white); border-left-color: var(--border-strong); }
+        .toc a.active { color: var(--yellow); border-left-color: var(--yellow); background: var(--yellow-soft); }
+        .toc .sub a { padding-left: 22px; font-size: 13px; }
+
+        .block { padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--border); }
+        .block:last-child { border-bottom: 0; }
+        body.tabbed .block { display: none; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
+        body.tabbed .block.active { display: block; }
+        body.tabbed .sub-panel { display: none; }
+        body.tabbed .sub-panel.active { display: block; }
+        .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 4px; }
+        .pills button { padding: 7px 13px; border: 1px solid var(--border-strong); font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mid); }
+        .pills button:hover { border-color: var(--yellow); color: var(--yellow); }
+        .pills button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
+        .sub-panel > h3:first-child { margin-top: 20px; }
+
+        .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .pager a { display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none; font-size: 14px; color: var(--text-mid); max-width: 48%; }
+        .pager a:hover { color: var(--yellow); }
+        .pager span { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+        .pager a:last-child { text-align: right; align-items: flex-end; }
+        .pager a b { color: var(--white); font-weight: 600; }
+        .pager a:hover b { color: var(--yellow); }
+
+        .block > h2 { margin-bottom: 10px; }
+        .block > p { color: var(--text-mid); max-width: 760px; }
+        .block h3 { margin: 32px 0 10px; font-size: 17px; }
+        .block h4 { margin: 22px 0 8px; font-size: 14px; color: var(--white); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+        .block p + p { margin-top: 10px; }
+
+        table.ref { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); margin-top: 14px; font-size: 13.5px; table-layout: fixed; }
+        table.ref th { text-align: left; font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 11px 12px; border-bottom: 1px solid var(--border-strong); }
+        table.ref td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-mid); overflow-wrap: anywhere; }
+        table.ref tr:last-child td { border-bottom: 0; }
+        table.ref td.key { color: var(--white); font-family: var(--mono); font-size: 12.5px; font-weight: 400; }
+        table.ref td.def, table.ref th.def { font-family: var(--mono); color: var(--yellow); font-weight: 400; }
+        table.ref td.rng, table.ref th.rng { font-family: var(--mono); font-size: 12px; color: var(--text-dim); font-weight: 400; }
+        table.ref th:nth-child(1) { width: 22%; }
+        table.ref th:nth-child(2) { width: 12%; }
+        table.ref th:nth-child(3) { width: 14%; }
+        @media (max-width: 760px) {
+            table.ref { table-layout: auto; font-size: 13px; }
+            table.ref th, table.ref td { padding: 9px 9px; }
+            /* The range column is the first thing to go on a phone */
+            table.ref th.rng, table.ref td.rng { display: none; }
+        }
+
+        code { font-family: var(--mono); font-size: 12.5px; color: var(--yellow); background: var(--yellow-soft); border: 1px solid rgba(250,204,21,0.15); padding: 1px 6px; }
+        pre { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--yellow); padding: 16px 18px; margin: 16px 0; overflow-x: auto; }
+        pre code { background: none; border: 0; padding: 0; font-size: 12.5px; line-height: 1.6; color: var(--text); white-space: pre; display: block; }
+        @media (max-width: 700px) { pre { padding: 12px; } pre code { font-size: 11.5px; } code { word-break: break-word; } }
+
+        .tpl-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+        .tpl-head a { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--yellow); text-decoration: none; border: 1px solid var(--yellow-line); padding: 6px 12px; }
+        .tpl-head a:hover { background: var(--yellow); color: #0b0c09; }
+
+        ol.steps { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 18px 0; }
+        ol.steps li { position: relative; padding-left: 44px; color: var(--text); font-size: 14.5px; }
+        ol.steps li::before {
+            counter-increment: step; content: counter(step);
+            position: absolute; left: 0; top: -2px;
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            font-family: var(--mono); font-size: 12px; font-weight: 700;
+            color: var(--yellow); border: 1px solid var(--yellow-line); background: var(--yellow-soft);
+        }
+        ol.steps b { color: var(--white); }
+        ol.steps .hint { display: block; color: var(--text-dim); font-size: 13px; margin-top: 3px; }
+        @media (max-width: 700px) { ol.steps li { padding-left: 38px; } }
+
+        .note { border-left: 3px solid var(--orange); background: rgba(249,115,22,0.06); padding: 14px 18px; margin: 20px 0; font-size: 14px; color: var(--text-mid); }
+        .note b { color: var(--white); }
+        .note.tip { border-left-color: var(--green); background: rgba(34,197,94,0.06); }
+        .note.warn { border-left-color: var(--red); background: rgba(239,68,68,0.06); }
+        .legend { font-size: 12.5px; color: var(--text-dim); margin-top: 10px; }
+    </style>
+</head>
+<body>
+<main id="main">
+
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Server config</div>
+            <h1>Tune DCO from one JSON file</h1>
+            <p class="lead">Your server writes a folder of JSON files on its first start, every setting at its current value. Edit, restart, done — no editor, no repack, no mission change. This page is the reference for what's in them.</p>
+            <div class="stats" style="margin-top:22px">
+                <div class="stat"><div class="stat-val accent">156</div><div class="stat-label">Named keys</div></div>
+                <div class="stat"><div class="stat-val">535</div><div class="stat-label">Tuning keys</div></div>
+                <div class="stat"><div class="stat-val">4</div><div class="stat-label">Templates</div></div>
+                <div class="stat"><div class="stat-val">21</div><div class="stat-label">Groups</div></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container guide">
+
+            <nav class="toc" aria-label="On this page">
+                <details id="toc-d" open>
+                <summary>On this page</summary>
+                <ul>
+                    <li><a href="#start">How the config works</a></li>
+                    <li class="sub"><a href="#cfg-first">First start</a></li>
+                    <li class="sub"><a href="#cfg-rewrite">Rewrites &amp; migration</a></li>
+                    <li class="sub"><a href="#cfg-errors">When something's wrong</a></li>
+                    <li><a href="#templates">Templates</a></li>
+                    <li class="sub"><a href="#tpl-forgiving">Forgiving</a></li>
+                    <li class="sub"><a href="#tpl-hard">Hard</a></li>
+                    <li class="sub"><a href="#tpl-perf">Performance</a></li>
+                    <li class="sub"><a href="#tpl-factions">Per faction</a></li>
+                    <li><a href="#aggression">The aggression trap</a></li>
+                    <li><a href="#keys">Key reference</a></li>
+                    <li class="sub"><a href="#k-soldier">Soldier</a></li>
+                    <li class="sub"><a href="#k-combat">Combat</a></li>
+                    <li class="sub"><a href="#k-behaviour">Behaviour</a></li>
+                    <li class="sub"><a href="#k-idle">Idle &amp; stragglers</a></li>
+                    <li class="sub"><a href="#k-squad">Squads &amp; commander</a></li>
+                    <li class="sub"><a href="#k-server">Server &amp; players</a></li>
+                    <li><a href="#tune">Tuning keys</a></li>
+                    <li><a href="#trouble">Troubleshooting</a></li>
+                </ul>
+                </details>
+            </nav>
+
+            <div>
+
+                <!-- HOW IT WORKS -->
+                <section class="block" id="start">
+                    <h2>How the config works</h2>
+                    <p>A folder in the server profile, read once at startup. Nothing is read while the server runs, so edits made during a session are lost at the next write.</p>
+                    <table class="ref">
+                        <thead><tr><th>File</th><th>Holds</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">Core.json</td><td>General settings, performance, Game Master permissions, logging.</td></tr>
+                            <tr><td class="key">Soldiers.json</td><td>Skill, aim, perception, suppression, dodge, grenades, personality, night, aggression, voice.</td></tr>
+                            <tr><td class="key">Squads.json</td><td>Idle, stragglers, CQB, behaviour, contact sharing and reports, medics, break contact, squad jobs.</td></tr>
+                            <tr><td class="key">Commander.json</td><td>Commander spawner, doctrine, group presets, commander tactics.</td></tr>
+                            <tr><td class="key">Vehicles.json</td><td>Vehicle AI.</td></tr>
+                            <tr><td class="key">Advanced/&lt;group&gt;.json</td><td>Every <code>tune_</code> key, one file per group — <code>tune_hear_shot_err</code> lives in <code>Advanced/hear.json</code>.</td></tr>
+                            <tr><td class="key">Factions/&lt;FACTION&gt;.json</td><td>Values for one faction only.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip"><b>A key in the wrong file still works.</b> It is logged as <code>cfg_key_wrong_file</code> and moved to its home file at the next rewrite. One broken file is ignored on its own — the rest still apply, and the broken one is never overwritten.</div>
+
+                    <h3 id="cfg-first">First start</h3>
+                    <ol class="steps">
+                        <li>Start the server once with DCO_AI loaded.<span class="hint">It writes <code>$profile:DCO/Config/</code> with every setting at its current value, one key per line, split across the files above.</span></li>
+                        <li>Stop the server, edit the keys you care about, start it again.<span class="hint">The log line <code>N settings overridden from ...</code> tells you how many were applied — check it matches what you changed.</span></li>
+                        <li>Keep only what you changed, if you prefer a short file.<span class="hint">Missing keys are filled back in at the next start, so a four-line file works exactly like a full one.</span></li>
+                    </ol>
+                    <div class="note warn"><b>Never edit a running server.</b> The config is read at startup, and a later write from the game overwrites your file. Stop it first.</div>
+                    <div class="note"><b>Upgrading from the single-file config?</b> If only the old <code>$profile:DCO/DCO_GlobalConfig.json</code> exists, it is read once, split into the folder with every value kept — a <code>factions</code> block becomes <code>Factions/&lt;FACTION&gt;.json</code> — and renamed to <code>.migrated.bak</code>. Logged as <code>cfg_split_migrated</code>. That is also why the templates below still work as a single file.</div>
+                    <div class="note tip"><b>Whole numbers are fine.</b> <code>"aiAggression": 2</code> and <code>2.0</code> both work. Quotes around a number do not — that's a <code>cfg_bad_type</code>.</div>
+
+                    <h3 id="cfg-rewrite">Rewrites and migration</h3>
+                    <table class="ref">
+                        <thead><tr><th>What</th><th class="def">When</th><th>Effect</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">Auto generate</td><td class="def">On</td><td>Missing keys are added with the current value, and the old file is copied to <code>.bak</code> first. Turn it off to drop a key for good — otherwise deleted keys come back.</td></tr>
+                            <tr><td class="key">Default migration</td><td class="def">On update</td><td>A key still sitting at the old shipped default takes the new one, logged as <code>cfg_default_migrated</code>. Values you edited are never touched.</td></tr>
+                            <tr><td class="key">Defaults record</td><td class="def">Per world</td><td><code>DCO_GlobalConfig.defaults.&lt;world&gt;.txt</code> records every default for that world, so rotating scenarios doesn't trigger migrations. Don't edit these.</td></tr>
+                            <tr><td class="key">Save from Game Master</td><td class="def">Opt-in</td><td><code>gmSaveConfig</code> decides who may press Save to server config: <code>gm</code>, <code>admin</code> (default) or <code>off</code>. It writes every current value, defaults included.</td></tr>
+                            <tr><td class="key">Misspelled keys</td><td class="def">Dropped</td><td>Only real keys survive a rewrite, so a typo quietly disappears. Copy names from the reference below.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="cfg-errors">When something's wrong</h3>
+                    <p>The server never refuses to start over a config problem — it logs and carries on. Grep <code>dco.log</code> for these:</p>
+                    <table class="ref">
+                        <thead><tr><th>Log line</th><th>Means</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">cfg_clamped</td><td>Value outside its range; it was pulled to the nearest limit.</td></tr>
+                            <tr><td class="key">cfg_bad_type</td><td>Wrong type — a quoted number, or a decimal where a whole number is required. That key keeps its old value and the file is not rewritten.</td></tr>
+                            <tr><td class="key">cfg_parse_fail</td><td>That one file is broken. It is ignored and never overwritten; the other files still apply and its keys fall back to their defaults.</td></tr>
+                            <tr><td class="key">cfg_key_wrong_file</td><td>A real key in the wrong file. It still works and is moved at the next rewrite.</td></tr>
+                            <tr><td class="key">cfg_split_migrated</td><td>An old single-file config was split into the folder.</td></tr>
+                            <tr><td class="key">cfg_unused</td><td>A key nothing reads — almost always a misspelling.</td></tr>
+                            <tr><td class="key">cfg_faction_unknown_key</td><td>A key inside a <code>factions</code> block that DCO doesn't know.</td></tr>
+                            <tr><td class="key">cfg_faction_global_only</td><td>A key that only works server-wide, ignored inside a faction block.</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- TEMPLATES -->
+                <section class="block" id="templates">
+                    <h2>Templates</h2>
+                    <p>Four starting points. Each changes only a handful of keys; everything else is filled in with the shipped default at the next start, so you can drop one in as-is. Download it, back up whatever was there, save it as <code>$profile:DCO/DCO_GlobalConfig.json</code> and restart — DCO splits it into the config folder for you. Already on the folder layout? Paste the keys into the matching file instead.</p>
+
+                    <h3 id="tpl-forgiving">Forgiving</h3>
+                    <p>Slower, less accurate, easier to shake. For a casual or new-player server where the AI shouldn't win every firefight.</p>
+                    <div class="tpl-head"><code>presets/forgiving.json</code><a href="presets/forgiving.json" download>Download</a></div>
+                    <pre><code>{
+  "_comment": "DCO AI - Forgiving. Easier AI for a casual or new-player server. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "aiSkillDefault": 1,
+  "aimAccuracy": 0.8,
+  "aimSpeed": 0.8,
+  "perception_identify_mul": 0.8,
+  "suppressionEffect": 1.3,
+  "aiAggression": 0.7
+}</code></pre>
+
+                    <h3 id="tpl-hard">Hard</h3>
+                    <p>Veteran skill, faster on target, pushes through fire and rarely panics, with personality weights shifted toward aggressive and reckless.</p>
+                    <div class="tpl-head"><code>presets/hard.json</code><a href="presets/hard.json" download>Download</a></div>
+                    <pre><code>{
+  "_comment": "DCO AI - Hard. Veteran AI that pushes and rarely breaks. Read the aiAggression note before tuning further: above 1 it scales takeCoverChance, dodgeChance and suppressionEffect DOWN. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "aiSkillDefault": 3,
+  "aimAccuracy": 1.3,
+  "aimSpeed": 1.2,
+  "aiPerception": 2,
+  "aiAggression": 1.5,
+  "suppressionEffect": 0.7,
+  "personalityWeightMeasured": 60,
+  "personalityWeightCautious": 3,
+  "personalityWeightAggressive": 30,
+  "personalityWeightReckless": 7
+}</code></pre>
+                    <div class="note">Read <a href="#aggression" class="accent">the aggression trap</a> before pushing this further — raising <code>aiAggression</code> scales cover and suppression settings <em>down</em>, which is not what most people expect.</div>
+
+                    <h3 id="tpl-perf">Performance</h3>
+                    <p>For a large PvE server where frame time matters more than the last few percent of behaviour. LOD keeps commander groups fighting at distance without full simulation, and contact reporting is the other big recurring cost.</p>
+                    <div class="tpl-head"><code>presets/performance.json</code><a href="presets/performance.json" download>Download</a></div>
+                    <pre><code>{
+  "_comment": "DCO AI - Performance. For a big PvE server where frame time matters more than the last 5% of behaviour. Turn perfProfiling on for one session to measure, then off. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "lodMode": 1,
+  "perfProfiling": false,
+  "contactReportMaxPerScan": 2,
+  "contactReportScanInterval": 25
+}</code></pre>
+                    <div class="note tip"><b>Measure, don't guess.</b> Set <code>perfProfiling</code> to <code>true</code> for one session: every 30 s it writes FPS, AI count by LOD, time per DCO system and queries per second to <code>perf.log</code>, and lists which systems ran on any frame over 50 ms. Turn it off afterwards.</div>
+
+                    <h3 id="tpl-factions">Per faction</h3>
+                    <p>One faction gets its own values on top of the global ones — a trained army against a militia in the same mission. Any key from the reference works. On the folder layout each faction is its own file, <code class="path">Config/Factions/USSR.json</code>, holding just that faction's keys; in the single-file template below they sit in a <code>factions</code> block and are split out on first start.</p>
+                    <div class="tpl-head"><code>presets/factions.json</code><a href="presets/factions.json" download>Download</a></div>
+                    <pre><code>{
+  "_comment": "DCO AI - Asymmetric factions. Global values apply to everyone; the factions block overrides them per faction. Layer order, last wins: global file, GM global, this faction block, GM faction. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "aiSkillDefault": 2,
+  "aiAggression": 1,
+  "factions": {
+    "US": {
+      "aiSkillDefault": 3,
+      "aimAccuracy": 1.2,
+      "aiAggression": 1.2
+    },
+    "USSR": {
+      "aiSkillDefault": 2,
+      "aiAggression": 1
+    },
+    "FIA": {
+      "aiSkillDefault": 1,
+      "aiAggression": 1.6,
+      "takeCoverChance": 0.5,
+      "personalityWeightReckless": 20
+    }
+  }
+}</code></pre>
+                    <h4>Layer order</h4>
+                    <p>Four layers, last one wins: <b>1.</b> global values in this file → <b>2.</b> Game Master global settings → <b>3.</b> this file's faction block → <b>4.</b> Game Master faction settings.</p>
+                    <div class="note"><b>Some keys are server-wide only</b> and are ignored inside a faction block: the <code>doctrine*</code> keys, the <code>groupPreset*</code> keys, <code>gmSaveConfig</code>, <code>startupPresetPrompt</code> and <code>perfProfiling</code>. A faction that doesn't exist in the mission, or an empty entry, is skipped and left in the file.</div>
+                    <div class="note warn"><b>Edit the block while the server is stopped.</b> A Game Master save writes the faction block as it was when the server started, so live edits to the file get overwritten.</div>
+                </section>
+
+                <!-- AGGRESSION -->
+                <section class="block" id="aggression">
+                    <h2>The aggression trap</h2>
+                    <p>Read this before touching soldier settings. <code>aiAggression</code> is not an independent slider — it rescales several others, and the shipped value already sits in the range where it does.</p>
+                    <table class="ref">
+                        <thead><tr><th>Rule</th><th>Effect at the shipped value</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">Effective aggression</td><td><code>aiAggression × 2.5</code>. Shipped 1 means an effective 2.5.</td></tr>
+                            <tr><td class="key">takeCoverChance<br>dodgeChance<br>suppressionEffect</td><td>Multiplied by <code>1 / effective</code> whenever that is above 1 — so ×0.4 as shipped. A <code>takeCoverChance</code> of 0.8 is a real 0.32. They still work across their whole range, just lower than the number suggests.</td></tr>
+                            <tr><td class="key">grenadeUsage<br>glUsage</td><td>Multiplied by effective aggression and capped at 1. At the shipped value everything from 0.4 to 1.0 behaves identically — only values below 0.4 change anything.</td></tr>
+                            <tr><td class="key">Squad pull-back</td><td>Casualty thresholds scale with aggression too. At the shipped value squads almost never fall back on losses alone.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>What was actually measured</h3>
+                    <p>From stress runs of roughly 170 AI, one run per value — indicative, not a benchmark.</p>
+                    <table class="ref">
+                        <thead><tr><th>Key</th><th class="def">Tested</th><th>Result</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">aiAggression</td><td class="def">0.5 / 1 / 3</td><td>First kill at 189 / 176 / 127 s, panic flights 53 / 18 / 2. Low is careful and easily shaken; high pushes in fast and rarely panics. Above 1 the squad posture choice stops changing, but soldier-level effects keep growing.</td></tr>
+                            <tr><td class="key">suppressionEffect</td><td class="def">0.2 vs 1.0</td><td>Panic flights 1 vs 23, deaths while panicking 0 vs 17. The strongest single lever on whether AI can be pinned at all.</td></tr>
+                            <tr><td class="key">takeCoverChance</td><td class="def">0.2 vs 0.8</td><td>Barely moved — 76 vs 74 deaths. Small effect at the shipped aggression, which is the rescaling above in action.</td></tr>
+                            <tr><td class="key">superiorRatio</td><td class="def">1.0 vs 2.0</td><td>No clear effect in a test without commanders. It mainly changes when commanders and groups decide to attack.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip"><b>Practical order.</b> Set <code>aiAggression</code> first, play a round, and only then adjust cover, dodge and suppression — their effective values all move when you change it.</div>
+                </section>
+
+                <!-- KEY REFERENCE -->
+                <section class="block" id="keys">
+                    <h2>Key reference</h2>
+                    <p>All 156 named keys, with the value a fresh server writes and the range it's clamped to. Every one of these also exists in the Game Master settings window and in the <a href="modding.html" class="accent">modding API</a> under the same name.</p>
+                    <p class="legend">Ranges are hidden on narrow screens — rotate or widen to see them. A <span class="chip chip-live">tested</span> tag means that key was measured in a stress run, written up under <a href="#aggression" class="accent">the aggression trap</a>.</p>
+
+                    <h3 id="k-soldier">Soldier</h3>
+                    <p>27 keys &mdash; from the <em>Unit</em>, <em>Personality</em>, <em>Dodge</em>, <em>Weapon Usage</em> groups.</p>
+                    <table class="ref">
+                        <thead><tr><th>JSON key</th><th class="def">Shipped</th><th class="rng">Range</th><th>What it does</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">aimAccuracy</td><td class="def">1</td><td class="rng">0.1 .. 10.0</td><td>Aim accuracy multiplier. Higher = more accurate.</td></tr>
+                            <tr><td class="key">aimSpeed</td><td class="def">1</td><td class="rng">0.25 .. 4.0</td><td>Seconds needed to reach full accuracy on a target.</td></tr>
+                            <tr><td class="key">aimShake</td><td class="def">1</td><td class="rng">0.25 .. 4.0</td><td>How steady AI holds the weapon when standing, kneeling or tired. 1.0 = realistic; higher = smaller posture and fatigue penalty.</td></tr>
+                            <tr><td class="key">aiPerception</td><td class="def">1.5</td><td class="rng">0.5 .. 5.0</td><td>Spotting multiplier. Higher = detects enemies faster and further.</td></tr>
+                            <tr><td class="key">vehicleDismountDanger</td><td class="def">700</td><td class="rng">0.0 .. 2000.0</td><td>Dismounts when danger is closer than this distance (m).</td></tr>
+                            <tr><td class="key">disembarkRule</td><td class="def">0</td><td class="rng">AUTO .. NEVER</td><td>When AI may leave a vehicle. Auto = as usual. Disabled only = only when the vehicle is badly damaged or ordered. Orders only = only through a get out waypoint or order. Never = never get out. A destroyed or burning vehicle always allows getting out.</td></tr>
+                            <tr><td class="key">suppressionEffect</td><td class="def">1</td><td class="rng">0.0 .. 2.0</td><td>How strongly suppression affects the AI. 0 = immune.</td></tr>
+                            <tr><td class="key">takeCoverChance</td><td class="def">0.8</td><td class="rng">0.0 .. 1.0</td><td>Chance to actively seek cover when spotted in the open.</td></tr>
+                            <tr><td class="key">magicallyResupplied</td><td class="def">false</td><td class="rng">&mdash;</td><td>Never runs out of magazines.</td></tr>
+                            <tr><td class="key">aiSkillDefault</td><td class="def">2</td><td class="rng">NOOB .. TERMINATOR</td><td>Combat skill preset, from Noob to Terminator.</td></tr>
+                            <tr><td class="key">personalityWeightMeasured</td><td class="def">80</td><td class="rng">0.0 .. 100.0</td><td>Relative share of new soldiers that roll the Measured personality. Can differ per faction.</td></tr>
+                            <tr><td class="key">personalityWeightCautious</td><td class="def">7</td><td class="rng">0.0 .. 100.0</td><td>Relative share of new soldiers that roll the Cautious personality. Can differ per faction.</td></tr>
+                            <tr><td class="key">personalityWeightAggressive</td><td class="def">12</td><td class="rng">0.0 .. 100.0</td><td>Relative share of new soldiers that roll the Aggressive personality. Can differ per faction.</td></tr>
+                            <tr><td class="key">personalityWeightReckless</td><td class="def">3</td><td class="rng">0.0 .. 100.0</td><td>Relative share of new soldiers that roll the Reckless personality. Can differ per faction.</td></tr>
+                            <tr><td class="key">dodgeChance</td><td class="def">0.8</td><td class="rng">0.0 .. 1.0</td><td>Chance to run for cover when shot at.</td></tr>
+                            <tr><td class="key">dodgeCooldown</td><td class="def">8</td><td class="rng">0.0 .. 120.0</td><td>Minimum seconds between two dodges.</td></tr>
+                            <tr><td class="key">dodgeMaxDist</td><td class="def">400</td><td class="rng">0.0 .. 1000.0</td><td>Shots from further than this (m) never trigger a dodge.</td></tr>
+                            <tr><td class="key">dodgeSearchDist</td><td class="def">50</td><td class="rng">5.0 .. 100.0</td><td>How far (m) to search for cover or a building when dodging.</td></tr>
+                            <tr><td class="key">dodgeScaleByPersonality</td><td class="def">true</td><td class="rng">&mdash;</td><td>Personality adjusts dodge chance (Cautious more, Reckless less).</td></tr>
+                            <tr><td class="key">proneChance</td><td class="def">1</td><td class="rng">0.0 .. 1.0</td><td>Chance an AI is allowed to go prone, in every situation. 0 = AI never go prone, 1 = always allowed. Each AI keeps its roll for 10 seconds; AI already prone stay prone.</td></tr>
+                            <tr><td class="key">cqbProneChance</td><td class="def">0</td><td class="rng">0.0 .. 1.0</td><td>Chance an AI is allowed to go prone during CQB: inside a building, or with the enemy closer than close-combat range. 0 = AI never go prone in CQB (old behaviour), 1 = always allowed. Each AI keeps its roll for 10 seconds.</td></tr>
+                            <tr><td class="key">dodgeShotThreshold</td><td class="def">1</td><td class="rng">1 .. 20</td><td>Enemy shots AI need before dodging. 1 = dodge on the first shot.</td></tr>
+                            <tr><td class="key">dodgeShotWindow</td><td class="def">5</td><td class="rng">1.0 .. 30.0</td><td>Seconds a shot keeps counting toward the threshold. A longer pause resets the count.</td></tr>
+                            <tr><td class="key">grenadeUsage</td><td class="def">0.5</td><td class="rng">0.0 .. 1.0</td><td>How often frag grenades are thrown. 0 = never, 0.5 = default, 1 = often.</td></tr>
+                            <tr><td class="key">glUsage</td><td class="def">0.7</td><td class="rng">0.0 .. 1.0</td><td>How often underbarrel grenade launchers are fired. 0 = never, 0.5 = default, 1 = often.</td></tr>
+                            <tr><td class="key">glAccuracy</td><td class="def">1</td><td class="rng">0.1 .. 5.0</td><td>Underbarrel grenade launcher accuracy. Higher = tighter impact spread. 1 = default. Applies to AI spawned afterwards.</td></tr>
+                            <tr><td class="key">smokeUsage</td><td class="def">0.5</td><td class="rng">0.0 .. 1.0</td><td>How often smoke is thrown to cover movement. 0 = never, 0.5 = default, 1 = often. Applies to AI spawned afterwards.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="k-combat">Combat</h3>
+                    <p>23 keys &mdash; from the <em>Combat</em>, <em>CQB</em>, <em>Night</em>, <em>Investigate</em>, <em>Aggression</em> groups.</p>
+                    <table class="ref">
+                        <thead><tr><th>JSON key</th><th class="def">Shipped</th><th class="rng">Range</th><th>What it does</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">superiorRatio</td><td class="def">2</td><td class="rng">1.0 .. 5.0</td><td>A squad switches to assault posture with bounding fireteams when its weighted strength (MG, AT and vehicles count more; an armored vehicle facing infantry without AT always wins) is at least this many times the known enemy strength and it is not heavily suppressed. Also lets idle squads and Defend/Release garrisons leave their hold (within leash).</td></tr>
+                            <tr><td class="key">longRangeHold</td><td class="def">true</td><td class="rng">&mdash;</td><td>Target beyond the weapon effective range and not directly threatened: stay put (prone if the target stays visible, else crouch) and fire slow aimed single shots.</td></tr>
+                            <tr><td class="key">rifleEffectiveRange</td><td class="def">350</td><td class="rng">100.0 .. 800.0</td><td>Beyond this range rifle fire rate is capped (slow single shots); threat cannot raise it.</td></tr>
+                            <tr><td class="key">mgEffectiveRange</td><td class="def">700</td><td class="rng">200.0 .. 1500.0</td><td>Machine guns may keep bursting (suppression) up to this range; beyond it they fire slowly.</td></tr>
+                            <tr><td class="key">shareBuildings</td><td class="def">false</td><td class="rng">&mdash;</td><td>Allow several squads to use the same building for indoor positions (defend, idle, garrison). Off = one building per squad.</td></tr>
+                            <tr><td class="key">coverPreference</td><td class="def">0</td><td class="rng">0 .. 2</td><td>Where defending / idle squads look for positions: Balanced scores indoor and outdoor spots together (fortifications like sandbags and trenches get a bonus), Indoor prefers buildings, Outdoor prefers field cover.</td></tr>
+                            <tr><td class="key">overmatchAssault</td><td class="def">true</td><td class="rng">&mdash;</td><td>A squad that clearly outguns a confirmed enemy (weighted strength: MG, AT and vehicles count more; ratio scaled by leader personality) keeps bounding forward while the enemy is still visible instead of trading fire from position. Aborts on a new unknown contact, fire from another direction, heavy suppression or when the edge is lost.</td></tr>
+                            <tr><td class="key">overmatchMaxDist</td><td class="def">250</td><td class="rng">100.0 .. 500.0</td><td>Overmatch assault only starts when the enemy is closer than this.</td></tr>
+                            <tr><td class="key">cqbEnabled</td><td class="def">true</td><td class="rng">&mdash;</td><td>Squads attacking, flanking or in an overmatch assault that see enemies inside a building within 100 m clear it room by room in pairs (random order through the building graph), with a rear guard outside. Also sweeps buildings after an objective is captured. The Do CQB waypoint uses the same clear.</td></tr>
+                            <tr><td class="key">cqbIsolateMin</td><td class="def">6</td><td class="rng">3 .. 12</td><td>Squads with at least this many living members keep 1 man outside as rear guard (2 men from this number + 2), MG preferred. Smaller squads all go in as pairs.</td></tr>
+                            <tr><td class="key">cqbStackWait</td><td class="def">6</td><td class="rng">0.0 .. 30.0</td><td>Longest wait at the building entry for the team to gather before the first room is picked; after this the clear starts with whoever has arrived.</td></tr>
+                            <tr><td class="key">cqbAbortLosses</td><td class="def">2</td><td class="rng">1 .. 6</td><td>Casualties (dead or unconscious) that abort the clear. The building stays marked as occupied and is tried again later (Do CQB waypoint: next attempt after 15 s).</td></tr>
+                            <tr><td class="key">cqbCaptureWaits</td><td class="def">true</td><td class="rng">&mdash;</td><td>An objective is only captured when no building inside its radius is marked as occupied (enemy seen inside and not cleared yet).</td></tr>
+                            <tr><td class="key">cqbContactTimeout</td><td class="def">180</td><td class="rng">30.0 .. 600.0</td><td>A building marked occupied counts as clear after this long without new contact from it, so captures never stall.</td></tr>
+                            <tr><td class="key">cqbBreachMode</td><td class="def">0</td><td class="rng">0 .. 3</td><td>When the CQB pair throws a frag before entering a room. Auto = only when an enemy is known in that room (seen in the last 15 s), Always = every room, Never = no grenades. At most 3 frags per building.</td></tr>
+                            <tr><td class="key">cqbRoomTimeout</td><td class="def">60</td><td class="rng">20.0 .. 120.0</td><td>Seconds a pair may spend on one room (stack, frag, enter, sweep) before it skips the room and moves on. The whole building gets 120 s + rooms x this.</td></tr>
+                            <tr><td class="key">nightEnabled</td><td class="def">true</td><td class="rng">&mdash;</td><td>At night: squads in contact with unlit enemies 100-400 m away fire a flare (from a 40mm illumination round or RSP-30 in their inventory; otherwise they ask the commander for illumination), defending groups open fire later, long-range fire starts closer, and the commander fires illumination over an objective when the assault is released.</td></tr>
+                            <tr><td class="key">nightFlareCooldown</td><td class="def">75</td><td class="rng">30.0 .. 300.0</td><td>Minimum time between flares from the same squad. Only one flare per 150 m area at a time.</td></tr>
+                            <tr><td class="key">nightEngageMul</td><td class="def">0.6</td><td class="rng">0.2 .. 1.0</td><td>At night Defend/Garrison groups open fire at this fraction of their normal engage distance (unless directly threatened), and rifle/MG effective range is scaled by the same factor.</td></tr>
+                            <tr><td class="key">nightLightDiscipline</td><td class="def">true</td><td class="rng">&mdash;</td><td>At night AI flashlights stay off outdoors and only the entry team clearing a building turns them on inside. Vehicle headlights go off when an enemy is known within 800 m.</td></tr>
+                            <tr><td class="key">investigateMaxDist</td><td class="def">500</td><td class="rng">0.0 .. 1500.0</td><td>This squad ignores unidentified contacts further than this (m). Starts at the DCO global value.</td></tr>
+                            <tr><td class="key">investigateChance</td><td class="def">1</td><td class="rng">0.0 .. 1.0</td><td>Chance this squad investigates an unidentified contact, rolled once per contact. Starts at the DCO global value.</td></tr>
+                            <tr><td class="key">aiAggression <span class="chip chip-live" title="Measured in a stress test">tested</span></td><td class="def">1</td><td class="rng">0.5 .. 10.0</td><td>Overall AI aggression. 1 = DCO default (2.5x the old normal, effective value = slider x 2.5). Lower = soldiers take cover sooner, squads fall back sooner and the commander attacks less; higher = soldiers push through fire, squads hold under losses and the commander attacks more. New soldiers also roll more cautious or aggressive personalities. Can differ per faction.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="k-behaviour">Behaviour</h3>
+                    <p>28 keys.</p>
+                    <table class="ref">
+                        <thead><tr><th>JSON key</th><th class="def">Shipped</th><th class="rng">Range</th><th>What it does</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">behTargetPriority</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers pick targets by personality: who is shooting at them, AT/MG gunners, leaders/radio operators or the nearest enemy. At most one switch per 3 s.</td></tr>
+                            <tr><td class="key">behReloadDiscipline</td><td class="def">true</td><td class="rng">&mdash;</td><td>Tactical reload below 30% when no enemy was seen for 3 s, fireteam mates do not reload at the same time, 'reloading' callout.</td></tr>
+                            <tr><td class="key">behPistolCQB</td><td class="def">true</td><td class="rng">&mdash;</td><td>Empty primary with an enemy under 10 m: switch to the handgun instead of reloading, switch back when clear.</td></tr>
+                            <tr><td class="key">behSecurity360</td><td class="def">true</td><td class="rng">&mdash;</td><td>Halted groups not in contact watch front, left, right and rear sectors.</td></tr>
+                            <tr><td class="key">behHearing</td><td class="def">true</td><td class="rng">&mdash;</td><td>Groups hear engines, footsteps, doors and explosions and turn to look or investigate.</td></tr>
+                            <tr><td class="key">behBuddyCallout</td><td class="def">true</td><td class="rng">&mdash;</td><td>When a soldier identifies an enemy, nearby squad mates look and receive it as detected, with a voice callout.</td></tr>
+                            <tr><td class="key">behWindowFire</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers in contact near a building take a window or roof slot facing the enemy.</td></tr>
+                            <tr><td class="key">behMGGunner</td><td class="def">true</td><td class="rng">&mdash;</td><td>Machine gunners set a base of fire, keep suppressing the last known position, displace and get an assistant.</td></tr>
+                            <tr><td class="key">behATSpecialist</td><td class="def">true</td><td class="rng">&mdash;</td><td>Rockets only against vehicles, bunkers, MG nests and window targets; flank armor, check backblast, squad covers the AT.</td></tr>
+                            <tr><td class="key">behMarksman</td><td class="def">true</td><td class="rng">&mdash;</td><td>Marksmen take elevated overwatch, prioritize leaders, MG and AT, and relocate after a few shots.</td></tr>
+                            <tr><td class="key">behLeaderRTOGrenadier</td><td class="def">true</td><td class="rng">&mdash;</td><td>Group confusion when the leader dies, report delay when the radio operator dies, grenadier smoke and HE use.</td></tr>
+                            <tr><td class="key">behBreakContact</td><td class="def">true</td><td class="rng">&mdash;</td><td>Withdrawals use smoke and fireteam leapfrog instead of one group run.</td></tr>
+                            <tr><td class="key">behAmbushDrill</td><td class="def">true</td><td class="rng">&mdash;</td><td>Ambushed squads assault through (near) or take cover, smoke and break contact or flank (far).</td></tr>
+                            <tr><td class="key">behContactSOP</td><td class="def">true</td><td class="rng">&mdash;</td><td>Squads that see an unaware enemy observe, set a hasty ambush, bypass or engage depending on their task.</td></tr>
+                            <tr><td class="key">behRearm</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers low on ammo resupply from ammo boxes, logistics trucks and corpses.</td></tr>
+                            <tr><td class="key">behSpecialistRecovery</td><td class="def">true</td><td class="rng">&mdash;</td><td>A rifleman picks up the weapon of a fallen MG/AT/GL specialist when the group needs it.</td></tr>
+                            <tr><td class="key">behRearmEnemySources</td><td class="def">true</td><td class="rng">&mdash;</td><td>Rearm may use enemy corpses.</td></tr>
+                            <tr><td class="key">behEnemyWeapons</td><td class="def">true</td><td class="rng">&mdash;</td><td>Specialist recovery may pick up enemy weapons.</td></tr>
+                            <tr><td class="key">behExplosionReactions</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers hit the dirt near blasts, get shocked and briefly deafened up close, react to friendly danger-close blasts, displace out of artillery beaten zones, report indirect fire to the commander (counter-battery also against player and vanilla mortars), take cover from grenade shrapnel and estimate where GL/RPG shots came from.</td></tr>
+                            <tr><td class="key">behPlayerVoice</td><td class="def">true</td><td class="rng">&mdash;</td><td>Enemy AI can hear players talking on VoN: certain within 8 m, fading to nothing around 25 m. Walls, vehicles, engine noise and nearby gunfire muffle it, longer talking is easier to hear, radio talkers are quieter. The listener group gets the estimated position as a contact.</td></tr>
+                            <tr><td class="key">behLeanPeek</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers lean out from cover to peek at unseen noise or fire, peek-shoot when suppressed, check where a lost target was last seen and watch sectors. In CQB they slice the pie at doors and corners, lean around hallway and stair turns and peek before entry, also while walking.</td></tr>
+                            <tr><td class="key">behSuppressLastKnown</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers keep firing at the last seen position of a hidden enemy for a window based on weapon (rifle 5 s, MG 12 s, close 8 s) and personality, spread along the cover edge, then watch the spot and report lost contact.</td></tr>
+                            <tr><td class="key">behAssaultFire</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers advancing toward a visible enemy closer than 30 m run instead of sprint and keep aiming, firing bursts while they move. Moves to cover under heavy fire stay a sprint.</td></tr>
+                            <tr><td class="key">behReactionTime</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers need a short moment before firing at a newly seen enemy (longer when relaxed, shorter when alert, faster with higher skill, slower when the enemy is behind them). A first near miss on a relaxed soldier makes him freeze or drop for a moment.</td></tr>
+                            <tr><td class="key">behProneMove</td><td class="def">true</td><td class="rng">&mdash;</td><td>Realistic prone moves: crawl forward up to 15 m (under heavy fire, sneaking, MG/marksman shifts), roll sideways up to 3 m, crawl back up to 5 m still facing the enemy. Longer prone moves get up to crouch first.</td></tr>
+                            <tr><td class="key">behPinned</td><td class="def">true</td><td class="rng">&mdash;</td><td>Accurate close fire (weighted near misses) pins soldiers down: they stay low, stop moving and only fire rare unaimed bursts until the fire stops, then peek and recover. When half the squad is pinned the leader reports, pops smoke, the free fireteam suppresses and flanks, and support is requested.</td></tr>
+                            <tr><td class="key">behAwareness</td><td class="def">true</td><td class="rng">&mdash;</td><td>Finding a friendly body makes the squad sweep toward the killer. Lost enemies are chased along their last direction (150-300 m by personality) and the commander sends an idle group to cut them off. Under enemy artillery squads spread out, avoid halting in the open and do not bunch in one building. Static soldiers use concealment, avoid the skyline, keep back from windows, rest their weapon and deploy bipods.</td></tr>
+                            <tr><td class="key">behCombinedArms</td><td class="def">true</td><td class="rng">&mdash;</td><td>Infantry escort tanks from behind or the side and lead them through towns and forest; tanks wait for infantry before entering towns or forest, go hull-down and fire at positions infantry spot. Defending squads in contact man nearby static HMG/AT weapons and the commander counts statics as defense assets.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="k-idle">Idle &amp; stragglers</h3>
+                    <p>13 keys &mdash; from the <em>Idle</em>, <em>Straggler</em> groups.</p>
+                    <table class="ref">
+                        <thead><tr><th>JSON key</th><th class="def">Shipped</th><th class="rng">Range</th><th>What it does</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">idleEnterTime</td><td class="def">30</td><td class="rng">5.0 .. 300.0</td><td>Seconds a group without waypoints waits before going IDLE: members take cover and hold. Player groups never go IDLE.</td></tr>
+                            <tr><td class="key">idleCoverSearchDist</td><td class="def">100</td><td class="rng">10.0 .. 200.0</td><td>How far (m) from the leader IDLE members search for cover or a building position.</td></tr>
+                            <tr><td class="key">idleOverrunDist</td><td class="def">15</td><td class="rng">0.0 .. 100.0</td><td>IDLE units only leave their cover when an enemy is this close (m).</td></tr>
+                            <tr><td class="key">idleLeaveToAssist</td><td class="def">true</td><td class="rng">&mdash;</td><td>IDLE groups may leave cover to attack enemies that are fighting allies. Enemies shooting at the group itself are fought from cover.</td></tr>
+                            <tr><td class="key">idleLeaveToInvestigate</td><td class="def">false</td><td class="rng">&mdash;</td><td>IDLE groups may leave cover to investigate unidentified contacts.</td></tr>
+                            <tr><td class="key">idleFollowCommander</td><td class="def">true</td><td class="rng">&mdash;</td><td>IDLE groups still take AI Commander orders. Off = the commander leaves IDLE groups alone.</td></tr>
+                            <tr><td class="key">stragglerEnabled</td><td class="def">true</td><td class="rng">&mdash;</td><td>Soldiers who fall far behind their leader are ordered back. Can differ per faction.</td></tr>
+                            <tr><td class="key">stragglerTime</td><td class="def">15</td><td class="rng">5.0 .. 120.0</td><td>Seconds outside cohesion distance before a soldier is pulled back. Can differ per faction.</td></tr>
+                            <tr><td class="key">stragglerStuckTime</td><td class="def">30</td><td class="rng">10.0 .. 300.0</td><td>Seconds without getting 3 m closer to the leader that count as stuck. He tries another point once, then is marked stuck.</td></tr>
+                            <tr><td class="key">stragglerLog</td><td class="def">false</td><td class="rng">&mdash;</td><td>Log each straggler: distance, active behavior, combat mode, cover, leash. For diagnosis.</td></tr>
+                            <tr><td class="key">combatCohesionOpen</td><td class="def">40</td><td class="rng">10.0 .. 100.0</td><td>In combat, a member farther than this from the leader in the open moves back to a random spot within half this distance of the leader. Scaled by each group's cohesion multiplier.</td></tr>
+                            <tr><td class="key">combatCohesionUrban</td><td class="def">15</td><td class="rng">5.0 .. 50.0</td><td>Same as Combat Cohesion (Open), used when the member or the leader is inside a building.</td></tr>
+                            <tr><td class="key">armorFearScale</td><td class="def">-1</td><td class="rng">-1.0 .. 2.0</td><td>How much a nearby enemy tank or armored vehicle lowers morale. -1 = automatic by faction: regular armies (US, USSR) 0.5, others (FIA militia) 1.0. Set it on a faction layer to override one side.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="k-squad">Squads &amp; commander</h3>
+                    <p>24 keys &mdash; from the <em>Contact Report</em>, <em>Contact Sharing</em>, <em>Cross-Group Medic</em>, <em>Commander Spawner</em> groups.</p>
+                    <table class="ref">
+                        <thead><tr><th>JSON key</th><th class="def">Shipped</th><th class="rng">Range</th><th>What it does</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">contactReportMaxPerScan</td><td class="def">0</td><td class="rng">0 .. 10</td><td>Most contact reports one squad sends to its commander per scan. Priority: armor/vehicles, then AT/MG/sniper, then enemies firing at the squad, then infantry (bigger and nearer first). The rest is reported on the next scan. 0 = use each squad's prefab value (default 3).</td></tr>
+                            <tr><td class="key">contactReportScanInterval</td><td class="def">0</td><td class="rng">0.0 .. 60.0</td><td>How often each squad checks what it sees and reports contacts to the commander. 0 = use each squad's prefab value (default 15 s).</td></tr>
+                            <tr><td class="key">shareEnabled</td><td class="def">true</td><td class="rng">&mdash;</td><td>AI squads share enemy contacts with nearby friendly squads by voice or short radio, without going through the commander.</td></tr>
+                            <tr><td class="key">shareVoiceRange</td><td class="def">100</td><td class="rng">20.0 .. 300.0</td><td>Distance (m) a squad can shout a contact to another squad. No radio needed.</td></tr>
+                            <tr><td class="key">shareRadioRange</td><td class="def">400</td><td class="rng">100.0 .. 1500.0</td><td>Distance (m) of squad-to-squad short radio.</td></tr>
+                            <tr><td class="key">shareNoisePer100m</td><td class="def">8</td><td class="rng">0.0 .. 50.0</td><td>Base position error (m) of a shared contact per 100 m between the spotter and the enemy.</td></tr>
+                            <tr><td class="key">shareVoiceNoise</td><td class="def">1.5</td><td class="rng">0.5 .. 5.0</td><td>Extra position error for contacts passed by voice (rougher than radio).</td></tr>
+                            <tr><td class="key">shareRadioNoise</td><td class="def">1</td><td class="rng">0.5 .. 5.0</td><td>Position error multiplier for contacts passed by short radio.</td></tr>
+                            <tr><td class="key">shareRequireRadio</td><td class="def">false</td><td class="rng">&mdash;</td><td>Short radio sharing only works when both the sender and the receiver carry a radio. Voice always works.</td></tr>
+                            <tr><td class="key">shareHops</td><td class="def">2</td><td class="rng">1 .. 2</td><td>1 = only direct. 2 = a squad that received a contact may pass it on once more (with extra error).</td></tr>
+                            <tr><td class="key">shareMapMarkers</td><td class="def">false</td><td class="rng">&mdash;</td><td>Shared contacts are marked on friendly players' maps (vanilla AI enemy markers). Positions keep their error.</td></tr>
+                            <tr><td class="key">shareToPlayers</td><td class="def">false</td><td class="rng">&mdash;</td><td>Friendly players in voice or radio range get a small notification when an AI squad shares a contact. Each player can hide it in Settings &gt; DCO.</td></tr>
+                            <tr><td class="key">shareDebug</td><td class="def">false</td><td class="rng">&mdash;</td><td>Log every shared contact (sender, receiver, hop, voice/radio, error) to the console.</td></tr>
+                            <tr><td class="key">medicCrossGroup</td><td class="def">true</td><td class="rng">&mdash;</td><td>AI medics treat friendly casualties outside their own group when the casualty's group has no medic that can come.</td></tr>
+                            <tr><td class="key">medicRadiusBleeding</td><td class="def">150</td><td class="rng">25.0 .. 500.0</td><td>How far (m) to look for a medic from another group for a bleeding casualty.</td></tr>
+                            <tr><td class="key">medicRadiusUnconscious</td><td class="def">300</td><td class="rng">25.0 .. 800.0</td><td>How far (m) to look for a medic from another group for an unconscious casualty.</td></tr>
+                            <tr><td class="key">medicIncludePlayers</td><td class="def">true</td><td class="rng">&mdash;</td><td>Friendly players are treated by AI medics too.</td></tr>
+                            <tr><td class="key">medicUnderFire</td><td class="def">true</td><td class="rng">&mdash;</td><td>Unconscious casualties may be reached under fire, with smoke, when the medic is not directly engaged. Bleeding casualties always wait until it is safe.</td></tr>
+                            <tr><td class="key">medicMaxLentPerGroup</td><td class="def">1</td><td class="rng">1 .. 4</td><td>How many medics one group lends out at the same time.</td></tr>
+                            <tr><td class="key">medicTimeout</td><td class="def">90</td><td class="rng">20.0 .. 300.0</td><td>Seconds before a lent medic counts as failed and another medic is tried.</td></tr>
+                            <tr><td class="key">commanderStock</td><td class="def">-1</td><td class="rng">-1 .. 100000</td><td>Starting reinforcement stock for all commanders (soldiers). -1 = use each commander's own value.</td></tr>
+                            <tr><td class="key">maxAttackGroups</td><td class="def">-1</td><td class="rng">-1 .. 20</td><td>Default for every commander's maximum number of groups sent on one attack (1-20). -1 keeps each commander's own setting from its prefab or the GM.</td></tr>
+                            <tr><td class="key">spawnerFactionAICap</td><td class="def">0</td><td class="rng">0 .. 2000</td><td>Total AI cap per faction for Commander Spawners. When reached, spawning is delayed. 0 = unlimited.</td></tr>
+                            <tr><td class="key">c2Realism</td><td class="def">1</td><td class="rng">0 .. 2</td><td>How the AI commander learns about its own squads. 0 = Off (knows their state at once). 1 = Standard: squads report by radio (Contact, SPOTREP, LACE, SITREP) over one commander net and the commander plans with the last report. 2 = Full: Standard plus radio range (<code>tune_c2_radio_m</code> 1500 m without a radio pack), relay through another squad, radio check after <code>tune_c2_check_s</code> (600 s) of silence and lost contact (no new tasks, half strength, the squad holds <code>tune_c2_lost_hold_s</code> (300 s) and then moves to the nearest own objective). Can differ per faction. Other tuning: <code>tune_c2_sitrep_s</code> (300), <code>tune_c2_queue_max</code> (20), <code>tune_c2_tx_min_s</code> / <code>tune_c2_tx_max_s</code> (10 / 30), <code>tune_c2_sat_per_min</code> (4).</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="k-server">Server &amp; players</h3>
+                    <p>41 keys &mdash; from the <em>General</em>, <em>Doctrine names</em>, <em>Performance</em>, <em>Player Awareness</em>, <em>GroupPresets</em>, <em>GMSettings</em> groups.</p>
+                    <table class="ref">
+                        <thead><tr><th>JSON key</th><th class="def">Shipped</th><th class="rng">Range</th><th>What it does</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">doctrinePreset</td><td class="def">Default (Measured)</td><td class="rng">&mdash;</td><td>Name of the server-wide commander doctrine preset. Built-in names: "Default (Measured)", "Defensive", "Aggressive", "Recon-heavy", "US 1989", "USSR 1989", "FIA"; any other name loads $profile:DCO/Doctrine/&lt;name&gt;.json, and an unknown name falls back to "Default (Measured)". Written by the GM doctrine editor; doctrineMasks, doctrineNumbers and doctrineForce are applied on top of it.</td></tr>
+                            <tr><td class="key">doctrineBattleStrong</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>attack plan columns allowed when the commander is Strong (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineBattleFavorable</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>attack plan columns allowed when the commander is Favorable (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineBattleEqual</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>attack plan columns allowed when the commander is Equal (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineBattleWeaker</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>attack plan columns allowed when the commander is Weaker (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineBattleUnknown</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>attack plan columns allowed when the commander is unsure of the force balance (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineDefenseStrong</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>defensive plan columns allowed when the commander is Strong (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineDefenseFavorable</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>defensive plan columns allowed when the commander is Favorable (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineDefenseEqual</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>defensive plan columns allowed when the commander is Equal (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineDefenseWeaker</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>defensive plan columns allowed when the commander is Weaker (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineDefenseUnknown</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>defensive plan columns allowed when the commander is unsure of the force balance (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineSupportSupplies</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>Squad conditions that trigger a supplies request (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineSupportReinforcement</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>Squad conditions that trigger a reinforcement request (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineSupportSupport</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>Squad conditions that trigger a support request (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineSupportFiresupport</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>Squad conditions that trigger a firesupport request (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineSupportMedevac</td><td class="def">from the preset</td><td class="rng">&mdash;</td><td>Squad conditions that trigger a medevac request (names below). Names separated by spaces, or <code>none</code>.</td></tr>
+                            <tr><td class="key">doctrineReconTimeout</td><td class="def">300</td><td class="rng">60 .. 1800</td><td>Seconds of recon on Unknown before Movement to Contact.</td></tr>
+                            <tr><td class="key">doctrineWeakerScale</td><td class="def">1</td><td class="rng">0.2 .. 2</td><td>Scale for the Weaker defence thresholds 0.33 and 0.17. Below 1 holds longer.</td></tr>
+                            <tr><td class="key">doctrineWaitTimeout</td><td class="def">240</td><td class="rng">30 .. 1800</td><td>Wait timeout in seconds at Moderate decision (Fast x0.5, Slow x1.5).</td></tr>
+                            <tr><td class="key">doctrineReserve</td><td class="def">0.25</td><td class="rng">0 .. 0.5</td><td>Share of the force kept back when Keep reserve applies.</td></tr>
+                            <tr><td class="key">doctrineAttackRatio</td><td class="def">0</td><td class="rng">0 .. 6</td><td>Minimum attack ratio (0 = the commander's own attack ratio).</td></tr>
+                            <tr><td class="key">doctrineCounterMin</td><td class="def">300</td><td class="rng">0 .. 1800</td><td>Counterattack window on a lost objective, shortest (seconds).</td></tr>
+                            <tr><td class="key">doctrineCounterMax</td><td class="def">600</td><td class="rng">0 .. 1800</td><td>Counterattack window on a lost objective, longest (seconds).</td></tr>
+                            <tr><td class="key">doctrineRetreatLoss</td><td class="def">0</td><td class="rng">0 .. 0.9</td><td>Abort the attack when this share of the committed force is lost (0 = off).</td></tr>
+                            <tr><td class="key">doctrineConsolidate</td><td class="def">480</td><td class="rng">60 .. 1200</td><td>Seconds a captured objective is held before its groups are released.</td></tr>
+                            <tr><td class="key">doctrineForce</td><td class="def">reserve min=1 share=min max=2; sbf min=1 share=0.33 max=2; attack min=2 share=ratio max=6; ...</td><td class="rng">&mdash;</td><td>How many squads the commander sends to each mission, one row per mission separated by ;: `&lt;mission&gt; min=&lt;n&gt; share=&lt;ratio</td></tr>
+                            <tr><td class="key">doctrineFiaDefendV1</td><td class="def">(internal)</td><td class="rng">&mdash;</td><td>Internal one-time marker: set after the FIA doctrine defense rows were migrated to also defend objectives (obj_defence). Do not edit.</td></tr>
+                            <tr><td class="key">lodMode</td><td class="def">0</td><td class="rng">VANILLA .. FULL_DETAIL</td><td>Simulation detail for groups owned by an AI Commander. Groups without a commander always stay vanilla unless their own AI LOD is set. Vanilla = engine decides (distant AI may stop). Prevent Max LOD = commander groups keep moving and fighting far from players. Full Detail = commander groups always at full simulation, heaviest. Applies immediately.</td></tr>
+                            <tr><td class="key">perfProfiling</td><td class="def">false</td><td class="rng">&mdash;</td><td>Server-side profiler: every 30 s writes FPS (avg/min/longest frame), AI count by LOD, groups per commander, time per DCO system and queries/raycasts per second to dco.log (PERF channel) and perf.log in the session folder $profile:DCO/Logs/&lt;date&gt;/&lt;block&gt;/session_&lt;time&gt;/; frames over 50 ms list the systems that ran. Near-zero cost when off.</td></tr>
+                            <tr><td class="key">intentOverlay</td><td class="def">false</td><td class="rng">&mdash;</td><td>Commander intent map overlay (Dev/GM): plans, decision reasons, group roles, the commander's picture of the enemy. Off = none; on = Game Master only. Always allowed in Workbench.</td></tr>
+                            <tr><td class="key">overlayMode</td><td class="def">1</td><td class="rng">0 .. 2</td><td>Friendly AI groups on the players' map. 0 = off, 1 = only squads supporting the player's group or sharing its objective, 2 = all.</td></tr>
+                            <tr><td class="key">overlayRadius</td><td class="def">1500</td><td class="rng">200.0 .. 5000.0</td><td>Base radius (m) for objectives in the relevant overlay mode (objectives within 2x this radius are shown).</td></tr>
+                            <tr><td class="key">radioRadius</td><td class="def">800</td><td class="rng">100.0 .. 3000.0</td><td>Players within this radius (m) of an objective hear the commander's operation broadcasts.</td></tr>
+                            <tr><td class="key">artyWarnRadius</td><td class="def">400</td><td class="rng">100.0 .. 1500.0</td><td>Friendly players within this radius (m) of an artillery target are warned before the rounds are fired.</td></tr>
+                            <tr><td class="key">playerBriefings</td><td class="def">true</td><td class="rng">&mdash;</td><td>Commander briefings to player groups (OPORD, FRAGO, phases, withdraw/cancel). Off = nothing is sent and players see Disabled by server.</td></tr>
+                            <tr><td class="key">playerBriefingCap</td><td class="def">2</td><td class="rng">0 .. 2</td><td>Highest briefing HUD level players may choose. 0 = Hardcore, 1 = Standard, 2 = Assisted.</td></tr>
+                            <tr><td class="key">briefingWorldMarkers</td><td class="def">0</td><td class="rng">0 .. 2</td><td>Briefing world markers. 0 = follow the player's level, 1 = off for everyone, 2 = on for everyone.</td></tr>
+                            <tr><td class="key">groupPresetUploads</td><td class="def">gm</td><td class="rng">&mdash;</td><td>Who may upload saved group presets to the server. Allowed values: "gm" (any Game Master, default), "admin" (server administrators only), "off" (nobody). Other values are ignored.</td></tr>
+                            <tr><td class="key">groupPresetLimit</td><td class="def">200</td><td class="rng">0 .. 10000</td><td>Maximum number of saved group preset files the server keeps. When the count is reached, new preset uploads are refused until one is deleted.</td></tr>
+                            <tr><td class="key">gmSaveConfig</td><td class="def">admin</td><td class="rng">&mdash;</td><td>Who may save the current GM settings back to the server config file from the GM settings screen. Allowed values: "gm" (any Game Master), "admin" (server or session administrators, default), "off" (nobody). The listen-server host can always save unless this is "off".</td></tr>
+                            <tr><td class="key">startupPresetPrompt</td><td class="def">true</td><td class="rng">&mdash;</td><td>On/off (true/false, default true). When on, the first unrestricted Game Master is offered the list of saved Global settings presets to load at session start, if any presets exist.</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- TUNE -->
+                <section class="block" id="tune">
+                    <h2>Tuning keys</h2>
+                    <p>Beyond the named keys there are <b>535 tuning keys</b>, all prefixed <code>tune_</code>. They're the numbers the AI reasons with — hearing error, cover scoring, flank geometry, morale thresholds — exposed rather than buried. A value equal to the default means the built-in behaviour, so a file that mentions none of them behaves exactly as shipped.</p>
+
+                    <h3>Naming</h3>
+                    <p>Each key has two spellings, and both are accepted everywhere — config, Game Master and API: the config name <code>tune_hear_shot_err</code>, or the short internal name <code>hear.shot_err</code>. The generated <code>DCO_GlobalConfig_README.txt</code> next to your config file lists every key with its default and range.</p>
+
+                    <h3>The larger groups</h3>
+                    <table class="ref">
+                        <thead><tr><th>Prefix</th><th class="def">Keys</th><th>Covers</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">tune_wf_</td><td class="def">39</td><td>Weapon and fire behaviour.</td></tr>
+                            <tr><td class="key">tune_ph_</td><td class="def">26</td><td>Phase handling inside a task.</td></tr>
+                            <tr><td class="key">tune_fi_</td><td class="def">25</td><td>Fire control and engagement decisions.</td></tr>
+                            <tr><td class="key">tune_cr_</td><td class="def">24</td><td>Contact reporting.</td></tr>
+                            <tr><td class="key">tune_tac_</td><td class="def">21</td><td>Commander tactic selection.</td></tr>
+                            <tr><td class="key">tune_va_ · tune_agg_</td><td class="def">19 · 19</td><td>Vehicle activity, and the aggression profile.</td></tr>
+                            <tr><td class="key">tune_tb_ · tune_def_</td><td class="def">18 · 18</td><td>Team bounding, and defence layout.</td></tr>
+                            <tr><td class="key">tune_mb_ · tune_opp_</td><td class="def">16 · 15</td><td>Move brain, and opportunity handling.</td></tr>
+                            <tr><td class="key">tune_cqb_ · tune_reinf_ · tune_osc_</td><td class="def">13 · 12 · 12</td><td>Building clearing, reinforcement, oscillation damping.</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="legend">Another 38 prefixes hold the remaining keys, from <code>tune_cov_</code> (cover) and <code>tune_fm_</code> (fire missions) down to single-key groups.</p>
+                    <div class="note warn"><b>Change these one at a time.</b> They were built to be tuned against a measurement, not guessed at. Many are flagged experimental in the Game Master settings window because they're still being validated — if a run gets worse, delete the key rather than compensating with a second one.</div>
+                </section>
+
+                <!-- TROUBLESHOOTING -->
+                <section class="block" id="trouble">
+                    <h2>Troubleshooting</h2>
+                    <table class="ref">
+                        <thead><tr><th>Symptom</th><th>Check</th></tr></thead>
+                        <tbody>
+                            <tr><td class="key">My edits did nothing</td><td>Look for <code>N settings overridden from ...</code> at startup. If N is 0, the file is somewhere else — it has to be <code>$profile:DCO/DCO_GlobalConfig.json</code> under the <code>-profile</code> folder the server actually uses.</td></tr>
+                            <tr><td class="key">A key vanished from the file</td><td>It was misspelled. Only real keys survive a rewrite — copy the name from the reference above.</td></tr>
+                            <tr><td class="key">My value went back to the default</td><td>Either it was clamped (<code>cfg_clamped</code>), or it was still sitting at the old shipped default and got migrated (<code>cfg_default_migrated</code>). Values you edited are never migrated.</td></tr>
+                            <tr><td class="key">The whole file was ignored</td><td><code>cfg_parse_fail</code> — a trailing comma or a missing brace. The previous values stay and nothing is written, so your file is still intact.</td></tr>
+                            <tr><td class="key">Faction values ignored</td><td><code>cfg_faction_global_only</code> for server-wide keys, <code>cfg_faction_skip</code> for a faction that isn't in the mission, <code>cfg_factions_not_object</code> if the block is an array rather than an object.</td></tr>
+                            <tr><td class="key">Game Master changes gone after restart</td><td>Game Master edits apply live but aren't written back unless somebody saves. <code>gmSaveConfig</code> controls who may.</td></tr>
+                            <tr><td class="key">Cover and suppression feel weaker than the numbers</td><td>They are. See <a href="#aggression" class="accent">the aggression trap</a>.</td></tr>
+                            <tr><td class="key">Lower isn't better, or vice versa</td><td>Check the shipped value in the table rather than your intuition. Several keys ship above 1 (<code>aiPerception</code> 1.5) and several below (<code>takeCoverChance</code> 0.8).</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="callout mt-32">
+                        <div>
+                            <h2>Running a DCO server?</h2>
+                            <p>Bring your config and your perf log to Discord — tuning questions get answered fastest with numbers attached.</p>
+                        </div>
+                        <div class="btn-row">
+                            <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                            <a class="btn" href="guide.html">Using the mod</a>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="assets/site.js"></script>
+<script>
+    // Same one-section-at-a-time behaviour as the guide and modding pages.
+    (function () {
+        const blocks = [...document.querySelectorAll('.block')];
+        const links = [...document.querySelectorAll('.toc a')];
+        document.body.classList.add('tabbed');
+
+        const owner = {};
+        blocks.forEach(b => {
+            owner[b.id] = b.id;
+            b.querySelectorAll('[id]').forEach(el => owner[el.id] = b.id);
+        });
+
+        blocks.forEach(b => {
+            const heads = [...b.querySelectorAll(':scope > h3[id]')];
+            if (heads.length < 2) return;
+            heads.forEach(h => {
+                const panel = document.createElement('div');
+                panel.className = 'sub-panel';
+                panel.dataset.id = h.id;
+                h.before(panel);
+                let node = h;
+                while (node && !(node.tagName === 'H3' && node !== h && node.id)) {
+                    const next = node.nextElementSibling;
+                    panel.append(node);
+                    node = next;
+                }
+            });
+            const pills = heads.map(h =>
+                `<button type="button" data-goto="${h.id}" aria-pressed="false">${h.textContent.trim()}</button>`).join('');
+            (b.querySelector(':scope > p') || b.querySelector('h2'))
+                .insertAdjacentHTML('afterend', `<div class="pills" role="tablist">${pills}</div>`);
+        });
+
+        blocks.forEach((b, i) => {
+            const prev = blocks[i - 1], next = blocks[i + 1];
+            const label = el => el.querySelector('h2').textContent.trim();
+            b.insertAdjacentHTML('beforeend', `<nav class="pager">
+                ${prev ? `<a href="#${prev.id}"><span>← Previous</span><b>${label(prev)}</b></a>` : '<span></span>'}
+                ${next ? `<a href="#${next.id}"><span>Next →</span><b>${label(next)}</b></a>` : ''}
+            </nav>`);
+        });
+
+        function show(id) {
+            const sectionId = owner[id] || blocks[0].id;
+            const section = document.getElementById(sectionId);
+            blocks.forEach(b => b.classList.toggle('active', b === section));
+
+            const panels = [...section.querySelectorAll('.sub-panel')];
+            if (panels.length) {
+                const wanted = panels.find(p => p.dataset.id === id) || panels[0];
+                panels.forEach(p => p.classList.toggle('active', p === wanted));
+                section.querySelectorAll('.pills button').forEach(btn =>
+                    btn.setAttribute('aria-pressed', btn.dataset.goto === wanted.dataset.id));
+                id = wanted.dataset.id;
+            }
+
+            links.forEach(a => a.classList.toggle('active',
+                a.getAttribute('href') === '#' + id || (panels.length === 0 && a.getAttribute('href') === '#' + sectionId)));
+
+            if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
+            scrollTo({ top: 0 });
+        }
+
+        const toc = document.getElementById('toc-d');
+        const narrow = matchMedia('(max-width: 960px)');
+        const syncToc = () => toc.open = !narrow.matches;
+        syncToc();
+        narrow.addEventListener('change', syncToc);
+
+        document.addEventListener('click', e => {
+            if (e.target.closest('.toc a') && narrow.matches) toc.open = false;
+            const el = e.target.closest('a[href^="#"], .pills button');
+            if (!el) return;
+            const id = el.dataset.goto || el.getAttribute('href').slice(1);
+            if (!owner[id]) return;
+            e.preventDefault();
+            history.pushState(null, '', '#' + id);
+            show(id);
+        });
+        addEventListener('popstate', () => show(location.hash.slice(1)));
+
+        show(location.hash.slice(1));
+    })();
+</script>
+</body>
+</html>

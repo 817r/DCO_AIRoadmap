@@ -1,11 +1,11 @@
 {
-  "version": "v0.4.142",
+  "version": "v0.4.145",
   "gameVersion": "1.8.0.13",
   "phase": "Alpha",
-  "downloads": 35772,
-  "rating": 94,
-  "releases": 56,
-  "updated": "2026-09-28",
+  "downloads": 41270,
+  "rating": 93,
+  "releases": 50,
+  "updated": "2026-10-13",
   "links": {
     "workshop": "https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger",
     "changelog": "https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger/changelog",

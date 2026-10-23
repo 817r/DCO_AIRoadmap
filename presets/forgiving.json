@@ -1,0 +1,9 @@
+{
+  "_comment": "DCO AI - Forgiving. Easier AI for a casual or new-player server. DCO AI template. Rename to DCO_GlobalConfig.json and put it where your server keeps that file (back up the old one first). Only the keys below change; everything else is filled in with the shipped default at the next start. Delete the file to go back to defaults.",
+  "aiSkillDefault": 1,
+  "aimAccuracy": 0.8,
+  "aimSpeed": 0.8,
+  "perception_identify_mul": 0.8,
+  "suppressionEffect": 1.3,
+  "aiAggression": 0.7
+}

@@ -22,6 +22,7 @@
     --teal: #2dd4bf;
     --pink: #f472b6;
     --purple: #a78bfa;
+    --cyan: #22d3ee;
     --discord: #5865f2;
 
     --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -117,7 +118,8 @@ h3 { font-size: 17px; font-weight: 700; }
 .nav.open .nav-toggle span::before { transform: translateY(6px) rotate(45deg); }
 .nav.open .nav-toggle span::after { transform: translateY(-6px) rotate(-45deg); }
 
-@media (max-width: 960px) {
+/* Ten links plus the Support button need room; below this they'd collide. */
+@media (max-width: 1100px) {
     .nav-toggle { display: flex; margin-left: 0; }
     .nav-cta { margin-left: auto; }
     .nav-links { display: none; }

@@ -862,5 +862,277 @@
     "prog": 45,
     "desc": "Writes FPS, live AI per faction, commander and objective state, plus per-group and per-vehicle dumps to log files for performance testing.",
     "video": ""
+  },
+  {
+    "cat": "Modding & API",
+    "name": "Public modding API",
+    "ver": "v0.4.144",
+    "prio": "High",
+    "prog": 90,
+    "desc": "DCO_API: one stable entry point other addons call instead of modding DCO internals. Version() reports the API version, IsReady() whether DCO is running. Nothing on the published surface is removed or renamed within a major version."
+  },
+  {
+    "cat": "Modding & API",
+    "name": "Event API",
+    "ver": "v0.4.144",
+    "prio": "High",
+    "prog": 90,
+    "desc": "Fifteen script invokers an addon can subscribe to: enemy contact, stress and morale changes, squad task changes, soldier killed, objective owner and contested, commander mode, stock empty, operations, spawner, reinforcement requests, fire missions, victory, plus a catch-all text feed."
+  },
+  {
+    "cat": "Modding & API",
+    "name": "Settings API",
+    "ver": "v0.4.144",
+    "prio": "High",
+    "prog": 85,
+    "desc": "Read and write DCO settings at four levels — global, per faction, per squad and per soldier — using the same key names as the server config file."
+  },
+  {
+    "cat": "Modding & API",
+    "name": "AI state readouts",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 85,
+    "desc": "Read a soldier’s morale state, morale pressure, stress level, suppression, cover and ammo, and a squad’s task, phase, state flags, morale, strength, objective and commander. Read-only, no internals exposed."
+  },
+  {
+    "cat": "Modding & API",
+    "name": "API audit trail",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 90,
+    "desc": "Every write takes the calling mod’s name and is written to the DCO log and to report.txt, so a server owner can see which addon changed what. Refused calls return false with a reason instead of failing silently."
+  },
+  {
+    "cat": "Modding & API",
+    "name": "Example addon",
+    "ver": "v0.4.144",
+    "prio": "Low",
+    "prog": 100,
+    "desc": "A small working addon that subscribes to every event, reads AI state and changes settings — a copy-paste starting point rather than a snippet in a document."
+  },
+  {
+    "cat": "Modding & API",
+    "name": "Victory conditions component",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 80,
+    "desc": "Drop-in component that ends the mission when a faction holds enough objectives, holds every primary objective, holds one objective long enough, empties the enemy commander’s stock, or wins the most typed objectives."
+  },
+  {
+    "cat": "Global Systems",
+    "name": "535 tuning keys",
+    "ver": "v0.4.144",
+    "prio": "High",
+    "prog": 85,
+    "desc": "Everything the AI reasons with — hearing, vision, night, cover, context, morale — exposed as named keys with ranges, in the settings dialog, the server config and the API. Each ships with a generated reference listing its default and range."
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Per-faction settings layer",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 80,
+    "desc": "A factions block in the server config gives one faction its own values on top of the global ones, so US and USSR can fight with different skill, perception or aggression in the same mission."
+  },
+  {
+    "cat": "Global Systems",
+    "name": "In-game settings dialog",
+    "ver": "v0.4.144",
+    "prio": "High",
+    "prog": 75,
+    "desc": "A searchable settings tree with folders, favourites, per-setting help, reset, and an experimental flag on settings still being tested — instead of hunting through attribute categories."
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Shareable setting presets",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 70,
+    "desc": "Save a tuned set-up as a preset and hand it to someone else, or start from a shipped one such as the forgiving preset."
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Structured logging & report",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 85,
+    "desc": "Log lines carry a channel, a level and a stable key=value shape, so a run can be parsed rather than read. A run also writes report.txt summarising what happened and what other mods changed."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Combat context bands",
+    "ver": "v0.4.144",
+    "prio": "High",
+    "prog": 60,
+    "desc": "One table decides how a soldier shoots, moves and investigates from its distance band and environment, instead of every behaviour measuring distance for itself. Behind a switch while it is tuned."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Indoor navigation",
+    "ver": "v0.4.144",
+    "prio": "Medium",
+    "prog": 65,
+    "desc": "A dedicated indoor path layer for room-to-room movement, so building clearing follows doorways and rooms rather than the outdoor navmesh."
+  },
+  {
+    "cat": "Commander",
+    "name": "Relentless Aggressive doctrine",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 80,
+    "desc": "An aggressive commander keeps attacking instead of consolidating: it pursues, releases undermanned squads and only pulls back below 70% strength."
+  },
+  {
+    "cat": "Commander",
+    "name": "Firmer Defensive doctrine",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 80,
+    "desc": "No silent withdrawal. Garrisons hold, there is a final line to fall back to, counterattacks come faster, and a lost objective gets a QRF and a retake."
+  },
+  {
+    "cat": "Commander",
+    "name": "Varied attack axes",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 75,
+    "desc": "Attacks stop arriving from the same direction every time: the approach axis varies, scouts go in off-axis, and staging points expire so they are not reused."
+  },
+  {
+    "cat": "Commander",
+    "name": "Reserves with real jobs",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 75,
+    "desc": "Instead of clustering at the rear, reserves take QRF duty, flank observation posts, link patrols between objectives, local defence of fresh captures and counter-ambushes."
+  },
+  {
+    "cat": "Commander",
+    "name": "Stalemate handling",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 70,
+    "desc": "A firefight with no progress for five minutes forces a different tactic, and a failed attack leaves a screening ambush behind instead of simply withdrawing."
+  },
+  {
+    "cat": "Commander",
+    "name": "Event-driven threat response",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 75,
+    "desc": "Rebuilt around events: QRF advances, artillery applies pressure with follow-up and illumination, flankers expire properly, and lost contacts turn into hunt missions."
+  },
+  {
+    "cat": "Commander",
+    "name": "Stacked contact intel",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 75,
+    "desc": "Reports from several squads stack into one picture, the main effort gets priority recon, and recon blocked by Game Master rules no longer stalls the whole plan."
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Evasive posture",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 75,
+    "desc": "A squad that cannot win breaks contact properly: fast escape, hold fire unless forced, hide, and lurk back rather than trade shots it will lose."
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "CQB stack fixes",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 75,
+    "desc": "The team clears the room nearest the known enemy first, the entry stack no longer flinches from fire coming out of the target building, entries switch when a stack cannot form, and windows get suppressed while the stack moves."
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Stop and fight while tasked",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 80,
+    "desc": "Soldiers walking for ammo, a weapon pickup or a regroup now stop and fight when an enemy is visible nearby, instead of jogging past it."
+  },
+  {
+    "cat": "Squad Systems",
+    "name": "Relative ammo and sharing",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 75,
+    "desc": "Rearming works off relative thresholds, squads share ammo between members, a low-ammo state is tracked, and vehicles count as an ammo source."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Leadership trait",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 80,
+    "desc": "Every soldier rolls Poor, Average, Good or Inspiring. A leader’s rating sets how much morale his squad draws from him, how fast he rallies a panicking soldier, fire and ammo discipline, the odds the squad demands before attacking, and how hard his death lands."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Morale and panic rework",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 80,
+    "desc": "Being hit adds stress, squad-mate support is capped so panic can actually happen, and panic itself varies — dash to cover, flatten, run to a calm buddy, wild burst. It re-bolts under fire, ends early with a calm leader, spreads by shouting, and repeated panics shut a soldier down for a minute."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Cover selection rewrite",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 75,
+    "desc": "Tiered search with terrain cover, multi-threat scoring, bush and heavy cover, and prone-low positions — rather than one nearest-cover query."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Prone watchdog",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 80,
+    "desc": "A soldier lying prone with no line of sight stands up again instead of staying flat behind a rise for the rest of the fight."
+  },
+  {
+    "cat": "Soldier Systems",
+    "name": "Civilian mode",
+    "ver": "dev",
+    "prio": "Low",
+    "prog": 70,
+    "desc": "Civilians hide and stay cautious, with per-faction caution (Ignore, Normal, Strict), and no longer pick up weapons unless that is allowed."
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Speed limit per squad",
+    "ver": "dev",
+    "prio": "Low",
+    "prog": 85,
+    "desc": "A speed cap set per squad and per faction, so convoys and patrols move at a believable pace instead of flat out."
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Per-squad AI simulation",
+    "ver": "dev",
+    "prio": "Medium",
+    "prog": 80,
+    "desc": "AI Simulation set per squad — Auto, Off, or Off and hidden — so a large scenario can park the squads nobody is near."
+  },
+  {
+    "cat": "Vehicle Behaviour",
+    "name": "Dead gunner ejected",
+    "ver": "dev",
+    "prio": "Low",
+    "prog": 90,
+    "desc": "A killed gunner is ejected so the turret can be re-manned rather than left blocked by a body."
+  },
+  {
+    "cat": "Global Systems",
+    "name": "Nine built-in presets",
+    "ver": "dev",
+    "prio": "High",
+    "prog": 90,
+    "desc": "Recommended, Realistic, Forgiving, Players Defend, Players Attack and Large Server for the whole server, plus US style, USSR style and Irregular per faction. Read-only; save your own copy to tweak one."
   }
 ]

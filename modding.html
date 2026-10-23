@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modding API — DCO_AI Reforger</title>
+    <meta name="description" content="DCO_AI Reforger modding API for Arma Reforger addons: events to subscribe to, settings to change at four levels, AI state to read, and a worked example addon.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
+    <style>
+        .page-head { padding: 32px 0 24px; }
+        .page-head h1 { font-size: clamp(26px, 4vw, 36px); }
+        .section { padding-top: 28px; }
+
+        .guide { display: grid; grid-template-columns: 220px 1fr; gap: 44px; align-items: start; }
+        @media (max-width: 960px) { .guide { grid-template-columns: 1fr; gap: 24px; } }
+        /* Grid items default to min-width:auto, which lets code blocks and wide
+           tables push the column past the viewport. */
+        .guide > * { min-width: 0; }
+
+        .toc { position: sticky; top: calc(var(--nav-h) + 20px); max-height: calc(100vh - var(--nav-h) - 40px); overflow-y: auto; }
+        @media (max-width: 960px) { .toc { position: static; max-height: none; } }
+        .toc summary { font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; list-style: none; cursor: default; }
+        .toc summary::-webkit-details-marker { display: none; }
+        @media (max-width: 960px) {
+            .toc summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-strong); padding: 12px 14px; color: var(--text); font-size: 12px; margin-bottom: 0; }
+            .toc summary::after { content: '▾'; color: var(--yellow); }
+            .toc details[open] summary { margin-bottom: 8px; }
+            .toc details[open] summary::after { content: '▴'; }
+        }
+        .toc ul { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+        .toc a { display: block; padding: 6px 10px; font-size: 13.5px; color: var(--text-mid); text-decoration: none; border-left: 2px solid var(--border); }
+        .toc a:hover { color: var(--white); border-left-color: var(--border-strong); }
+        .toc a.active { color: var(--yellow); border-left-color: var(--yellow); background: var(--yellow-soft); }
+        .toc .sub a { padding-left: 22px; font-size: 13px; }
+
+        .block { padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--border); }
+        .block:last-child { border-bottom: 0; }
+        body.tabbed .block { display: none; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
+        body.tabbed .block.active { display: block; }
+        body.tabbed .sub-panel { display: none; }
+        body.tabbed .sub-panel.active { display: block; }
+        .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 4px; }
+        .pills button { padding: 7px 13px; border: 1px solid var(--border-strong); font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mid); }
+        .pills button:hover { border-color: var(--yellow); color: var(--yellow); }
+        .pills button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
+        .sub-panel > h3:first-child { margin-top: 20px; }
+
+        .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .pager a { display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none; font-size: 14px; color: var(--text-mid); max-width: 48%; }
+        .pager a:hover { color: var(--yellow); }
+        .pager span { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+        .pager a:last-child { text-align: right; align-items: flex-end; }
+        .pager a b { color: var(--white); font-weight: 600; }
+        .pager a:hover b { color: var(--yellow); }
+
+        .block > h2 { margin-bottom: 10px; }
+        .block > p { color: var(--text-mid); max-width: 760px; }
+        .block h3 { margin: 32px 0 10px; font-size: 17px; }
+        .block h4 { margin: 22px 0 8px; font-size: 14px; color: var(--white); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+        .block p + p { margin-top: 10px; }
+
+        table.ref { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); margin-top: 14px; font-size: 14px; }
+        table.ref th { text-align: left; font-family: var(--mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; padding: 11px 14px; border-bottom: 1px solid var(--border-strong); }
+        table.ref td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-mid); overflow-wrap: anywhere; }
+        table.ref tr:last-child td { border-bottom: 0; }
+        table.ref td:first-child { color: var(--white); font-weight: 600; }
+        table.ref td.sig { font-family: var(--mono); font-size: 12.5px; color: var(--text-mid); font-weight: 400; }
+        table.ref td.fn { font-family: var(--mono); font-size: 12.5px; color: var(--yellow); font-weight: 400; }
+
+        code { font-family: var(--mono); font-size: 12.5px; color: var(--yellow); background: var(--yellow-soft); border: 1px solid rgba(250,204,21,0.15); padding: 1px 6px; }
+        pre { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--yellow); padding: 16px 18px; margin: 16px 0; overflow-x: auto; }
+        pre code { background: none; border: 0; padding: 0; font-size: 13px; line-height: 1.65; color: var(--text); white-space: pre; display: block; }
+        pre code .c { color: var(--text-dim); }
+        pre code .k { color: var(--yellow); }
+        pre code .s { color: var(--green); }
+        @media (max-width: 700px) {
+            table.ref { font-size: 13px; }
+            table.ref th, table.ref td { padding: 9px 10px; }
+            pre { padding: 12px 12px; }
+            pre code { font-size: 11.5px; }
+            code { word-break: break-word; }
+            ol.steps li { padding-left: 38px; }
+        }
+
+        ol.steps { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 18px 0; }
+        ol.steps li { position: relative; padding-left: 44px; color: var(--text); font-size: 14.5px; }
+        ol.steps li::before {
+            counter-increment: step; content: counter(step);
+            position: absolute; left: 0; top: -2px;
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            font-family: var(--mono); font-size: 12px; font-weight: 700;
+            color: var(--yellow); border: 1px solid var(--yellow-line); background: var(--yellow-soft);
+        }
+        ol.steps b { color: var(--white); }
+        ol.steps .hint { display: block; color: var(--text-dim); font-size: 13px; margin-top: 3px; }
+
+        .note { border-left: 3px solid var(--orange); background: rgba(249,115,22,0.06); padding: 14px 18px; margin: 20px 0; font-size: 14px; color: var(--text-mid); }
+        .note b { color: var(--white); }
+        .note.tip { border-left-color: var(--green); background: rgba(34,197,94,0.06); }
+        .note.warn { border-left-color: var(--red); background: rgba(239,68,68,0.06); }
+
+        .cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+        .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+        @media (max-width: 800px) { .cards-3 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 620px) { .cards-2, .cards-3 { grid-template-columns: 1fr; } }
+        .mini { background: var(--surface); border: 1px solid var(--border); padding: 16px 18px; }
+        .mini b { display: block; color: var(--white); margin-bottom: 4px; }
+        .mini span { font-size: 13px; color: var(--text-mid); }
+        .legend { font-size: 12.5px; color: var(--text-dim); margin-top: 10px; }
+    </style>
+</head>
+<body>
+<main id="main">
+
+    <header class="page-head">
+        <div class="container">
+            <div class="kicker">// Modding API</div>
+            <h1>Build on top of DCO_AI</h1>
+            <p class="lead">DCO exposes a published surface for other addons: events to subscribe to, settings to change, AI state to read. Use it instead of <code>modded class</code> on DCO internals — the internals move between updates, this does not.</p>
+            <div class="stats" style="margin-top:22px">
+                <div class="stat"><div class="stat-val accent">1.0</div><div class="stat-label">API version</div></div>
+                <div class="stat"><div class="stat-val">15</div><div class="stat-label">Events</div></div>
+                <div class="stat"><div class="stat-val">4</div><div class="stat-label">Setting scopes</div></div>
+                <div class="stat"><div class="stat-val">544</div><div class="stat-label">Tuning keys</div></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container guide">
+
+            <nav class="toc" aria-label="On this page">
+                <details id="toc-d" open>
+                <summary>On this page</summary>
+                <ul>
+                    <li><a href="#start">Getting started</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li class="sub"><a href="#ev-unit">Soldier &amp; squad</a></li>
+                    <li class="sub"><a href="#ev-cmd">Commander &amp; mission</a></li>
+                    <li><a href="#state">Reading AI state</a></li>
+                    <li class="sub"><a href="#st-soldier">Soldiers</a></li>
+                    <li class="sub"><a href="#st-squad">Squads</a></li>
+                    <li class="sub"><a href="#st-world">Commanders &amp; objectives</a></li>
+                    <li><a href="#settings">Changing settings</a></li>
+                    <li class="sub"><a href="#set-scopes">The four scopes</a></li>
+                    <li class="sub"><a href="#set-keys">Keys</a></li>
+                    <li class="sub"><a href="#set-rules">When changes land</a></li>
+                    <li><a href="#victory">Victory conditions</a></li>
+                    <li><a href="#example">A complete addon</a></li>
+                    <li><a href="#trouble">Troubleshooting</a></li>
+                </ul>
+                </details>
+            </nav>
+
+            <div>
+
+                <!-- GETTING STARTED -->
+                <section class="block" id="start">
+                    <h2>Getting started</h2>
+                    <p>Everything lives on two classes. <code>DCO_API</code> holds settings and AI state; <code>DCO_Events</code> holds the events. Both are static — there is nothing to place in the world and nothing to register.</p>
+
+                    <ol class="steps">
+                        <li>Add DCO_AI to your addon's dependencies.<span class="hint">GUID <code>5EDAAE0D3CC60D6B</code>, in the <code>Dependencies</code> block of your <code>addon.gproj</code>.</span></li>
+                        <li>Subscribe and call from server-side code.<span class="hint">A component on your game mode or a mission entity. Events only fire on the server and writes are refused on clients.</span></li>
+                        <li>Check that DCO is actually running before you lean on it.<span class="hint"><code>DCO_API.IsReady()</code> is true once the global component exists.</span></li>
+                    </ol>
+
+                    <pre><code><span class="c">// addon.gproj</span>
+GameProject {
+  Dependencies {
+    <span class="s">"58D0FB3206B6F859"</span>  <span class="c">// ArmaReforger</span>
+    <span class="s">"5EDAAE0D3CC60D6B"</span>  <span class="c">// DCO_AI</span>
+  }
+}</code></pre>
+
+                    <h3>Versioning</h3>
+                    <p><code>DCO_API.Version()</code> returns an integer: major × 100 + minor, so <code>100</code> means 1.0. Within one major version nothing published is removed or renamed, and anything due to go away is marked deprecated for at least one release first.</p>
+                    <pre><code><span class="k">if</span> (DCO_API.Version() &lt; 100 || !DCO_API.IsReady())
+    <span class="k">return</span>;  <span class="c">// too old, or DCO isn't loaded — fall back quietly</span></code></pre>
+
+                    <h3>What you get</h3>
+                    <div class="cards-3">
+                        <div class="mini"><b>Events</b><span>Fifteen invokers: contact, stress, morale, squad tasks, kills, objectives, commander mode and stock, operations, spawns, reinforcements, fire missions, victory.</span></div>
+                        <div class="mini"><b>Settings</b><span>Read and write at four scopes — global, faction, squad, soldier — using the same key names as the server config.</span></div>
+                        <div class="mini"><b>State</b><span>Morale, stress, suppression, cover and ammo per soldier; task, phase, flags, strength, objective and commander per squad.</span></div>
+                    </div>
+
+                    <div class="note"><b>Checked against v0.4.146.</b> Everything on this page was read out of <code>DCO_API.c</code> and <code>DCO_Events.c</code> in the mod source. If you have seen notes describing commands, locks or modifiers, those are not in the shipped API yet — <code>Version()</code> still returns <code>100</code>.</div>
+                    <div class="note tip"><b>Nothing you write is invisible.</b> Every change you make goes into the DCO log and into <code>report.txt</code> under your mod's name, so a server owner can see which addon changed what. That is a feature — it keeps your mod blameless when something else breaks.</div>
+                </section>
+
+                <!-- EVENTS -->
+                <section class="block" id="events">
+                    <h2>Events</h2>
+                    <p>Get the event object three ways — they all return the same singleton. Subscribe with <code>Insert</code>, and always <code>Remove</code> when your component goes away.</p>
+                    <pre><code>DCO_Events ev = DCO_API.Events();
+<span class="c">// or</span>
+DCO_Events ev = DCO_Events.Get();
+<span class="c">// or</span>
+DCO_Events ev = AICommander_ManagerComponent.GetInstance().GetEvents();
+
+ev.GetOnContact().Insert(OnContact);
+<span class="c">// ... later</span>
+ev.GetOnContact().Remove(OnContact);</code></pre>
+
+                    <h3 id="ev-unit">Soldier &amp; squad events</h3>
+                    <table class="ref">
+                        <thead><tr><th>Getter</th><th>Handler signature</th><th>Fires when</th></tr></thead>
+                        <tbody>
+                            <tr><td class="fn">GetOnContact()</td><td class="sig">(SCR_AIGroup group, IEntity enemy, vector pos)</td><td>A squad that knew of no enemies now knows of one, seen or heard. It won't fire again until the squad has forgotten every enemy — roughly 150 s without new information.</td></tr>
+                            <tr><td class="fn">GetOnStressChanged()</td><td class="sig">(IEntity soldier, int from, int to)</td><td>Stress moves between 0 calm, 1 suppressed and 2 pinned.</td></tr>
+                            <tr><td class="fn">GetOnMoraleChanged()</td><td class="sig">(IEntity soldier, int from, int to)</td><td>Morale state changes: 0 Calm, 1 Tense, 2 Shaken, 3 Panic, 4 Break.</td></tr>
+                            <tr><td class="fn">GetOnSquadTaskChanged()</td><td class="sig">(AIGroup group, DCO_EGroupTask from, DCO_EGroupTask to, string by)</td><td>A squad is given a new task. <code>by</code> names whoever gave it.</td></tr>
+                            <tr><td class="fn">GetOnSoldierKilled()</td><td class="sig">(IEntity victim, IEntity killer, float distance)</td><td>An AI soldier dies. <code>killer</code> is null when unknown, and <code>distance</code> is then -1.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note warn"><b>Keep these handlers short.</b> Stress and morale fire per soldier and can run hot in a large battle. Count, queue or sample — don't do pathfinding or file I/O in there.</div>
+
+                    <h3 id="ev-cmd">Commander &amp; mission events</h3>
+                    <table class="ref">
+                        <thead><tr><th>Getter</th><th>Handler signature</th><th>Fires when</th></tr></thead>
+                        <tbody>
+                            <tr><td class="fn">GetOnObjectiveOwnerChanged()</td><td class="sig">(CMD_AICommanderObjectiveComponent obj, FactionKey from, FactionKey to)</td><td>An objective changes hands. An empty key means nobody owns it.</td></tr>
+                            <tr><td class="fn">GetOnObjectiveContested()</td><td class="sig">(CMD_AICommanderObjectiveComponent obj, bool contested)</td><td>Two or more factions now have presence inside the objective, or it drops back to one or none.</td></tr>
+                            <tr><td class="fn">GetOnCommanderModeChanged()</td><td class="sig">(AICommander_BaseComponent cmd, CMD_ECommanderMode from, CMD_ECommanderMode to)</td><td>A commander switches between OFFENSIVE, DEFENSIVE and BALANCED.</td></tr>
+                            <tr><td class="fn">GetOnCommanderStockEmpty()</td><td class="sig">(AICommander_BaseComponent cmd, string kind)</td><td>Reinforcement stock drops from above zero to zero. <code>kind</code> is <code>"soldiers"</code> or <code>"points"</code>. Unlimited stock (-1) never fires.</td></tr>
+                            <tr><td class="fn">GetOnOperation()</td><td class="sig">(string name, string detail)</td><td>The planner starts, branches, replans or ends an operation: <code>op_plan</code>, <code>op_phase</code>, <code>op_phase_end</code>, <code>op_branch</code>, <code>op_replan</code>, <code>op_reserve</code>, <code>op_end</code>.</td></tr>
+                            <tr><td class="fn">GetOnSpawner()</td><td class="sig">(string name, string detail)</td><td><code>spawner_spawn</code>, <code>spawner_off</code> (switched off, e.g. enemies nearby), <code>spawner_stop</code> (stock or points used up).</td></tr>
+                            <tr><td class="fn">GetOnReinforcementRequest()</td><td class="sig">(string name, string detail)</td><td>A commander asks for reinforcements.</td></tr>
+                            <tr><td class="fn">GetOnFireMission()</td><td class="sig">(string name, string detail)</td><td>An artillery or mortar request is queued, with tier, shells, type and position.</td></tr>
+                            <tr><td class="fn">GetOnVictory()</td><td class="sig">(string name, string detail)</td><td>The victory component ends the mission.</td></tr>
+                            <tr><td class="fn">GetOnAnyEvent()</td><td class="sig">(string name, string detail)</td><td>All of the above as text. One subscription to log everything or forward it to Scenario Framework.</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="legend"><code>detail</code> is the full <code>key=value</code> log line, for example <code>op_end cmd=US_1 primary=OBJ_Town reason=captured</code>. Parse what you need from it.</p>
+                    <div class="note"><b>Two things to know.</b> <code>GetOnAnyEvent()</code> covers this table only — not the soldier and squad events above. And the four polled ones (owner, contested, mode, stock) are checked once a second, so your callback can arrive up to a second late.</div>
+                </section>
+
+                <!-- STATE -->
+                <section class="block" id="state">
+                    <h2>Reading AI state</h2>
+                    <p>All read-only, all safe to call on anything — a non-DCO entity returns a zero or a null rather than throwing.</p>
+
+                    <h3 id="st-soldier">Per soldier</h3>
+                    <table class="ref">
+                        <thead><tr><th>Call</th><th>Returns</th></tr></thead>
+                        <tbody>
+                            <tr><td class="fn">SoldierMorale(soldier)</td><td>Morale state: 0 Calm, 1 Tense, 2 Shaken, 3 Panic, 4 Break. -1 if it isn't a DCO soldier.</td></tr>
+                            <tr><td class="fn">SoldierMoraleValue(soldier)</td><td>Morale pressure as a number — higher is worse.</td></tr>
+                            <tr><td class="fn">SoldierStress(soldier)</td><td>0 calm, 1 suppressed, 2 pinned.</td></tr>
+                            <tr><td class="fn">SoldierSuppression(soldier)</td><td>Suppression, 0 to 1.</td></tr>
+                            <tr><td class="fn">SoldierInCover(soldier)</td><td>True in valid cover or inside a building.</td></tr>
+                            <tr><td class="fn">SoldierAmmo(soldier)</td><td>Rounds left in the current magazine, 0 to 1.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="st-squad">Per squad</h3>
+                    <table class="ref">
+                        <thead><tr><th>Call</th><th>Returns</th></tr></thead>
+                        <tbody>
+                            <tr><td class="fn">SquadTask(group)</td><td><code>DCO_EGroupTask</code>: NONE, ATTACK, FLANK, SUPPORT_BY_FIRE, DEFEND, GARRISON, RECON, PATROL, REINFORCE, TRANSPORT, FIRE_MISSION.</td></tr>
+                            <tr><td class="fn">SquadPhase(group)</td><td><code>DCO_ETaskPhase</code>: MOVING, STAGING, EXECUTING, HOLDING.</td></tr>
+                            <tr><td class="fn">SquadState(group)</td><td>Bit flags: EN_ROUTE 1, IN_CONTACT 2, SUPPRESSED 4, COMBAT_INEFFECTIVE 8, RETREATING 16, MOUNTED 32.</td></tr>
+                            <tr><td class="fn">SquadMorale(group)</td><td>Average morale pressure across the squad.</td></tr>
+                            <tr><td class="fn">SquadAlive(group) / SquadPeak(group)</td><td>Soldiers alive now, and the most it ever had — the pair gives you attrition.</td></tr>
+                            <tr><td class="fn">SquadObjective(group)</td><td>The objective its commander gave it, or null.</td></tr>
+                            <tr><td class="fn">SquadCommander(group)</td><td>Its commander, or null.</td></tr>
+                        </tbody>
+                    </table>
+                    <pre><code><span class="k">if</span> (DCO_API.SquadState(group) &amp; DCO_EGroupState.COMBAT_INEFFECTIVE)
+    Print(<span class="s">"squad is spent: "</span> + DCO_API.SquadAlive(group) + <span class="s">"/"</span> + DCO_API.SquadPeak(group));</code></pre>
+
+                    <h3 id="st-world">Commanders &amp; objectives</h3>
+                    <p>Two list calls fill an array you own and return the count.</p>
+                    <pre><code>array&lt;AICommander_BaseComponent&gt; cmds = {};
+<span class="k">int</span> n = DCO_API.Commanders(cmds);
+
+array&lt;CMD_AICommanderObjectiveComponent&gt; objs = {};
+<span class="k">int</span> m = DCO_API.Objectives(objs);</code></pre>
+                    <p>From there, ask the objects themselves: a commander answers <code>GetCommanderMode()</code>, <code>GetReinforcementStock()</code>, <code>GetPointsStock()</code> and <code>GetCommanderFactionKey()</code>; an objective answers <code>GetOwnerFaction()</code> and <code>GetLogName()</code>.</p>
+                </section>
+
+                <!-- SETTINGS -->
+                <section class="block" id="settings">
+                    <h2>Changing settings</h2>
+                    <p>Writes take your mod's name as the first argument. Reads don't. Everything is clamped to its valid range rather than refused, so you can't put DCO into an impossible state by passing a silly number.</p>
+
+                    <h3 id="set-scopes">The four scopes</h3>
+                    <table class="ref">
+                        <thead><tr><th>Scope</th><th>Call</th><th>Notes</th></tr></thead>
+                        <tbody>
+                            <tr><td>Global</td><td class="sig">GetSetting(key)<br>SetSetting(mod, key, value)</td><td>Affects everything with no faction override.</td></tr>
+                            <tr><td>Faction</td><td class="sig">GetSetting(key, faction)<br>SetSetting(mod, key, value, faction)</td><td>Only works if the server config has a <code>factions</code> block for that faction. Otherwise refused with <code>no_faction_layer</code>.</td></tr>
+                            <tr><td>Squad</td><td class="sig">GetSquadSetting(group, key)<br>SetSquadSetting(mod, group, key, value)</td><td>Key: <code>vehicleExit</code>, where -1 means follow the global value.</td></tr>
+                            <tr><td>Soldier</td><td class="sig">GetSoldierSetting(soldier, key)<br>SetSoldierSetting(mod, soldier, key, value)</td><td>Keys: <code>aiSkill</code>, <code>aimAccuracy</code>, <code>aimSpeed</code>, <code>aiPerception</code>, <code>suppressionEffect</code>, <code>takeCoverChance</code>, <code>personality</code>, <code>leadership</code>.</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="legend"><code>personality</code>: 0 Cautious, 1 Standard, 2 Aggressive, 3 Reckless. <code>leadership</code> <span class="chip chip-dev">v0.4.146</span>: 0 Poor, 1 Average, 2 Good, 3 Inspiring.</p>
+
+                    <h3 id="set-keys">Keys</h3>
+                    <p>Two families, both accepted by the same calls. <code>DCO_API.HasSetting(key)</code> tells you whether a key exists before you try.</p>
+                    <table class="ref">
+                        <thead><tr><th>Family</th><th>Count</th><th>Names</th></tr></thead>
+                        <tbody>
+                            <tr><td>Main settings</td><td>8</td><td><code>aiAggression</code>, <code>vehicleExit</code>, <code>aiSkillDefault</code>, <code>aimAccuracy</code>, <code>aimSpeed</code>, <code>aiPerception</code>, <code>suppressionEffect</code>, <code>takeCoverChance</code></td></tr>
+                            <tr><td>Tuning keys</td><td>544</td><td>The config name (<code>tune_hear_shot_err</code>) or the short internal name (<code>hear.shot_err</code>) — both work. Defaults and ranges are in <code>DCO_GlobalConfig_README.txt</code> beside the server config.</td></tr>
+                        </tbody>
+                    </table>
+                    <pre><code>DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"aiAggression"</span>, 1.5);
+DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"tune_hear_shot_err"</span>, 0.5);
+DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"aiPerception"</span>, 0.8, <span class="s">"USSR"</span>);
+DCO_API.SetSquadSetting(<span class="s">"MyMod"</span>, group, <span class="s">"vehicleExit"</span>, 16);
+DCO_API.SetSoldierSetting(<span class="s">"MyMod"</span>, soldier, <span class="s">"aiPerception"</span>, 1.5);
+DCO_API.SetSoldierSetting(<span class="s">"MyMod"</span>, soldier, <span class="s">"leadership"</span>, 3);  <span class="c">// Inspiring</span></code></pre>
+
+                    <h3 id="set-rules">When changes land</h3>
+                    <table class="ref">
+                        <thead><tr><th>Setting</th><th>Takes effect</th></tr></thead>
+                        <tbody>
+                            <tr><td>Aggression, perception, tuning keys</td><td>Immediately, on everyone.</td></tr>
+                            <tr><td>Skill, accuracy, aim, suppression, cover</td><td>Copied into soldiers at spawn, so only new soldiers pick it up. Use the soldier calls for those already on the map.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note"><b>Writes can be refused.</b> They return <code>false</code> and log a reason: <code>unknown_key</code>, <code>not_server</code>, <code>mod_name_empty</code>, <code>no_faction_layer</code>, <code>no_dco_squad</code>, <code>no_dco_soldier</code>. Check the return value when it matters — a typo in a key name fails silently otherwise.</div>
+                </section>
+
+                <!-- VICTORY -->
+                <section class="block" id="victory">
+                    <h2>Victory conditions</h2>
+                    <p><code>DCO_VictoryComponent</code> ends a mission when a faction meets a condition. Add it to your game mode entity or to any entity in the world — only the server evaluates it, and the first faction to meet a condition wins through the vanilla end-game path.</p>
+                    <table class="ref">
+                        <thead><tr><th>Condition</th><th>Default</th><th>Wins when</th></tr></thead>
+                        <tbody>
+                            <tr><td>Hold count</td><td>0 (off)</td><td>A faction holds at least this many DCO objectives.</td></tr>
+                            <tr><td>Hold all primary</td><td>Off</td><td>A faction holds every objective marked Primary. Needs at least one.</td></tr>
+                            <tr><td>Hold objective</td><td>Empty (off)</td><td>A faction holds one named objective for Hold Minutes without interruption. The timer resets if it changes hands.</td></tr>
+                            <tr><td>Enemy stock empty</td><td>Off</td><td>Every enemy commander has used up its soldier stock. Unlimited stock never counts.</td></tr>
+                            <tr><td>Typed objectives</td><td>Off</td><td>Every typed objective has finished; the faction that won the most of them takes it. A tie means no winner.</td></tr>
+                            <tr><td>Grace / check seconds</td><td>60 s / 5 s</td><td>Nothing is checked before the grace period, then every check interval.</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-16">It writes <code>victory_init</code>, <code>victory_check</code>, <code>victory_hold</code> and <code>victory_end</code> to the CMD log channel, and fires <code>GetOnVictory()</code> so your own addon can react before the mission closes.</p>
+                </section>
+
+                <!-- EXAMPLE -->
+                <section class="block" id="example">
+                    <h2>A complete addon</h2>
+                    <p>This is the shape of a working listener: subscribe on game start, unsubscribe on game end, and do everything behind a server check. Two fuller examples ship alongside the mod rather than inside it — <code>DCO_API_Example</code>, which exercises every part of this page, and <code>DCO_API_HudExample</code>, a squad HUD built only on this API. Ask on Discord for the current copies.</p>
+                    <pre><code><span class="k">class</span> MyListener : Managed
+{
+    <span class="k">protected const string</span> MOD = <span class="s">"MyMod"</span>;
+
+    <span class="k">void</span> Start()
+    {
+        <span class="k">if</span> (!Replication.IsServer() || !DCO_API.IsReady())
+            <span class="k">return</span>;
+
+        DCO_Events ev = DCO_API.Events();
+        ev.GetOnContact().Insert(OnContact);
+        ev.GetOnSquadTaskChanged().Insert(OnTask);
+        ev.GetOnObjectiveOwnerChanged().Insert(OnOwner);
+
+        DCO_API.SetSetting(MOD, <span class="s">"aiAggression"</span>, 1.2);
+    }
+
+    <span class="k">void</span> Stop()
+    {
+        DCO_Events ev = DCO_API.Events();
+        ev.GetOnContact().Remove(OnContact);
+        ev.GetOnSquadTaskChanged().Remove(OnTask);
+        ev.GetOnObjectiveOwnerChanged().Remove(OnOwner);
+    }
+
+    <span class="k">protected void</span> OnContact(SCR_AIGroup group, IEntity enemy, vector pos)
+    {
+        PrintFormat(<span class="s">"[MyMod] contact task=%1 alive=%2/%3 morale=%4"</span>,
+            typename.EnumToString(DCO_EGroupTask, DCO_API.SquadTask(group)),
+            DCO_API.SquadAlive(group), DCO_API.SquadPeak(group), DCO_API.SquadMorale(group));
+    }
+
+    <span class="k">protected void</span> OnTask(AIGroup group, DCO_EGroupTask from, DCO_EGroupTask to, <span class="k">string</span> by)
+    {
+        <span class="c">// react to the squad being retasked</span>
+    }
+
+    <span class="k">protected void</span> OnOwner(CMD_AICommanderObjectiveComponent obj, FactionKey from, FactionKey to)
+    {
+        Print(obj.GetLogName() + <span class="s">" taken by "</span> + to);
+    }
+}
+
+<span class="k">modded class</span> SCR_BaseGameMode
+{
+    <span class="k">protected ref</span> MyListener m_Listener;
+
+    <span class="k">protected override void</span> OnGameStart()
+    {
+        <span class="k">super</span>.OnGameStart();
+        m_Listener = <span class="k">new</span> MyListener();
+        m_Listener.Start();
+    }
+
+    <span class="k">override void</span> OnGameEnd()
+    {
+        <span class="k">if</span> (m_Listener)
+            m_Listener.Stop();
+        <span class="k">super</span>.OnGameEnd();
+    }
+}</code></pre>
+                    <div class="note tip"><b>The one <code>modded class</code> that's fine.</b> Modding <code>SCR_BaseGameMode</code> to get a start and end hook is vanilla, not DCO internals — that's exactly what this API is meant to let you stop doing everywhere else.</div>
+                </section>
+
+                <!-- TROUBLESHOOTING -->
+                <section class="block" id="trouble">
+                    <h2>Troubleshooting</h2>
+                    <table class="ref">
+                        <thead><tr><th>Symptom</th><th>Check</th></tr></thead>
+                        <tbody>
+                            <tr><td>Nothing happens at all</td><td><code>DCO_API.IsReady()</code> is false until the global component exists, and every write is refused off the server. Subscribe from server-side code after game start.</td></tr>
+                            <tr><td>A write returns false</td><td>Read the <code>api_reject</code> line in the log — it names the key and the reason.</td></tr>
+                            <tr><td>Faction write refused</td><td><code>no_faction_layer</code>: that faction has no <code>factions</code> block in the server config, so there is nothing to write to.</td></tr>
+                            <tr><td>Setting changed but AI didn't</td><td>Skill, accuracy, aim, suppression and cover are copied at spawn. Existing soldiers need the per-soldier calls.</td></tr>
+                            <tr><td>Key not recognised</td><td>Test with <code>HasSetting()</code>. Tuning keys take either <code>tune_hear_shot_err</code> or <code>hear.shot_err</code> — but not a typo in either.</td></tr>
+                            <tr><td>Contact event fires once and stops</td><td>By design. It fires on the transition from no known enemies to some, and rearms only after the squad forgets them all.</td></tr>
+                            <tr><td>Server is lagging under my handler</td><td>Stress and morale fire per soldier. Sample or count in the handler and do the real work on a timer.</td></tr>
+                            <tr><td>Everything is marked Dev build</td><td>The API is written but not in the public Workshop release yet — see the <a href="roadmap.html" class="accent">roadmap</a>.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="callout mt-32">
+                        <div>
+                            <h2>Building something with it?</h2>
+                            <p>Come say so on Discord. API questions, missing events and breaking changes all get answered there first.</p>
+                        </div>
+                        <div class="btn-row">
+                            <a class="btn btn-discord" data-link="discord" href="#">Join Discord</a>
+                            <a class="btn" href="guide.html">Using the mod</a>
+                            <a class="btn" href="server-config.html">Server config</a>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+<script src="assets/site.js"></script>
+<script>
+    // Same one-section-at-a-time behaviour as the guide page.
+    (function () {
+        const blocks = [...document.querySelectorAll('.block')];
+        const links = [...document.querySelectorAll('.toc a')];
+        document.body.classList.add('tabbed');
+
+        const owner = {};
+        blocks.forEach(b => {
+            owner[b.id] = b.id;
+            b.querySelectorAll('[id]').forEach(el => owner[el.id] = b.id);
+        });
+
+        blocks.forEach(b => {
+            const heads = [...b.querySelectorAll(':scope > h3[id]')];
+            if (heads.length < 2) return;
+            heads.forEach(h => {
+                const panel = document.createElement('div');
+                panel.className = 'sub-panel';
+                panel.dataset.id = h.id;
+                h.before(panel);
+                let node = h;
+                while (node && !(node.tagName === 'H3' && node !== h && node.id)) {
+                    const next = node.nextElementSibling;
+                    panel.append(node);
+                    node = next;
+                }
+            });
+            const pills = heads.map(h =>
+                `<button type="button" data-goto="${h.id}" aria-pressed="false">${h.textContent.trim()}</button>`).join('');
+            (b.querySelector(':scope > p') || b.querySelector('h2'))
+                .insertAdjacentHTML('afterend', `<div class="pills" role="tablist">${pills}</div>`);
+        });
+
+        blocks.forEach((b, i) => {
+            const prev = blocks[i - 1], next = blocks[i + 1];
+            const label = el => el.querySelector('h2').textContent.trim();
+            b.insertAdjacentHTML('beforeend', `<nav class="pager">
+                ${prev ? `<a href="#${prev.id}"><span>← Previous</span><b>${label(prev)}</b></a>` : '<span></span>'}
+                ${next ? `<a href="#${next.id}"><span>Next →</span><b>${label(next)}</b></a>` : ''}
+            </nav>`);
+        });
+
+        function show(id) {
+            const sectionId = owner[id] || blocks[0].id;
+            const section = document.getElementById(sectionId);
+            blocks.forEach(b => b.classList.toggle('active', b === section));
+
+            const panels = [...section.querySelectorAll('.sub-panel')];
+            if (panels.length) {
+                const wanted = panels.find(p => p.dataset.id === id) || panels[0];
+                panels.forEach(p => p.classList.toggle('active', p === wanted));
+                section.querySelectorAll('.pills button').forEach(btn =>
+                    btn.setAttribute('aria-pressed', btn.dataset.goto === wanted.dataset.id));
+                id = wanted.dataset.id;
+            }
+
+            links.forEach(a => a.classList.toggle('active',
+                a.getAttribute('href') === '#' + id || (panels.length === 0 && a.getAttribute('href') === '#' + sectionId)));
+
+            if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
+            scrollTo({ top: 0 });
+        }
+
+        const toc = document.getElementById('toc-d');
+        const narrow = matchMedia('(max-width: 960px)');
+        const syncToc = () => toc.open = !narrow.matches;
+        syncToc();
+        narrow.addEventListener('change', syncToc);
+
+        document.addEventListener('click', e => {
+            if (e.target.closest('.toc a') && narrow.matches) toc.open = false;
+            const el = e.target.closest('a[href^="#"], .pills button');
+            if (!el) return;
+            const id = el.dataset.goto || el.getAttribute('href').slice(1);
+            if (!owner[id]) return;
+            e.preventDefault();
+            history.pushState(null, '', '#' + id);
+            show(id);
+        });
+        addEventListener('popstate', () => show(location.hash.slice(1)));
+
+        show(location.hash.slice(1));
+    })();
+</script>
+</body>
+</html>
