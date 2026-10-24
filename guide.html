@@ -183,6 +183,12 @@
                     <li class="sub"><a href="#wb-groups">Groups under a commander</a></li>
                     <li class="sub"><a href="#wb-defaults">Baking in defaults</a></li>
                     <li class="sub"><a href="#wb-vs-gm">Workbench vs Game Master</a></li>
+                    <li><a href="#build">Building a mission</a></li>
+                    <li class="sub"><a href="#build-a">1. Smallest that works</a></li>
+                    <li class="sub"><a href="#build-b">2. A way to end</a></li>
+                    <li class="sub"><a href="#build-c">3. Garrison &amp; reserves</a></li>
+                    <li class="sub"><a href="#build-d">4. Full template</a></li>
+                    <li class="sub"><a href="#build-wrong">When it doesn't work</a></li>
                     <li><a href="#garrison">Garrisons</a></li>
                     <li><a href="#units">Squads &amp; units</a></li>
                     <li><a href="#behaviour">Behaviour reference</a></li>
@@ -697,6 +703,84 @@
                     <div class="note tip">Server owners get a third route that overrides neither editor confusingly: the <a href="server-config.html" class="accent">config folder</a> is read once at startup, and can be switched off so the editor values stand.</div>
                 </section>
 
+                <!-- BUILD -->
+                <section class="block" id="build">
+                    <h2>Building a mission, step by step</h2>
+                    <p>Four missions, each one adding a layer to the one before it. The values below are the ones the shipped example missions actually use, so you can follow along or just copy them.</p>
+                    <div class="note tip"><b>You don't have to build these by hand.</b> They ship as an optional addon, <b>DCO Examples</b>, with four worlds and four scenario entries. Load it alongside DCO_AI and they appear in the scenario list; open its project in the Workbench to take the worlds apart. Each world is a sub-scene of the vanilla <code>GM_Arland</code>, so it reuses that map's navmesh.</div>
+
+                    <h3 id="build-a">1. The smallest mission that works</h3>
+                    <p>Two commanders, three objectives, four squads. Nothing else. If this runs, your setup is sound and everything later is an addition.</p>
+                    <ol class="steps">
+                        <li>Place <b>one CommanderManager</b>.<span class="hint">Workbench only — the Game Master commander brings its own.</span></li>
+                        <li>Place <b>two commanders</b> and name them.<span class="hint">The example uses <b>Viking</b> (US) and <b>Volga</b> (USSR). Faction and name are the two rows you cannot skip.</span></li>
+                        <li>Place <b>three objectives</b> and decide who starts with each.<span class="hint">A village held by Volga, a farm left neutral in the middle, a crossroads held by Viking. The neutral one in the middle is what makes them meet.</span></li>
+                        <li>Place <b>two squads per side</b>, near their own commander.<span class="hint">Workbench: tick <b>Auto Assign</b> and set <b>Dedicated Co</b> to that commander's name. Game Master: set the group's <b>Commander</b> attribute.</span></li>
+                        <li>Unpause and press <b>Ctrl + I</b> to watch the plan.</li>
+                    </ol>
+                    <h4>What a healthy start looks like</h4>
+                    <table class="ref">
+                        <thead><tr><th class="def">Time</th><th>What you should see</th></tr></thead>
+                        <tbody>
+                            <tr><td class="def">T+7 s</td><td>Every squad has joined its commander. If one hasn't, its Auto Assign is off or its faction doesn't match.</td></tr>
+                            <tr><td class="def">T+20 s</td><td>The start-up check runs. <code>setup_check_done warn=0</code> means the scene is fine; anything else names the problem.</td></tr>
+                            <tr><td class="def">T+30 s</td><td>Objectives that failed the first navmesh test are re-checked, for tiles that hadn't loaded yet.</td></tr>
+                            <tr><td class="def">T+65 s</td><td>The first orders go out. Before this the commander is simply waiting out its first-think delay — it is not broken.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="build-b">2. Give it a way to end</h3>
+                    <p>The first mission runs forever. An operation and a win condition turn it into something with a shape.</p>
+                    <ol class="steps">
+                        <li>On the objective you want the fight to be about, turn on <b>Operation Primary</b>.<span class="hint">The commander then plans the whole operation around it instead of treating all three as separate jobs.</span></li>
+                        <li>Tick the other two under <b>Linked Secondaries</b>.<span class="hint">Or leave that empty and let <b>Secondary Radius</b> (600 m) pick up whatever is nearby.</span></li>
+                        <li>Add <b>DCO_VictoryComponent</b> and turn on <b>Hold All Primary</b>.<span class="hint">It works on any entity, so you can put it on a spare one and leave the game mode untouched.</span></li>
+                    </ol>
+                    <p>The commander now attacks in order rather than all at once — in the example, checkpoint first, then the secondary, then the primary. The log shows <code>op_plan</code> with the primary named, and <code>victory_init</code> confirming which rules are live.</p>
+
+                    <h3 id="build-c">3. Defenders in buildings, attackers with reserves</h3>
+                    <p>Now the two sides stop being symmetrical.</p>
+                    <ol class="steps">
+                        <li>Give the defender a squad with a <b>Garrison (DCO)</b> waypoint on the objective.<span class="hint">In the Workbench this goes under the group's <i>Static Waypoints</i>. The squad scans the village and takes window positions.</span></li>
+                        <li>Give the attacking commander a <b>Reinforcement Stock</b> — the example uses 60 men.<span class="hint">That is the pool the spawner draws from, and what the defender has to bleed dry.</span></li>
+                        <li>Place a spawner behind the attacker's line, preset <b>Commander on call</b>.<span class="hint">Target that commander by name, <b>Take From Stock</b> = Men, and a force pool of a rifle squad (weight 2) and a fire team (weight 1).</span></li>
+                        <li>Lower the spawner's <b>Safe Radius</b> if your map is tight.<span class="hint">The example uses 150 m instead of the default 300 m, and a 60 s cooldown.</span></li>
+                    </ol>
+                    <div class="note warn"><b>Match the preset to the side.</b> <i>Commander on call</i> for an attacker, because the commander asks when it is worn down. <i>Counterattack wave</i> only fires when an objective your side <em>holds</em> is lost — on an attacker that owns nothing, it can never trigger, and DCO will tell you so with <code>spawner_trigger_none</code>.</div>
+
+                    <h3 id="build-d">4. The full template</h3>
+                    <p>Everything above plus logistics, in five layers named in the order you build them.</p>
+                    <table class="ref">
+                        <thead><tr><th>Layer</th><th>Contains</th></tr></thead>
+                        <tbody>
+                            <tr><td class="def">01_Commanders</td><td>The manager, plus Viking (US) and Volga (USSR) with 60 stock each.</td></tr>
+                            <tr><td class="def">02_Objectives</td><td>Primary with its two linked secondaries — all three held by the defender at start.</td></tr>
+                            <tr><td class="def">03_Groups</td><td>Defender: a garrison squad and one free squad. Attacker: two rifle squads and three fire teams. All on Auto Assign.</td></tr>
+                            <tr><td class="def">04_Spawner_Logistics</td><td>Attacker on <i>Commander on call</i>, defender on <i>Steady top-up</i>, and a logistics hub per side.</td></tr>
+                            <tr><td class="def">05_Victory</td><td><i>Hold All Primary</i> and <i>Enemy Stock Empty</i> together — the attacker wins by taking the primary, the defender by bleeding the attacker dry.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note"><b>Two things the template leaves for you.</b> A hub needs an actual transport team and an ammo source to do anything (see <a href="#gm-spawner" class="accent">spawners and logistics</a>), and a <b>Do CQB</b> waypoint placed statically in the Workbench is not picked up — give it at runtime or from Game Master.</div>
+
+                    <h3 id="build-wrong">When it doesn't work</h3>
+                    <p>Almost every first-mission problem is one of these.</p>
+                    <table class="ref">
+                        <thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead>
+                        <tbody>
+                            <tr><td>Commander does nothing at all</td><td>No <code>CommanderManager</code> in a Workbench mission.</td><td>Place one, or use the Game Master prefabs which bring their own.</td></tr>
+                            <tr><td>Nothing happens for the first minute</td><td>Normal. First think delay, then the think interval — and the shipped commander prefab uses 150 s.</td><td>Lower both for a small test mission.</td></tr>
+                            <tr><td>Groups never join</td><td>Auto Assign off, or the commander's faction is empty or different.</td><td>Tick Auto Assign, set the faction. Look for <code>faction=EMPTY</code>.</td></tr>
+                            <tr><td>A side doesn't start with its objectives</td><td>Initial owner left empty.</td><td>Set <b>Controlled By</b> (Workbench: <i>Initial Owner Commander UID</i>).</td></tr>
+                            <tr><td>An objective never changes hands</td><td>No commander is planning it, or Allowed Factions excludes the attacker.</td><td>Check <b>Handled By</b> and the objective's base value.</td></tr>
+                            <tr><td>AI doesn't move at all</td><td>No navmesh, or the objective sits off it.</td><td>Generate the soldier navmesh. Watch for <code>navmesh=none</code>.</td></tr>
+                            <tr><td>Do CQB ends immediately</td><td>No building within 25 m, no outside door or rooms on the navmesh, or fewer than two men.</td><td>Move the waypoint, raise the target radius, use a bigger group.</td></tr>
+                            <tr><td>Spawner never spawns</td><td>A player or enemy inside the safe radius, the faction AI cap, an empty stock, or the cooldown.</td><td>Check <code>spawner_defer</code>, or right-click &rsaquo; <b>Spawn anyway</b>.</td></tr>
+                            <tr><td>A config value does nothing</td><td>A typo in the key, or the old default still sitting in the file.</td><td>Check the <a href="server-config.html" class="accent">key reference</a>; delete the key to take the new default.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="note tip"><b>Read the start-up check first.</b> Twenty seconds in, DCO writes one block of <code>setup_check</code> lines and tells every Game Master online if something is wrong. It catches the missing faction, the missing UID, the objective nobody handles and the missing navmesh — which between them cover most of the table above.</div>
+                </section>
+
                 <!-- GARRISON -->
                 <section class="block" id="garrison">
                     <h2>Garrisons <span class="chip chip-dev">Dev build</span></h2>
@@ -1142,8 +1226,8 @@
         // Role picker: keeps only the sections that reader needs in the contents
         const ROLES = {
             player: ['start', 'players', 'trouble'],
-            gm: ['start', 'gm', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
-            wb: ['start', 'workbench', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'gm', 'trouble'],
+            gm: ['start', 'gm', 'build', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'trouble'],
+            wb: ['start', 'workbench', 'build', 'commander', 'garrison', 'units', 'behaviour', 'recipes', 'gm', 'trouble'],
             server: ['start', 'server', 'workbench', 'behaviour', 'recipes', 'trouble'],
         };
         let role = '';
