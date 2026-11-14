@@ -51,6 +51,7 @@
         .faq summary::after { content: '+'; font-family: var(--mono); color: var(--yellow); }
         .faq details[open] summary::after { content: '–'; }
         .faq p { color: var(--text-mid); padding-bottom: 16px; max-width: 720px; }
+        .earmark { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--yellow); margin-top: 3px; font-weight: 400; letter-spacing: 0.03em; }
     </style>
 </head>
 <body>
@@ -75,7 +76,7 @@
                     <div class="stat"><div class="stat-val" data-bind="downloads">34,178</div><div class="stat-label">Downloads</div></div>
                     <div class="stat"><div class="stat-val" data-bind="rating">95%</div><div class="stat-label">Rating</div></div>
                     <div class="stat"><div class="stat-val" data-bind="releases">50</div><div class="stat-label">Releases</div></div>
-                    <div class="stat"><div class="stat-val" data-bind="version">v0.4.136</div><div class="stat-label">Latest</div></div>
+                    <div class="stat"><div class="stat-val" data-bind="version">v0.4.149</div><div class="stat-label">Latest</div></div>
                 </div>
             </div>
 
@@ -163,7 +164,7 @@
 </main>
 <script src="assets/site.js"></script>
 <script>
-    DCO.ready.then(site => {
+    DCO.ready.then(async site => {
         const { raised } = DCO.funding(site);
         let prev = 0;
         document.getElementById('tiers').innerHTML = site.funding.tiers.map(t => {
@@ -187,11 +188,16 @@
                 <p>${i === 0 ? 'Top-tier supporter' : r.min ? 'Up to $' + DCO.fmt(ranks[i - 1].min - 1) : 'Every contribution counts'}</p>
             </div>`).join('');
 
+        const milestones = await DCO.load('roadmap');
+        const titleOf = cat => (milestones.find(m => m.cat === cat) || {}).title || cat;
+
         document.getElementById('donors').innerHTML = [...site.donors]
             .sort((a, b) => b.amount - a.amount)
             .map((d, i) => {
                 const r = DCO.rank(site, d.amount);
-                return `<tr><td>${i + 1}</td><td class="name">${DCO.esc(d.name)}</td><td><span class="rank ${r.class}">${DCO.esc(r.label)}</span></td><td class="amt">$${DCO.fmt(d.amount)}</td></tr>`;
+                const note = d.earmark
+                    ? `<span class="earmark">${DCO.fmt(d.earmark.amount)} toward ${DCO.esc(titleOf(d.earmark.cat))}</span>` : '';
+                return `<tr><td>${i + 1}</td><td class="name">${DCO.esc(d.name)}${note}</td><td><span class="rank ${r.class}">${DCO.esc(r.label)}</span></td><td class="amt">${DCO.fmt(d.amount)}</td></tr>`;
             }).join('');
     });
 </script>

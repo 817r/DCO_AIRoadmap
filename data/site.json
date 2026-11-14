@@ -1,11 +1,11 @@
 {
-  "version": "v0.4.145",
+  "version": "v0.4.149",
   "gameVersion": "1.8.0.13",
   "phase": "Alpha",
-  "downloads": 41270,
-  "rating": 93,
+  "downloads": 45185,
+  "rating": 94,
   "releases": 50,
-  "updated": "2026-10-13",
+  "updated": "2026-10-27",
   "links": {
     "workshop": "https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger",
     "changelog": "https://reforger.armaplatform.com/workshop/5EDAAE0D3CC60D6B-DCO_AIReforger/changelog",
@@ -66,8 +66,16 @@
       "amount": 500
     },
     {
+      "name": "Zeek",
+      "amount": 415,
+      "earmark": {
+        "amount": 400,
+        "cat": "Soldier Systems"
+      }
+    },
+    {
       "name": "Hawkins",
-      "amount": 50
+      "amount": 100
     },
     {
       "name": "radar42",

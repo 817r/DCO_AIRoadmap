@@ -38,15 +38,6 @@
 
         .block { padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--border); }
         .block:last-child { border-bottom: 0; }
-        body.tabbed .block { display: none; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
-        body.tabbed .block.active { display: block; }
-        body.tabbed .sub-panel { display: none; }
-        body.tabbed .sub-panel.active { display: block; }
-        .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 4px; }
-        .pills button { padding: 7px 13px; border: 1px solid var(--border-strong); font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mid); }
-        .pills button:hover { border-color: var(--yellow); color: var(--yellow); }
-        .pills button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
-        .sub-panel > h3:first-child { margin-top: 20px; }
 
         .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
         .pager a { display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none; font-size: 14px; color: var(--text-mid); max-width: 48%; }
@@ -110,21 +101,46 @@
         .mini b { display: block; color: var(--white); margin-bottom: 4px; }
         .mini span { font-size: 13px; color: var(--text-mid); }
         .legend { font-size: 12.5px; color: var(--text-dim); margin-top: 10px; }
+
+        /* Switcher across the four documentation pages */
+        .docnav { border-bottom: 1px solid var(--border); background: var(--surface); }
+        .docnav .container { display: flex; gap: 4px; flex-wrap: wrap; padding-top: 10px; padding-bottom: 10px; }
+        .docnav a { display: flex; flex-direction: column; gap: 1px; padding: 8px 14px; text-decoration: none; border: 1px solid transparent; }
+        .docnav b { font-size: 13.5px; font-weight: 600; color: var(--text-mid); }
+        .docnav span { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.04em; }
+        .docnav a:hover { border-color: var(--border-strong); }
+        .docnav a:hover b { color: var(--white); }
+        .docnav a[aria-current="page"] { border-color: var(--yellow-line); background: var(--yellow-soft); }
+        .docnav a[aria-current="page"] b { color: var(--yellow); }
+        @media (max-width: 620px) { .docnav span { display: none; } .docnav a { padding: 8px 11px; } }
+        /* Everything stays in the page; anchors clear the sticky nav. */
+        .block, .block h3[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
+        /* narrow: the folded contents bar reads as a broken element */
+        @media (max-width: 960px) { .toc { display: none; } }
     </style>
 </head>
 <body>
 <main id="main">
 
+    <nav class="docnav" aria-label="Documentation">
+        <div class="container">
+            <a href="guide.html"><b>Guide</b><span>How to use the mod</span></a>
+            <a href="workbench.html"><b>Workbench</b><span>Set up DCO in a mission</span></a>
+            <a href="reference.html"><b>Reference</b><span>Look up a setting</span></a>
+            <a href="server-config.html"><b>Server config</b><span>Run it on a server</span></a>
+            <a href="modding.html" aria-current="page"><b>Modding API</b><span>Build on top of it</span></a>
+        </div>
+    </nav>
+
+
     <header class="page-head">
         <div class="container">
             <div class="kicker">// Modding API</div>
             <h1>Build on top of DCO_AI</h1>
-            <p class="lead">DCO exposes a published surface for other addons: events to subscribe to, settings to change, AI state to read. Use it instead of <code>modded class</code> on DCO internals — the internals move between updates, this does not.</p>
-            <div class="stats" style="margin-top:22px">
-                <div class="stat"><div class="stat-val accent">1.0</div><div class="stat-label">API version</div></div>
-                <div class="stat"><div class="stat-val">15</div><div class="stat-label">Events</div></div>
-                <div class="stat"><div class="stat-val">4</div><div class="stat-label">Setting scopes</div></div>
-                <div class="stat"><div class="stat-val">544</div><div class="stat-label">Tuning keys</div></div>
+            <p class="lead">A published surface for other addons: events to subscribe to, settings to change, AI state to read. Use it instead of <code>modded class</code> on DCO internals — those move between updates, this does not.</p>
+            <div class="btn-row mt-16">
+                <a class="btn btn-primary" href="#example">Copy a working listener</a>
+                <a class="btn" href="reference.html?src=api">Search the API</a>
             </div>
         </div>
     </header>
@@ -306,11 +322,11 @@ array&lt;CMD_AICommanderObjectiveComponent&gt; objs = {};
                         <thead><tr><th>Family</th><th>Count</th><th>Names</th></tr></thead>
                         <tbody>
                             <tr><td>Main settings</td><td>8</td><td><code>aiAggression</code>, <code>vehicleExit</code>, <code>aiSkillDefault</code>, <code>aimAccuracy</code>, <code>aimSpeed</code>, <code>aiPerception</code>, <code>suppressionEffect</code>, <code>takeCoverChance</code></td></tr>
-                            <tr><td>Tuning keys</td><td>544</td><td>The config name (<code>tune_hear_shot_err</code>) or the short internal name (<code>hear.shot_err</code>) — both work. Defaults and ranges are in <code>DCO_GlobalConfig_README.txt</code> beside the server config.</td></tr>
+                            <tr><td>Tuning keys</td><td>544</td><td>The config name (<code>tune_hear_mask</code>) or the short internal name (<code>hear.mask</code>) — both work. Defaults and ranges are in <code>DCO_GlobalConfig_README.txt</code> beside the server config.</td></tr>
                         </tbody>
                     </table>
                     <pre><code>DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"aiAggression"</span>, 1.5);
-DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"tune_hear_shot_err"</span>, 0.5);
+DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"tune_hear_mask"</span>, 1.0);
 DCO_API.SetSetting(<span class="s">"MyMod"</span>, <span class="s">"aiPerception"</span>, 0.8, <span class="s">"USSR"</span>);
 DCO_API.SetSquadSetting(<span class="s">"MyMod"</span>, group, <span class="s">"vehicleExit"</span>, 16);
 DCO_API.SetSoldierSetting(<span class="s">"MyMod"</span>, soldier, <span class="s">"aiPerception"</span>, 1.5);
@@ -423,7 +439,7 @@ DCO_API.SetSoldierSetting(<span class="s">"MyMod"</span>, soldier, <span class="
                             <tr><td>A write returns false</td><td>Read the <code>api_reject</code> line in the log — it names the key and the reason.</td></tr>
                             <tr><td>Faction write refused</td><td><code>no_faction_layer</code>: that faction has no <code>factions</code> block in the server config, so there is nothing to write to.</td></tr>
                             <tr><td>Setting changed but AI didn't</td><td>Skill, accuracy, aim, suppression and cover are copied at spawn. Existing soldiers need the per-soldier calls.</td></tr>
-                            <tr><td>Key not recognised</td><td>Test with <code>HasSetting()</code>. Tuning keys take either <code>tune_hear_shot_err</code> or <code>hear.shot_err</code> — but not a typo in either.</td></tr>
+                            <tr><td>Key not recognised</td><td>Test with <code>HasSetting()</code>. Tuning keys take either <code>tune_hear_mask</code> or <code>hear.mask</code> — but not a typo in either. The <a href="reference.html?src=api" class="accent">reference</a> lists every key that exists.</td></tr>
                             <tr><td>Contact event fires once and stops</td><td>By design. It fires on the transition from no known enemies to some, and rearms only after the squad forgets them all.</td></tr>
                             <tr><td>Server is lagging under my handler</td><td>Stress and morale fire per soldier. Sample or count in the handler and do the real work on a timer.</td></tr>
                             <tr><td>Everything is marked Dev build</td><td>The API is written but not in the public Workshop release yet — see the <a href="roadmap.html" class="accent">roadmap</a>.</td></tr>
@@ -450,88 +466,60 @@ DCO_API.SetSoldierSetting(<span class="s">"MyMod"</span>, soldier, <span class="
 </main>
 <script src="assets/site.js"></script>
 <script>
-    // Same one-section-at-a-time behaviour as the guide page.
+    // The page scrolls; the sidebar only reports where you are. Nothing is
+    // hidden, so browser find reaches every section.
     (function () {
-        const blocks = [...document.querySelectorAll('.block')];
         const links = [...document.querySelectorAll('.toc a')];
-        document.body.classList.add('tabbed');
+        if (!links.length) return;
+        const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+        const targets = [...document.querySelectorAll('.block, .block h3[id]')]
+            .filter(el => el.id && byId.has(el.id));
 
-        const owner = {};
-        blocks.forEach(b => {
-            owner[b.id] = b.id;
-            b.querySelectorAll('[id]').forEach(el => owner[el.id] = b.id);
-        });
-
-        blocks.forEach(b => {
-            const heads = [...b.querySelectorAll(':scope > h3[id]')];
-            if (heads.length < 2) return;
-            heads.forEach(h => {
-                const panel = document.createElement('div');
-                panel.className = 'sub-panel';
-                panel.dataset.id = h.id;
-                h.before(panel);
-                let node = h;
-                while (node && !(node.tagName === 'H3' && node !== h && node.id)) {
-                    const next = node.nextElementSibling;
-                    panel.append(node);
-                    node = next;
-                }
-            });
-            const pills = heads.map(h =>
-                `<button type="button" data-goto="${h.id}" aria-pressed="false">${h.textContent.trim()}</button>`).join('');
-            (b.querySelector(':scope > p') || b.querySelector('h2'))
-                .insertAdjacentHTML('afterend', `<div class="pills" role="tablist">${pills}</div>`);
-        });
-
-        blocks.forEach((b, i) => {
-            const prev = blocks[i - 1], next = blocks[i + 1];
-            const label = el => el.querySelector('h2').textContent.trim();
-            b.insertAdjacentHTML('beforeend', `<nav class="pager">
-                ${prev ? `<a href="#${prev.id}"><span>← Previous</span><b>${label(prev)}</b></a>` : '<span></span>'}
-                ${next ? `<a href="#${next.id}"><span>Next →</span><b>${label(next)}</b></a>` : ''}
-            </nav>`);
-        });
-
-        function show(id) {
-            const sectionId = owner[id] || blocks[0].id;
-            const section = document.getElementById(sectionId);
-            blocks.forEach(b => b.classList.toggle('active', b === section));
-
-            const panels = [...section.querySelectorAll('.sub-panel')];
-            if (panels.length) {
-                const wanted = panels.find(p => p.dataset.id === id) || panels[0];
-                panels.forEach(p => p.classList.toggle('active', p === wanted));
-                section.querySelectorAll('.pills button').forEach(btn =>
-                    btn.setAttribute('aria-pressed', btn.dataset.goto === wanted.dataset.id));
-                id = wanted.dataset.id;
+        let current = null;
+        const mark = id => {
+            if (id === current) return;
+            current = id;
+            links.forEach(a => a.classList.remove('active'));
+            const a = byId.get(id);
+            if (!a) return;
+            a.classList.add('active');
+            const box = a.closest('.toc');
+            if (box && box.scrollHeight > box.clientHeight) {
+                const t = a.offsetTop - box.offsetTop;
+                if (t < box.scrollTop || t > box.scrollTop + box.clientHeight - 40)
+                    box.scrollTop = t - box.clientHeight / 2;
             }
+        };
 
-            links.forEach(a => a.classList.toggle('active',
-                a.getAttribute('href') === '#' + id || (panels.length === 0 && a.getAttribute('href') === '#' + sectionId)));
-
-            if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
-            scrollTo({ top: 0 });
+        // Read live positions: an IntersectionObserver entry caches the rect from
+        // when it fired, which goes stale as soon as you keep scrolling.
+        const LINE = 120;
+        let queued = false;
+        function spy() {
+            queued = false;
+            let best = targets[0];
+            for (const el of targets) {
+                if (el.getBoundingClientRect().top - LINE <= 0) best = el;
+                else break;
+            }
+            if (best) mark(best.id);
         }
+        addEventListener('scroll', () => {
+            if (queued) return;
+            queued = true;
+            setTimeout(spy, 100);
+        }, { passive: true });
+        spy();
 
         const toc = document.getElementById('toc-d');
+        if (!toc) return;
         const narrow = matchMedia('(max-width: 960px)');
         const syncToc = () => toc.open = !narrow.matches;
         syncToc();
         narrow.addEventListener('change', syncToc);
-
         document.addEventListener('click', e => {
             if (e.target.closest('.toc a') && narrow.matches) toc.open = false;
-            const el = e.target.closest('a[href^="#"], .pills button');
-            if (!el) return;
-            const id = el.dataset.goto || el.getAttribute('href').slice(1);
-            if (!owner[id]) return;
-            e.preventDefault();
-            history.pushState(null, '', '#' + id);
-            show(id);
         });
-        addEventListener('popstate', () => show(location.hash.slice(1)));
-
-        show(location.hash.slice(1));
     })();
 </script>
 </body>

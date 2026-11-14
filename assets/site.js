@@ -98,8 +98,11 @@
             el.href = key === 'email' ? `mailto:${site.links.email}` : site.links[key];
             if (key !== 'email') { el.target = '_blank'; el.rel = 'noopener'; }
         });
+        // The bar is already painted at its inline width:0 by the time the data
+        // arrives, so the CSS transition animates without deferring to a frame —
+        // and a frame callback never fires at all in a backgrounded tab.
         document.querySelectorAll('[data-bar="funding"]').forEach(el => {
-            requestAnimationFrame(() => { el.style.width = f.pct + '%'; });
+            el.style.width = f.pct + '%';
         });
     }
 

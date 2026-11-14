@@ -67,6 +67,7 @@
         .feat-desc { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
         .ms-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--border-strong); font-size: 13px; color: var(--text-mid); }
         .ms-foot b { color: var(--white); }
+        .pledged { color: var(--yellow); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -93,7 +94,7 @@
                     <span class="muted" id="overall-note"></span>
                 </div>
                 <div class="bar lg glow"><span id="overall-bar" style="width:0"></span></div>
-                <div class="overall-legend"><span>Alpha · <span data-bind="version">v0.4.136</span></span><span>Beta 1.0</span></div>
+                <div class="overall-legend"><span>Alpha · <span data-bind="version">v0.4.149</span></span><span>Beta 1.0</span></div>
             </div>
 
             <section class="next" id="next" hidden>
@@ -146,7 +147,7 @@
 </main>
 <script src="assets/site.js"></script>
 <script>
-    DCO.ready.then(async () => {
+    DCO.ready.then(async site => {
         const [features, milestones] = await Promise.all([DCO.load('features'), DCO.load('roadmap')]);
         const releases = features.map(f => DCO.release(f.ver).key);
         const count = key => releases.filter(k => k === key).length;
@@ -160,7 +161,9 @@
         // Overall progress = average of every tracked feature
         const overall = Math.round(features.reduce((s, f) => s + f.prog, 0) / features.length);
         document.getElementById('overall-pct').textContent = overall + '%';
-        requestAnimationFrame(() => { document.getElementById('overall-bar').style.width = overall + '%'; });
+        // The bar is already painted at width:0, so the CSS transition still runs —
+        // and a frame callback never fires at all in a backgrounded tab.
+        document.getElementById('overall-bar').style.width = overall + '%';
         document.getElementById('overall-note').textContent =
             `${count('live')} of ${features.length} features are already playable on the Workshop.`;
 
@@ -187,6 +190,8 @@
             const list = features.filter(f => f.cat === m.cat).sort((a, b) => b.prog - a.prog || b.prio - a.prio);
             const pct = Math.round(list.reduce((s, f) => s + f.prog, 0) / (list.length || 1));
             const n = key => list.filter(f => DCO.release(f.ver).key === key).length;
+            const pledged = site.donors.reduce((s, d) =>
+                s + (d.earmark && d.earmark.cat === m.cat ? d.earmark.amount : 0), 0);
             return `
             <details class="ms c-${m.color}" id="${encodeURIComponent(m.cat)}">
                 <summary>
@@ -211,7 +216,7 @@
                         </div>`).join('')}
                     </div>
                     <div class="ms-foot">
-                        <span>Funding tier: <b>${DCO.esc(m.tier)}</b> · <a href="features.html?cat=${encodeURIComponent(m.cat)}">Feature details</a></span>
+                        <span>Funding tier: <b>${DCO.esc(m.tier)}</b>${pledged ? ` · <b class="pledged">${DCO.fmt(pledged)} pledged here</b>` : ''} · <a href="features.html?cat=${encodeURIComponent(m.cat)}">Feature details</a></span>
                         <a class="btn btn-primary btn-sm" href="donate.html">Fund this milestone →</a>
                     </div>
                 </div>

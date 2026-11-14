@@ -38,15 +38,6 @@
 
         .block { padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--border); }
         .block:last-child { border-bottom: 0; }
-        body.tabbed .block { display: none; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
-        body.tabbed .block.active { display: block; }
-        body.tabbed .sub-panel { display: none; }
-        body.tabbed .sub-panel.active { display: block; }
-        .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 4px; }
-        .pills button { padding: 7px 13px; border: 1px solid var(--border-strong); font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mid); }
-        .pills button:hover { border-color: var(--yellow); color: var(--yellow); }
-        .pills button[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0c09; }
-        .sub-panel > h3:first-child { margin-top: 20px; }
 
         .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
         .pager a { display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none; font-size: 14px; color: var(--text-mid); max-width: 48%; }
@@ -106,21 +97,57 @@
         .note.tip { border-left-color: var(--green); background: rgba(34,197,94,0.06); }
         .note.warn { border-left-color: var(--red); background: rgba(239,68,68,0.06); }
         .legend { font-size: 12.5px; color: var(--text-dim); margin-top: 10px; }
+
+        /* Switcher across the four documentation pages */
+        .docnav { border-bottom: 1px solid var(--border); background: var(--surface); }
+        .docnav .container { display: flex; gap: 4px; flex-wrap: wrap; padding-top: 10px; padding-bottom: 10px; }
+        .docnav a { display: flex; flex-direction: column; gap: 1px; padding: 8px 14px; text-decoration: none; border: 1px solid transparent; }
+        .docnav b { font-size: 13.5px; font-weight: 600; color: var(--text-mid); }
+        .docnav span { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.04em; }
+        .docnav a:hover { border-color: var(--border-strong); }
+        .docnav a:hover b { color: var(--white); }
+        .docnav a[aria-current="page"] { border-color: var(--yellow-line); background: var(--yellow-soft); }
+        .docnav a[aria-current="page"] b { color: var(--yellow); }
+        @media (max-width: 620px) { .docnav span { display: none; } .docnav a { padding: 8px 11px; } }
+        /* Everything stays in the page; anchors clear the sticky nav. */
+        .block, .block h3[id] { scroll-margin-top: calc(var(--nav-h) + 16px); }
+        /* narrow: the folded contents bar reads as a broken element */
+        @media (max-width: 960px) { .toc { display: none; } }
+        /* Inline diagrams: plain SVG, no library, readable on the dark theme */
+        figure.dia { margin: 20px 0; border: 1px solid var(--border); background: var(--surface); padding: 18px 18px 12px; }
+        figure.dia svg { width: 100%; height: auto; display: block; }
+        figure.dia figcaption { font-size: 13px; color: var(--text-dim); margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+        .dia .box { fill: var(--bg); stroke: var(--border-strong); }
+        .dia .box-key { fill: rgba(250,204,21,0.07); stroke: var(--yellow-line); }
+        .dia .lbl { fill: var(--white); font: 600 13px var(--sans); }
+        .dia .sub { fill: var(--text-mid); font: 11px var(--sans); }
+        .dia .tag { fill: var(--yellow); font: 700 9.5px var(--mono); letter-spacing: 0.08em; }
+        .dia .arrow { stroke: var(--border-strong); stroke-width: 1.5; fill: none; }
+        .dia .arrow-key { stroke: var(--yellow-line); stroke-width: 1.5; fill: none; }
     </style>
 </head>
 <body>
 <main id="main">
 
+    <nav class="docnav" aria-label="Documentation">
+        <div class="container">
+            <a href="guide.html"><b>Guide</b><span>How to use the mod</span></a>
+            <a href="workbench.html"><b>Workbench</b><span>Set up DCO in a mission</span></a>
+            <a href="reference.html"><b>Reference</b><span>Look up a setting</span></a>
+            <a href="server-config.html" aria-current="page"><b>Server config</b><span>Run it on a server</span></a>
+            <a href="modding.html"><b>Modding API</b><span>Build on top of it</span></a>
+        </div>
+    </nav>
+
+
     <header class="page-head">
         <div class="container">
             <div class="kicker">// Server config</div>
-            <h1>Tune DCO from one JSON file</h1>
-            <p class="lead">Your server writes a folder of JSON files on its first start, every setting at its current value. Edit, restart, done — no editor, no repack, no mission change. This page is the reference for what's in them.</p>
-            <div class="stats" style="margin-top:22px">
-                <div class="stat"><div class="stat-val accent">156</div><div class="stat-label">Named keys</div></div>
-                <div class="stat"><div class="stat-val">535</div><div class="stat-label">Tuning keys</div></div>
-                <div class="stat"><div class="stat-val">4</div><div class="stat-label">Templates</div></div>
-                <div class="stat"><div class="stat-val">21</div><div class="stat-label">Groups</div></div>
+            <h1>Tune DCO without opening the editor</h1>
+            <p class="lead">Your server writes a folder of JSON files on its first start, every setting at its current value. Edit, restart, done — no repack, no mission change.</p>
+            <div class="btn-row mt-16">
+                <a class="btn btn-primary" href="#templates">Start from a template</a>
+                <a class="btn" href="reference.html?src=cfg">Search every key</a>
             </div>
         </div>
     </header>
@@ -169,7 +196,7 @@
                             <tr><td class="key">Squads.json</td><td>Idle, stragglers, CQB, behaviour, contact sharing and reports, medics, break contact, squad jobs.</td></tr>
                             <tr><td class="key">Commander.json</td><td>Commander spawner, doctrine, group presets, commander tactics.</td></tr>
                             <tr><td class="key">Vehicles.json</td><td>Vehicle AI.</td></tr>
-                            <tr><td class="key">Advanced/&lt;group&gt;.json</td><td>Every <code>tune_</code> key, one file per group — <code>tune_hear_shot_err</code> lives in <code>Advanced/hear.json</code>.</td></tr>
+                            <tr><td class="key">Advanced/&lt;group&gt;.json</td><td>Every <code>tune_</code> key, one file per group — <code>tune_hear_mask</code> lives in <code>Advanced/hear.json</code>.</td></tr>
                             <tr><td class="key">Factions/&lt;FACTION&gt;.json</td><td>Values for one faction only.</td></tr>
                         </tbody>
                     </table>
@@ -288,6 +315,39 @@
   }
 }</code></pre>
                     <h4>Layer order</h4>
+                    <figure class="dia">
+                        <svg viewBox="0 0 700 210" role="img" aria-label="Four layers decide a setting's value: the config file, Game Master global, the faction block, then Game Master faction. The last one wins.">
+                            <rect class="box" x="10" y="30" width="150" height="56" rx="2"/>
+                            <text class="tag" x="22" y="50">1 · FILE</text>
+                            <text class="lbl" x="22" y="68">Server config</text>
+                            <text class="sub" x="22" y="81">Read once at startup</text>
+
+                            <rect class="box" x="186" y="30" width="150" height="56" rx="2"/>
+                            <text class="tag" x="198" y="50">2 · LIVE</text>
+                            <text class="lbl" x="198" y="68">Game Master</text>
+                            <text class="sub" x="198" y="81">Global settings</text>
+
+                            <rect class="box" x="362" y="30" width="150" height="56" rx="2"/>
+                            <text class="tag" x="374" y="50">3 · FILE</text>
+                            <text class="lbl" x="374" y="68">Faction block</text>
+                            <text class="sub" x="374" y="81">One faction only</text>
+
+                            <rect class="box box-key" x="538" y="30" width="150" height="56" rx="2"/>
+                            <text class="tag" x="550" y="50">4 · WINS</text>
+                            <text class="lbl" x="550" y="68">GM faction</text>
+                            <text class="sub" x="550" y="81">Overrides them all</text>
+
+                            <path class="arrow" d="M160 58 H186"/>
+                            <path class="arrow" d="M336 58 H362"/>
+                            <path class="arrow-key" d="M512 58 H538"/>
+
+                            <rect class="box" x="10" y="124" width="678" height="70" rx="2"/>
+                            <text class="lbl" x="24" y="148">Why a value you set "did nothing"</text>
+                            <text class="sub" x="24" y="168">A later layer overrode it · the key was misspelled, so it is simply unknown · it was clamped to its range</text>
+                            <text class="sub" x="24" y="185">· or you edited the file while the server was running, and the next write overwrote you.</text>
+                        </svg>
+                        <figcaption>Last layer wins. Most "my setting does nothing" reports are a layer further right, not a broken setting.</figcaption>
+                    </figure>
                     <p>Four layers, last one wins: <b>1.</b> global values in this file → <b>2.</b> Game Master global settings → <b>3.</b> this file's faction block → <b>4.</b> Game Master faction settings.</p>
                     <div class="note"><b>Some keys are server-wide only</b> and are ignored inside a faction block: the <code>doctrine*</code> keys, the <code>groupPreset*</code> keys, <code>gmSaveConfig</code>, <code>startupPresetPrompt</code> and <code>perfProfiling</code>. A faction that doesn't exist in the mission, or an empty entry, is skipped and left in the file.</div>
                     <div class="note warn"><b>Edit the block while the server is stopped.</b> A Game Master save writes the faction block as it was when the server started, so live edits to the file get overwritten.</div>
@@ -538,7 +598,7 @@
                     <p>Beyond the named keys there are <b>535 tuning keys</b>, all prefixed <code>tune_</code>. They're the numbers the AI reasons with — hearing error, cover scoring, flank geometry, morale thresholds — exposed rather than buried. A value equal to the default means the built-in behaviour, so a file that mentions none of them behaves exactly as shipped.</p>
 
                     <h3>Naming</h3>
-                    <p>Each key has two spellings, and both are accepted everywhere — config, Game Master and API: the config name <code>tune_hear_shot_err</code>, or the short internal name <code>hear.shot_err</code>. The generated <code>DCO_GlobalConfig_README.txt</code> next to your config file lists every key with its default and range.</p>
+                    <p>Each key has two spellings, and both are accepted everywhere — config, Game Master and API: the config name <code>tune_hear_mask</code>, or the short internal name <code>hear.mask</code>. The generated <code>DCO_GlobalConfig_README.txt</code> next to your config file lists every key with its default and range.</p>
 
                     <h3>The larger groups</h3>
                     <table class="ref">
@@ -595,88 +655,60 @@
 </main>
 <script src="assets/site.js"></script>
 <script>
-    // Same one-section-at-a-time behaviour as the guide and modding pages.
+    // The page scrolls; the sidebar only reports where you are. Nothing is
+    // hidden, so browser find reaches every section.
     (function () {
-        const blocks = [...document.querySelectorAll('.block')];
         const links = [...document.querySelectorAll('.toc a')];
-        document.body.classList.add('tabbed');
+        if (!links.length) return;
+        const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+        const targets = [...document.querySelectorAll('.block, .block h3[id]')]
+            .filter(el => el.id && byId.has(el.id));
 
-        const owner = {};
-        blocks.forEach(b => {
-            owner[b.id] = b.id;
-            b.querySelectorAll('[id]').forEach(el => owner[el.id] = b.id);
-        });
-
-        blocks.forEach(b => {
-            const heads = [...b.querySelectorAll(':scope > h3[id]')];
-            if (heads.length < 2) return;
-            heads.forEach(h => {
-                const panel = document.createElement('div');
-                panel.className = 'sub-panel';
-                panel.dataset.id = h.id;
-                h.before(panel);
-                let node = h;
-                while (node && !(node.tagName === 'H3' && node !== h && node.id)) {
-                    const next = node.nextElementSibling;
-                    panel.append(node);
-                    node = next;
-                }
-            });
-            const pills = heads.map(h =>
-                `<button type="button" data-goto="${h.id}" aria-pressed="false">${h.textContent.trim()}</button>`).join('');
-            (b.querySelector(':scope > p') || b.querySelector('h2'))
-                .insertAdjacentHTML('afterend', `<div class="pills" role="tablist">${pills}</div>`);
-        });
-
-        blocks.forEach((b, i) => {
-            const prev = blocks[i - 1], next = blocks[i + 1];
-            const label = el => el.querySelector('h2').textContent.trim();
-            b.insertAdjacentHTML('beforeend', `<nav class="pager">
-                ${prev ? `<a href="#${prev.id}"><span>← Previous</span><b>${label(prev)}</b></a>` : '<span></span>'}
-                ${next ? `<a href="#${next.id}"><span>Next →</span><b>${label(next)}</b></a>` : ''}
-            </nav>`);
-        });
-
-        function show(id) {
-            const sectionId = owner[id] || blocks[0].id;
-            const section = document.getElementById(sectionId);
-            blocks.forEach(b => b.classList.toggle('active', b === section));
-
-            const panels = [...section.querySelectorAll('.sub-panel')];
-            if (panels.length) {
-                const wanted = panels.find(p => p.dataset.id === id) || panels[0];
-                panels.forEach(p => p.classList.toggle('active', p === wanted));
-                section.querySelectorAll('.pills button').forEach(btn =>
-                    btn.setAttribute('aria-pressed', btn.dataset.goto === wanted.dataset.id));
-                id = wanted.dataset.id;
+        let current = null;
+        const mark = id => {
+            if (id === current) return;
+            current = id;
+            links.forEach(a => a.classList.remove('active'));
+            const a = byId.get(id);
+            if (!a) return;
+            a.classList.add('active');
+            const box = a.closest('.toc');
+            if (box && box.scrollHeight > box.clientHeight) {
+                const t = a.offsetTop - box.offsetTop;
+                if (t < box.scrollTop || t > box.scrollTop + box.clientHeight - 40)
+                    box.scrollTop = t - box.clientHeight / 2;
             }
+        };
 
-            links.forEach(a => a.classList.toggle('active',
-                a.getAttribute('href') === '#' + id || (panels.length === 0 && a.getAttribute('href') === '#' + sectionId)));
-
-            if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
-            scrollTo({ top: 0 });
+        // Read live positions: an IntersectionObserver entry caches the rect from
+        // when it fired, which goes stale as soon as you keep scrolling.
+        const LINE = 120;
+        let queued = false;
+        function spy() {
+            queued = false;
+            let best = targets[0];
+            for (const el of targets) {
+                if (el.getBoundingClientRect().top - LINE <= 0) best = el;
+                else break;
+            }
+            if (best) mark(best.id);
         }
+        addEventListener('scroll', () => {
+            if (queued) return;
+            queued = true;
+            setTimeout(spy, 100);
+        }, { passive: true });
+        spy();
 
         const toc = document.getElementById('toc-d');
+        if (!toc) return;
         const narrow = matchMedia('(max-width: 960px)');
         const syncToc = () => toc.open = !narrow.matches;
         syncToc();
         narrow.addEventListener('change', syncToc);
-
         document.addEventListener('click', e => {
             if (e.target.closest('.toc a') && narrow.matches) toc.open = false;
-            const el = e.target.closest('a[href^="#"], .pills button');
-            if (!el) return;
-            const id = el.dataset.goto || el.getAttribute('href').slice(1);
-            if (!owner[id]) return;
-            e.preventDefault();
-            history.pushState(null, '', '#' + id);
-            show(id);
         });
-        addEventListener('popstate', () => show(location.hash.slice(1)));
-
-        show(location.hash.slice(1));
     })();
 </script>
 </body>
